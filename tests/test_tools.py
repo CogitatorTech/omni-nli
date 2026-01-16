@@ -1,0 +1,402 @@
+import base64
+import json
+from dataclasses import asdict, dataclass
+from typing import get_args
+from unittest.mock import AsyncMock, MagicMock
+
+import httpx
+import pytest
+from mcp import types
+from pydantic import BaseModel
+
+from omni_lpr import tools
+from omni_lpr.errors import ErrorCode, ToolLogicError
+from omni_lpr.settings import settings
+from omni_lpr.tools import (
+    DetectorModel,
+    ListModelsArgs,
+    OcrModel,
+    ToolRegistry,
+    list_models,
+    setup_cache,
+    setup_tools,
+    tool_registry as global_tool_registry,
+)
+
+TINY_PNG_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+
+_MAX_BASE64_LENGTH = int(settings.max_image_size_mb * 1024 * 1024 * 4 / 3)
+_NEXT_BASE64_MULTIPLE_OF_4 = 4 - (_MAX_BASE64_LENGTH % 4)
+OVERSIZED_BASE64 = "a" * (_MAX_BASE64_LENGTH + _NEXT_BASE64_MULTIPLE_OF_4)
+
+
+@dataclass
+class MockBoundingBox:
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+
+
+@dataclass
+class MockDetectionResult:
+    bounding_box: MockBoundingBox
+    confidence: float
+
+
+@dataclass
+class MockOcrResult:
+    text: str
+    confidence: float
+
+
+@dataclass
+class MockALPRResult:
+    detection: MockDetectionResult
+    ocr: MockOcrResult
+
+
+@pytest.fixture
+def mock_alpr_result():
+    return MockALPRResult(
+        detection=MockDetectionResult(
+            bounding_box=MockBoundingBox(x1=10, y1=20, x2=100, y2=50), confidence=0.99
+        ),
+        ocr=MockOcrResult(text="TEST1234", confidence=0.95),
+    )
+
+
+@pytest.fixture(autouse=True)
+def clear_caches_and_registry():
+    """Clears all tool-related caches and the global registry before each test."""
+    # Clear the LRU caches on the functions
+    setup_cache()
+    tools._get_ocr_recognizer.cache_clear()
+    tools._get_alpr_instance.cache_clear()
+
+    # Clear the tool registry
+    global_tool_registry._tools.clear()
+    global_tool_registry._tool_definitions.clear()
+    global_tool_registry._tool_models.clear()
+
+    # Reset the placeholder models to their default state
+    tools.RecognizePlateArgs = BaseModel
+    tools.RecognizePlateFromPathArgs = BaseModel
+    tools.DetectAndRecognizePlateArgs = BaseModel
+    tools.DetectAndRecognizePlateFromPathArgs = BaseModel
+
+
+@pytest.fixture
+def tool_registry(mocker):
+    """Provides a fresh ToolRegistry instance for isolated tests."""
+    registry = ToolRegistry()
+    mocker.patch("omni_lpr.tools.tool_registry", registry)
+    return registry
+
+
+def test_register_and_list_tools(tool_registry: ToolRegistry):
+    tool_definition = types.Tool(
+        name="test_tool",
+        title="Test Tool",
+        description="A tool for testing.",
+        inputSchema={"type": "object", "properties": {}},
+    )
+
+    class TestArgs(BaseModel):
+        pass
+
+    @tool_registry.register(tool_definition, TestArgs)
+    async def test_tool(_: TestArgs):
+        return [types.TextContent(type="text", text="success")]
+
+    listed_tools = tool_registry.list()
+    assert len(listed_tools) == 1
+    assert listed_tools[0] == tool_definition
+
+
+@pytest.mark.asyncio
+async def test_call_tool_success(tool_registry: ToolRegistry):
+    class TestArgs(BaseModel):
+        message: str
+
+    tool_definition = types.Tool(
+        name="test_tool",
+        title="Test",
+        description="A test",
+        inputSchema=TestArgs.model_json_schema(),
+    )
+
+    @tool_registry.register(tool_definition, TestArgs)
+    async def test_tool(args: TestArgs):
+        return [types.TextContent(type="text", text=args.message)]
+
+    result = await tool_registry.call("test_tool", {"message": "hello"})
+    assert len(result) == 1
+    assert isinstance(result[0], types.TextContent)
+    assert result[0].text == "hello"
+
+
+@pytest.mark.asyncio
+async def test_call_tool_validation_error(tool_registry: ToolRegistry):
+    class TestArgs(BaseModel):
+        message: str
+
+    tool_definition = types.Tool(
+        name="test_tool",
+        title="Test",
+        description="A test",
+        inputSchema=TestArgs.model_json_schema(),
+    )
+
+    @tool_registry.register(tool_definition, TestArgs)
+    async def test_tool(args: TestArgs):
+        return [types.TextContent(type="text", text=args.message)]
+
+    with pytest.raises(ToolLogicError, match="Input validation failed"):
+        await tool_registry.call("test_tool", {"wrong_arg": "hello"})
+
+
+@pytest.mark.asyncio
+async def test_call_unknown_tool(tool_registry: ToolRegistry):
+    with pytest.raises(ToolLogicError, match="Unknown tool: unknown_tool"):
+        await tool_registry.call("unknown_tool", {})
+
+
+@pytest.mark.asyncio
+async def test_recognize_plate_base64_tool_success(mocker):
+    setup_tools()
+    mocker.patch("anyio.to_thread.run_sync", return_value=["TEST-123"])
+    mock_get_image = mocker.patch(
+        "omni_lpr.tools._get_image_from_source", return_value=AsyncMock()
+    )
+    mocker.patch("omni_lpr.tools._get_ocr_recognizer", return_value=AsyncMock())
+
+    result = await global_tool_registry.call(
+        "recognize_plate", {"image_base64": TINY_PNG_BASE64}
+    )
+
+    assert json.loads(result[0].text) == ["TEST-123"]
+    mock_get_image.assert_called_once_with(image_base64=TINY_PNG_BASE64, path=None)
+
+
+@pytest.mark.asyncio
+async def test_recognize_plate_path_tool_success(mocker):
+    setup_tools()
+    mocker.patch("anyio.to_thread.run_sync", return_value=["TEST-123"])
+    mock_get_image = mocker.patch(
+        "omni_lpr.tools._get_image_from_source", return_value=AsyncMock()
+    )
+    mocker.patch("omni_lpr.tools._get_ocr_recognizer", return_value=AsyncMock())
+
+    result = await global_tool_registry.call(
+        "recognize_plate_from_path", {"path": "/fake/path.jpg"}
+    )
+
+    assert json.loads(result[0].text) == ["TEST-123"]
+    mock_get_image.assert_called_once_with(image_base64=None, path="/fake/path.jpg")
+
+
+@pytest.mark.asyncio
+async def test_detect_and_recognize_plate_base64_tool_success(mocker, mock_alpr_result):
+    setup_tools()
+    mocker.patch("anyio.to_thread.run_sync", return_value=[mock_alpr_result])
+    mock_get_image = mocker.patch(
+        "omni_lpr.tools._get_image_from_source", return_value=AsyncMock()
+    )
+    mocker.patch("omni_lpr.tools._get_alpr_instance", return_value=AsyncMock())
+
+    result = await global_tool_registry.call(
+        "detect_and_recognize_plate", {"image_base64": TINY_PNG_BASE64}
+    )
+
+    expected_dict = [asdict(mock_alpr_result)]
+    assert json.loads(result[0].text) == expected_dict
+    mock_get_image.assert_called_once_with(image_base64=TINY_PNG_BASE64, path=None)
+
+
+@pytest.mark.asyncio
+async def test_detect_and_recognize_plate_path_tool_success(mocker, mock_alpr_result):
+    setup_tools()
+    mocker.patch("anyio.to_thread.run_sync", return_value=[mock_alpr_result])
+    mock_get_image = mocker.patch(
+        "omni_lpr.tools._get_image_from_source", return_value=AsyncMock()
+    )
+    mocker.patch("omni_lpr.tools._get_alpr_instance", return_value=AsyncMock())
+
+    result = await global_tool_registry.call(
+        "detect_and_recognize_plate_from_path", {"path": "/fake/path.jpg"}
+    )
+
+    expected_dict = [asdict(mock_alpr_result)]
+    assert json.loads(result[0].text) == expected_dict
+    mock_get_image.assert_called_once_with(image_base64=None, path="/fake/path.jpg")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "tool_name, invalid_data, expected_error_msg",
+    [
+        ("recognize_plate", {"image_base64": ""}, "image_base64 cannot be empty"),
+        (
+            "recognize_plate",
+            {"image_base64": OVERSIZED_BASE64},
+            "Input image is too large",
+        ),
+        ("recognize_plate", {"image_base64": "not-base64"}, "Invalid base64 string"),
+        ("recognize_plate_from_path", {"path": " "}, "Path cannot be empty"),
+        (
+                "recognize_plate",
+                {"image_base64": TINY_PNG_BASE64, "path": "/path"},
+                "Extra inputs are not permitted",
+        ),
+        ("recognize_plate", {}, "Field required"),
+    ],
+)
+async def test_tool_validation_errors(tool_name, invalid_data, expected_error_msg):
+    setup_tools()
+    with pytest.raises(ToolLogicError) as excinfo:
+        await global_tool_registry.call(tool_name, invalid_data)
+
+    assert excinfo.value.error.code == ErrorCode.VALIDATION_ERROR
+    assert expected_error_msg in str(excinfo.value.error.details)
+
+
+@pytest.mark.asyncio
+async def test_recognizer_model_caching(mocker):
+    setup_tools()
+    mock_recognizer_instance = MagicMock()
+    mock_recognizer_instance.run.return_value = ["CACHED"]
+    mock_recognizer_class = mocker.patch(
+        "fast_plate_ocr.LicensePlateRecognizer", return_value=mock_recognizer_instance
+    )
+    mocker.patch("omni_lpr.tools._get_image_from_source", return_value=AsyncMock())
+
+    # Call tool with first OCR model
+    await global_tool_registry.call(
+        "recognize_plate",
+        {"image_base64": TINY_PNG_BASE64, "ocr_model": "cct-s-v1-global-model"},
+    )
+    # Call it again, should be cached
+    await global_tool_registry.call(
+        "recognize_plate",
+        {"image_base64": TINY_PNG_BASE64, "ocr_model": "cct-s-v1-global-model"},
+    )
+    mock_recognizer_class.assert_called_once_with("cct-s-v1-global-model")
+
+    # Call tool with the second OCR model
+    await global_tool_registry.call(
+        "recognize_plate",
+        {"image_base64": TINY_PNG_BASE64, "ocr_model": "cct-xs-v1-global-model"},
+    )
+    assert mock_recognizer_class.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_alpr_instance_caching(mocker):
+    setup_tools()
+    mock_alpr_instance = MagicMock()
+    mock_alpr_instance.predict.return_value = []
+    mock_alpr_class = mocker.patch("fast_alpr.ALPR", return_value=mock_alpr_instance)
+    mocker.patch("omni_lpr.tools._get_image_from_source", return_value=AsyncMock())
+
+    # Call with first set of models
+    args_1 = {
+        "image_base64": TINY_PNG_BASE64,
+        "detector_model": "yolo-v9-t-384-license-plate-end2end",
+        "ocr_model": "cct-s-v1-global-model",
+    }
+    await global_tool_registry.call("detect_and_recognize_plate", args_1)
+    await global_tool_registry.call("detect_and_recognize_plate", args_1)
+    mock_alpr_class.assert_called_once_with(
+        detector_model="yolo-v9-t-384-license-plate-end2end",
+        ocr_model="cct-s-v1-global-model",
+        ocr_device="auto",
+        detector_providers=None,
+    )
+
+    # Call with the second set of models
+    args_2 = {
+        "image_base64": TINY_PNG_BASE64,
+        "detector_model": "yolo-v9-t-256-license-plate-end2end",
+        "ocr_model": "cct-xs-v1-global-model",
+    }
+    await global_tool_registry.call("detect_and_recognize_plate", args_2)
+    assert mock_alpr_class.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_list_models():
+    result = await list_models(ListModelsArgs())
+    assert len(result) == 1
+    assert isinstance(result[0], types.TextContent)
+    models = json.loads(result[0].text)
+    expected = {
+        "detector_models": list(get_args(DetectorModel)),
+        "ocr_models": list(get_args(OcrModel)),
+    }
+    assert models == expected
+
+
+@pytest.mark.asyncio
+async def test_get_image_from_source_url_fails(mocker):
+    # Mock httpx to return a 404 error
+    mock_response = httpx.Response(404)
+    mocker.patch(
+        "httpx.AsyncClient.get",
+        side_effect=httpx.HTTPStatusError("Not Found", request=mocker.MagicMock(),
+                                          response=mock_response)
+    )
+
+    setup_tools()  # To register the tools
+    with pytest.raises(ToolLogicError) as exc_info:
+        await global_tool_registry.call(
+            "detect_and_recognize_plate_from_path",
+            {"path": "http://example.com/notfound.jpg"}
+        )
+    assert "Failed to fetch image from URL" in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_get_image_from_corrupted_data():
+    """Tests that a corrupted image raises a ValueError."""
+    setup_tools()
+    corrupted_base64 = base64.b64encode(b"this is not an image").decode("utf-8")
+    with pytest.raises(ToolLogicError, match="not a valid image file"):
+        await global_tool_registry.call(
+            "recognize_plate", {"image_base64": corrupted_base64}
+        )
+
+
+@pytest.mark.asyncio
+async def test_unsupported_image_format_from_path(tmp_path):
+    """Tests that an unsupported image format from a path raises a ValueError."""
+    setup_tools()
+    unsupported_file = tmp_path / "test.txt"
+    unsupported_file.write_text("this is not an image")
+
+    with pytest.raises(ToolLogicError, match="not a valid image file"):
+        await global_tool_registry.call(
+            "recognize_plate_from_path", {"path": str(unsupported_file)}
+        )
+
+
+@pytest.mark.asyncio
+async def test_empty_image_data():
+    """Tests that providing empty image data raises a validation error."""
+    setup_tools()
+    with pytest.raises(ToolLogicError) as exc_info:
+        await global_tool_registry.call("recognize_plate", {"image_base64": ""})
+    assert "image_base64 cannot be empty" in str(exc_info.value.error.details)
+
+
+@pytest.mark.asyncio
+async def test_get_image_from_directory_path_raises_error(tmp_path):
+    """Tests that providing a path to a directory raises a ToolLogicError."""
+    setup_tools()
+    # tmp_path is a pytest fixture that provides a temporary directory
+    directory_path = tmp_path
+    with pytest.raises(ToolLogicError) as exc_info:
+        await global_tool_registry.call("recognize_plate_from_path", {"path": str(directory_path)})
+    # The specific error can vary by OS (like IsADirectoryError on Linux),
+    # so we check for a substring that indicates a read failure on a directory.
+    assert "Is a directory" in str(exc_info.value) or "read failed" in str(exc_info.value)
