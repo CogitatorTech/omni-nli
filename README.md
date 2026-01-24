@@ -1,193 +1,234 @@
 <div align="center">
   <picture>
-    <img alt="Omni-LPR Logo" src="logo.svg" width="300">
+    <img alt="Omni-NLI Logo" src="logo.svg" width="200">
   </picture>
 <br>
 
-<h2>Omni-LPR</h2>
+<h2>Omni-NLI</h2>
 
-[![Tests](https://img.shields.io/github/actions/workflow/status/habedi/omni-lpr/tests.yml?label=tests&style=flat&labelColor=333333&logo=github&logoColor=white)](https://github.com/habedi/omni-lpr/actions/workflows/tests.yml)
-[![Code Coverage](https://img.shields.io/codecov/c/github/habedi/omni-lpr?style=flat&label=coverage&labelColor=333333&logo=codecov&logoColor=white)](https://codecov.io/gh/habedi/omni-lpr)
-[![Code Quality](https://img.shields.io/codefactor/grade/github/habedi/omni-lpr?style=flat&label=code%20quality&labelColor=333333&logo=codefactor&logoColor=white)](https://www.codefactor.io/repository/github/habedi/omni-lpr)
-[![Python Version](https://img.shields.io/badge/python-%3E=3.10-3776ab?style=flat&labelColor=333333&logo=python&logoColor=white)](https://github.com/habedi/omni-lpr)
-[![PyPI](https://img.shields.io/pypi/v/omni-lpr?style=flat&labelColor=333333&logo=pypi&logoColor=white)](https://pypi.org/project/omni-lpr/)
-[![License](https://img.shields.io/badge/license-MIT-00acc1?style=flat&labelColor=333333&logo=open-source-initiative&logoColor=white)](https://github.com/habedi/omni-lpr/blob/main/LICENSE)
-<br>
-[![Documentation](https://img.shields.io/badge/docs-read-8ca0d7?style=flat&labelColor=282c34)](https://github.com/habedi/omni-lpr/tree/main/docs)
-[![Examples](https://img.shields.io/badge/examples-view-green?style=flat&labelColor=282c34)](https://github.com/habedi/omni-lpr/tree/main/examples)
-[![Docker Image (CPU)](https://img.shields.io/badge/Docker-CPU-007ec6?style=flat&logo=docker)](https://github.com/habedi/omni-lpr/pkgs/container/omni-lpr-cpu)
-[![Docker Image (OpenVINO)](https://img.shields.io/badge/Docker-OpenVINO-007ec6?style=flat&logo=docker)](https://github.com/habedi/omni-lpr/pkgs/container/omni-lpr-openvino)
-[![Docker Image (CUDA)](https://img.shields.io/badge/Docker-CUDA-007ec6?style=flat&logo=docker)](https://github.com/habedi/omni-lpr/pkgs/container/omni-lpr-cuda)
+[![Tests](https://img.shields.io/github/actions/workflow/status/CogitatorTech/omni-nli/tests.yml?label=tests&style=flat&labelColor=333333&logo=github&logoColor=white)](https://github.com/CogitatorTech/omni-nli/actions/workflows/tests.yml)
+[![Code Coverage](https://img.shields.io/codecov/c/github/CogitatorTech/omni-nli?style=flat&label=coverage&labelColor=333333&logo=codecov&logoColor=white)](https://codecov.io/gh/CogitatorTech/omni-nli)
+[![Python Version](https://img.shields.io/badge/python-%3E=3.10-3776ab?style=flat&labelColor=333333&logo=python&logoColor=white)](https://github.com/CogitatorTech/omni-nli)
+[![PyPI](https://img.shields.io/pypi/v/omni-nli?style=flat&labelColor=333333&logo=pypi&logoColor=white)](https://pypi.org/project/omni-nli/)
+[![License](https://img.shields.io/badge/license-MIT-00acc1?style=flat&labelColor=333333&logo=open-source-initiative&logoColor=white)](https://github.com/CogitatorTech/omni-nli/blob/main/LICENSE)
 
-A multi-interface (REST and MCP) server for automatic license plate recognition
+A multi-interface (REST and MCP) server for natural language inference
 
 </div>
 
 ---
 
-Omni-LPR is a self-hostable server that provides automatic license plate recognition (ALPR) capabilities via a REST API
-and the Model Context Protocol (MCP). It can be used both as a standalone ALPR microservice and as an ALPR toolbox for
-AI agents and large language models (LLMs).
+Omni-NLI is a self-hostable server that provides natural language inference (NLI) capabilities via a REST API and the Model Context Protocol (MCP).
+It can be used both as a very scalable standalone microservice and also as an MCP server for AI agents to implement a verification layer for AI-based
+applications.
 
-### Why Omni-LPR?
+### What is NLI?
 
-Using Omni-LPR can have the following benefits:
+Given two pieces of text called premise (or fact) and hypothesis (or claim), NLI is the task of determining the relationship between them.
+The relationship is typically shown by one of three labels:
+- `"entailment"`: the hypothesis is supported or proved by the premise
+- `"contradiction"`: the hypothesis is refuted or contradicts the premise
+- `"neutral"`: the hypothesis is neither supported nor refuted by the premise
 
-- **Decoupling.** Your main application can be in any programming language. It doesn't need to be tangled up with Python
-  or specific ML dependencies because the server handles all of that.
+NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
+question-answering system generates.
 
-- **Multiple Interfaces.** You aren't locked into one way of communicating. You can use a standard REST API from any
-  app, or you can use MCP, which is designed for AI agent integration.
+### Features
 
-- **Ready-to-Deploy.** You don't have to build it from scratch. There are pre-built Docker images that are easy to
-  deploy and start using immediately.
+- Supports models provided by different backends, including Ollama, HuggingFace, or OpenRouter
+- Supports REST API (for traditional applications) and MCP (for AI agent integration) interfaces
+- Fully configurable and very scalable
 
-- **Hardware Acceleration.** The server is optimized for the hardware you have. It supports generic CPUs (ONNX), Intel
-  CPUs (OpenVINO), and NVIDIA GPUs (CUDA).
-
-- **Asynchronous I/O.** It's built on Starlette, which means it has high-performance, non-blocking I/O. It can handle
-  many concurrent requests without getting bogged down.
-
-- **Scalability.** Because it's a separate service, it can be scaled independently of your main application. If you
-  suddenly need more ALPR power, you can scale Omni-LPR up without touching anything else.
-
-
-See the [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
+See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 
 > [!IMPORTANT]
-> Omni-LPR is in early development, so bugs and breaking API changes are expected.
-> Please use the [issues page](https://github.com/habedi/omni-lpr/issues) to report bugs or request features.
+> Omni-NLI is in early development, so bugs and breaking changes are expected.
+> Please use the [issues page](https://github.com/CogitatorTech/omni-nli/issues) to report bugs or request features.
 
 ---
 
 ### Quickstart
 
-You can get started with Omni-LPR in a few minutes by following the steps described below.
-
 #### 1. Install the Server
 
-You can install Omni-LPR using `pip`:
-
 ```sh
-pip install omni-lpr
+pip install omni-nli
 ```
 
-#### 2. Start the Server
+#### 2. Configure Backends
 
-When installed, start the server with a single command:
-
-```sh
-omni-lpr
-```
-
-By default, the server will be listening on `http://127.0.0.1:8000`.
-You can confirm it's running by accessing the health check endpoint:
+Copy the example config and add your API keys:
 
 ```sh
-curl http://127.0.0.1:8000/api/health
-# Sample expected output: {"status": "ok", "version": "0.3.4"}
+cp .env.example .env
+# Edit .env to configure the model backends and other settings
 ```
 
-#### 3. Recognize a License Plate
+#### 3. Start the Server
 
-Now you can make a request to recognize a license plate from an image.
-The example below uses a publicly available image URL.
+```sh
+omni-nli
+```
+
+The server will be listening on `http://127.0.0.1:8000` by default.
+
+#### 4. Evaluate NLI
 
 ```sh
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{"path": "https://www.olavsplates.com/foto_n/n_cx11111.jpg"}' \
-  http://127.0.0.1:8000/api/v1/tools/detect_and_recognize_plate_from_path/invoke
+  -d '{
+    "premise": "A soccer player kicks a ball into the goal.",
+    "hypothesis": "The soccer player is asleep on the field."
+  }' \
+  http://127.0.0.1:8000/api/v1/tools/evaluate_nli/invoke
 ```
 
-You should receive a JSON response with the detected license plate information.
+Response:
 
-### Usage
+```json
+{
+    "content": [
+        {
+            "type": "json",
+            "data": {
+                "label": "contradiction",
+                "confidence": 1.0,
+                "thinking_trace": null,
+                "usage": {
+                    "total_tokens": 188,
+                    "thinking_tokens": 0,
+                    "prompt_tokens": 172,
+                    "completion_tokens": 16
+                },
+                "model": "Qwen/Qwen2.5-1.5B-Instruct",
+                "backend": "huggingface"
+            }
+        }
+    ]
+}
+```
 
-Omni-LPR exposes its capabilities as "tools" that can be called via a REST API or over the MCP.
+---
 
-#### Available Tools
+### API Reference
 
-The server provides tools for listing models, recognizing plates from image data, and recognizing plates from a path.
+#### REST API: `POST /api/v1/tools/evaluate_nli/invoke`
 
-- `list_models`: Lists the available detector and OCR models.
+Request body schema: 
 
-- **Tools that process image data** (provided as Base64 or file upload):
-    - `recognize_plate`: Recognizes text from a pre-cropped license plate image.
-    - `detect_and_recognize_plate`: Detects and recognizes all license plates in a full image.
+```json
+{
+    "premise": "The base factual statement.",
+    "hypothesis": "The statement to test against the premise.",
+    "context": "An optional background context to prime the model.",
+    "backend": "ollama",
+    "model": "llama3.2",
+    "use_reasoning": false
+}
+```
 
-- **Tools that process an image path** (a URL or local file path):
-    - `recognize_plate_from_path`: Recognizes text from a pre-cropped license plate image at a given path.
-    - `detect_and_recognize_plate_from_path`: Detects and recognizes plates in a full image at a given path.
+Parameters in the request body:
 
-For more details on how to use the different tools and provide image data, please see the
-[API Documentation](docs/README.md).
+| Parameter       | Type    | Default  | Description                                                                     |
+|-----------------|---------|----------|---------------------------------------------------------------------------------|
+| `premise`       | string  | required | The base factual statement                                                      |
+| `hypothesis`    | string  | required | The statement to test                                                           |
+| `context`       | string  | null     | Optional background context to ground the inference                             |
+| `backend`       | string  | null     | `"ollama"`, `"huggingface"`, or `"openrouter"`. Uses configured default if null |
+| `model`         | string  | null     | Specific model to use. Uses backend default if null                             |
+| `use_reasoning` | boolean | `false`  | Enable extended thinking (when supported by the model)                          |
 
-#### REST API
+Response:
 
-The REST API provides a standard way to interact with the server. All tool endpoints are available under the `/api/v1`
-prefix. Once the server is running, you can access interactive API documentation in the Swagger UI
-at http://127.0.0.1:8000/api/v1/apidoc/swagger.
+| Field            | Type           | Description                                       |
+|------------------|----------------|---------------------------------------------------|
+| `label`          | string         | `"entailment"`, `"contradiction"`, or `"neutral"` |
+| `confidence`     | float          | Confidence score (0.0 - 1.0)                      |
+| `thinking_trace` | string or null | Reasoning trace if `use_reasoning` is enabled     |
+| `model`          | string         | Model that was used                               |
+| `backend`        | string         | Backend provider used                             |
+| `usage`          | object         | Token usage statistics                            |
 
-#### MCP Interface
+---
 
-The server also exposes its tools over the MCP for integration with AI agents and LLMs. The MCP endpoint is available at
-http://127.0.0.1:8000/mcp/, via streamable HTTP.
+### MCP Integration
 
-You can use a tool like [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to explore the available MCP
-tools.
+The server exposes its tools over MCP at `http://127.0.0.1:8000/mcp/`.
 
-<div align="center">
-  <picture>
-    <img src="docs/assets/screenshots/mcp-inspector-3.png" alt="MCP Inspector Screenshot" width="auto">
-  </picture>
-</div>
-
-### Integration
-
-You can connect any client that supports the MCP protocol to the server.
-The following examples show how to use the server with [LM Studio](https://lmstudio.ai/).
-
-#### LM Studio Configuration
+Claude Desktop / LM Studio Configuration:
 
 ```json
 {
     "mcpServers": {
-        "omni-lpr-local": {
+        "omni-nli": {
             "url": "http://127.0.0.1:8000/mcp/"
         }
     }
 }
 ```
 
-#### Tool Usage Examples
+Available MCP Tools:
 
-The screenshot of using the `list_models` tool in LM Studio to list the available models for the APLR.
+| Tool             | Description                                                               |
+|------------------|---------------------------------------------------------------------------|
+| `evaluate_nli`   | Analyzes premise/hypothesis pairs to determine their logical relationship |
+| `list_providers` | Lists available backend providers and their configuration status          |
 
-<div align="center">
-  <picture>
-<img src="docs/assets/screenshots/lmstudio-list-models-1.png" alt="LM Studio Screenshot 1" width="auto" height="auto">
-</picture>
-</div>
+---
 
-The screenshot below shows using the `detect_and_recognize_plate_from_path` tool in LM Studio to detect and recognize
-the license plate from an [image available on the web](https://www.olavsplates.com/foto_n/n_cx11111.jpg).
+### Configuration
 
-<div align="center">
-  <picture>
-<img src="docs/assets/screenshots/lmstudio-detect-plates-1.png" alt="LM Studio Screenshot 2" width="auto" height="auto">
-  </picture>
-</div>
+All settings can be configured via environment variables or CLI arguments.
+
+See [.env.example](.env.example) for the complete list:
+
+```bash
+# Server settings
+HOST=127.0.0.1
+PORT=8000
+LOG_LEVEL=INFO
+
+# Backend configuration
+OLLAMA_HOST=http://localhost:11434
+HUGGINGFACE_TOKEN=your_token_here
+OPENROUTER_API_KEY=your_key_here
+
+# Default backend and model for NLI evaluation
+DEFAULT_BACKEND=ollama
+DEFAULT_MODEL=llama3.2
+
+# Token limits
+MAX_THINKING_TOKENS=4096
+MAX_TOTAL_TOKENS=8192
+```
+
+CLI Arguments:
+
+```sh
+omni-nli --host 0.0.0.0 --port 8080 --default-backend openrouter --default-model anthropic/claude-3.5-sonnet
+```
+
+---
+
+### Supported Backends
+
+| Backend     | Local | Reasoning Support | Example Models                                        |
+|-------------|-------|-------------------|-------------------------------------------------------|
+| Ollama      | Yes   | No                | `llama3.2`, `mistral`, `qwen2.5`                      |
+| HuggingFace | Yes   | No                | `meta-llama/Llama-3.2-3B-Instruct`                    |
+| OpenRouter  | No    | Yes               | `anthropic/claude-3.5-sonnet`, `deepseek/deepseek-r1` |
 
 ---
 
 ### Documentation
 
-Omni-LPR documentation is available [here](docs).
+The REST API includes interactive documentation available when running the server:
 
-#### Examples
+- **Swagger UI**: `/docs` (e.g., http://127.0.0.1:8000/docs)
+- **ReDoc**: `/redoc` (e.g., http://127.0.0.1:8000/redoc)
 
-Check out the [examples](examples) directory for usage examples.
+These interfaces provide complete details on all available endpoints, parameters, and response schemas.
 
 ---
 
@@ -198,13 +239,8 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
 
 ### License
 
-Omni-LPR is licensed under the MIT License (see [LICENSE](LICENSE)).
+Omni-NLI is licensed under the MIT License (see [LICENSE](LICENSE)).
 
 ### Acknowledgements
 
-- This project uses the awesome [fast-plate-ocr](https://github.com/ankandrew/fast-plate-ocr)
-  and [fast-alpr](https://github.com/ankandrew/fast-alpr) Python libraries.
-- The project logo is from [SVG Repo](https://www.svgrepo.com/svg/237124/license-plate-number).
-
-<!-- Need to add this line for MCP registry publication -->
-<!-- mcp-name: io.github.habedi/omni-lpr -->
+- The logo is from [SVG Repo](https://www.svgrepo.com/svg/480613/puzzle-9) with some modifications.

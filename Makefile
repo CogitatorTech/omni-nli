@@ -3,7 +3,7 @@
 # ==============================================================================
 PYTHON      ?= python3
 PIP         ?= pip3
-DEP_MNGR    ?= poetry
+DEP_MNGR    ?= uv
 DOCS_DIR    ?= docs
 DOCKERFILE   ?= Dockerfile
 GUNICORN_NUM_WORKERS ?= 4
@@ -80,12 +80,12 @@ test-hooks: ## Test Git hooks on all files
 .PHONY: run
 run: ## Start the server
 	@echo "Starting the server..."
-	$(DEP_MNGR) run omni-lpr --host $(HOST) --port $(PORT) --log-level DEBUG
+	$(DEP_MNGR) run omni-nli --host $(HOST) --port $(PORT) --log-level DEBUG
 
 .PHONY: run-gunicorn
 run-gunicorn: ## Start the server with Gunicorn
-	@echo "Starting the Omni-LPR server with Gunicorn..."
-	$(DEP_MNGR) run gunicorn -w $(GUNICORN_NUM_WORKERS) -k uvicorn.workers.UvicornWorker omni_lpr:starlette_app
+	@echo "Starting the Omni-NLI server with Gunicorn..."
+	$(DEP_MNGR) run gunicorn -w $(GUNICORN_NUM_WORKERS) -k uvicorn.workers.UvicornWorker omni_nli:starlette_app
 
 # ==============================================================================
 # BUILD & PUBLISH
@@ -104,7 +104,7 @@ publish: ## Publish to PyPI (requires PYPI_TOKEN)
 # ==============================================================================
 .PHONY: example-rest example-mcp
 
-SERVER_PID := /tmp/omni-lpr-server.pid
+SERVER_PID := /tmp/omni-nli-server.pid
 
 # Define the lists of example files
 REST_EXAMPLES := $(wildcard examples/rest/*.py)
@@ -112,7 +112,7 @@ MCP_EXAMPLES := $(wildcard examples/mcp/*.py)
 
 define run_examples
 	@echo "Starting server in background..."
-	$(DEP_MNGR) run omni-lpr > /dev/null 2>&1 & echo $$! > $(SERVER_PID)
+	$(DEP_MNGR) run omni-nli > /dev/null 2>&1 & echo $$! > $(SERVER_PID)
 	@echo "Waiting for server to start..."
 	@while ! nc -z 127.0.0.1 8000; do sleep 1; done
 	@echo "Server started. Running $(1) examples..."
@@ -133,37 +133,15 @@ example-mcp: ## Run all MCP API examples
 # ==============================================================================
 # DOCKER
 # ==============================================================================
-IMAGE_NAME ?= omni-lpr
-
-.PHONY: docker-build-cpu
-docker-build-cpu: ## Build the Docker image for CPU
-	docker build -t $(IMAGE_NAME):cpu --build-arg BACKEND=cpu --target cpu -f Dockerfile .
-
-.PHONY: docker-build-cuda
-docker-build-cuda: ## Build the Docker image for CUDA
-	docker build -t $(IMAGE_NAME):cuda --build-arg BACKEND=cuda --target cuda -f Dockerfile .
-
-.PHONY: docker-build-openvino
-docker-build-openvino: ## Build the Docker image for OpenVINO
-	docker build -t $(IMAGE_NAME):openvino --build-arg BACKEND=openvino --target openvino -f Dockerfile .
+IMAGE_NAME ?= omni-nli
 
 .PHONY: docker-build
-docker-build: docker-build-cpu ## Build the default Docker image (CPU)
-
-.PHONY: docker-run-cpu
-docker-run-cpu: ## Run the CPU Docker container
-	docker run --rm -it -p $(PORT):$(PORT) $(IMAGE_NAME):cpu
-
-.PHONY: docker-run-cuda
-docker-run-cuda: ## Run the CUDA Docker container
-	docker run --rm -it --gpus all -p $(PORT):$(PORT) -e EXECUTION_DEVICE=cuda $(IMAGE_NAME):cuda
-
-.PHONY: docker-run-openvino
-docker-run-openvino: ## Run the OpenVINO Docker container
-	docker run --rm -it -p $(PORT):$(PORT) -e EXECUTION_DEVICE=openvino $(IMAGE_NAME):openvino
+docker-build: ## Build the Docker image
+	docker build -t $(IMAGE_NAME):latest -f Dockerfile .
 
 .PHONY: docker-run
-docker-run: docker-run-cpu ## Run the default Docker container (CPU)
+docker-run: ## Run the Docker container
+	docker run --rm -it -p $(PORT):$(PORT) $(IMAGE_NAME):latest
 
 # ==============================================================================
 # MAINTENANCE

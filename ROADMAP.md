@@ -1,46 +1,71 @@
-## Feature Roadmap
+## Implemented Features
 
-This document includes the roadmap for the Omni-LPR project.
-It outlines features to be implemented and their current status.
+This document outlines the features planned for the Omni-NLI project and their current implementation status.
 
 > [!IMPORTANT]
-> This roadmap is a work in progress and is subject to change.
+> This roadmap is a work in progress and can change without notice.
 
-### Feature Roadmap
+### Core NLI Functionality
 
-- **Core ALPR Capabilities**
+- [x] Natural language inference classification (entailment, contradiction, or neutral)
+- [x] Confidence score estimation for predictions
+- [x] Extended thinking/reasoning trace extraction
+- [x] Configurable default backend and model
+- [x] Per-request backend and model overrides
+- [x] Context grounding support for logic verification
 
-    - [x] License plate detection.
-    - [x] License plate recognition.
-    - [x] Optimized models for CPU, OpenVINO, and CUDA backends.
+---
 
-- **Interfaces and Developer Experience**
+### Backend Providers
 
-    - [x] MCP interface for AI agent integration.
-    - [x] REST API for all core functions/tools.
-    - [x] Standardized JSON error responses.
-    - [x] Interactive API documentation (Swagger UI and ReDoc).
-    - [x] Support for direct image uploads (`multipart/form-data`).
-    - [x] Switch from deprecated SSE to streamable HTTP for transport.
+- [x] Ollama
+- [x] HuggingFace (using the Transformers library)
+- [x] OpenRouter
 
-- **Performance**
+---
 
-    - [x] Asynchronous I/O for concurrent requests.
-    - [x] Simple LRU cache for recently processed images.
-    - [ ] Request batching for model inference.
+### Interfaces
 
-- **Integrations**
+- [x] REST API with OpenAPI documentation (Swagger UI and ReDoc)
+- [x] MCP (Model Context Protocol) for AI agent integration
+- [x] Streamable HTTP transport for MCP
+- [x] Standardized JSON error responses
+- [x] Pydantic validation for all inputs
 
-    - [x] Standalone microservice architecture.
-    - [x] MCP and REST API usage examples.
-    - [ ] A Python client library to simplify interaction with the REST API.
+---
 
-- **Deployment**
+### Performance
 
-    - [x] Pre-built Docker images for each hardware backend.
-    - [x] Configuration via environment variables and CLI arguments.
-    - [ ] A Helm chart for Kubernetes deployment.
+- [x] Asynchronous I/O for concurrent request handling
+- [x] Provider instance caching (using LRU)
+- [x] Token usage tracking and reporting
+- [ ] Request rate limiting
+- [ ] Response caching for identical queries
 
-- **Benchmarks**
+---
 
-    - [ ] Performance benchmarks for different hardware and request types.
+### Deployment
+
+- [x] Standalone microservice architecture
+- [x] Configuration via environment variables
+- [x] CLI argument overrides
+- [x] Docker support
+- [ ] Pre-built Docker images
+
+---
+
+### Development and Testing
+
+- [x] Unit tests with pytest
+- [x] Code coverage reporting
+- [ ] Integration tests with live backends
+- [ ] End-to-end API tests
+- [ ] Performance benchmarks
+
+---
+
+### Documentation
+
+- [x] README with a quickstart guide
+- [x] Configuration reference (.env.example)
+- [ ] MkDocs documentation (API reference, getting started, deployment guides, etc.)
