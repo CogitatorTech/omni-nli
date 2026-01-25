@@ -78,19 +78,14 @@ dev = [
 
 [project.urls]
 Repository = "https://github.com/CogitatorTech/omni-nli"
-Documentation = "https://github.com/CogitatorTech/omni-nli/blob/main/README.md"
+Documentation = "https://cogitatortech.github.io/omni-nli/"
 
 [project.scripts]
 omni-nli = "omni_nli.__main__:main"
 
-[tool.poetry]
-include = ["README.md"]
-packages = [{ include = "omni_nli", from = "src" }]
-package-mode = true
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.20", "build>=1.0"]
+build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

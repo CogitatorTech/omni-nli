@@ -26,6 +26,7 @@ applications.
 
 Given two pieces of text called premise (or fact) and hypothesis (or claim), NLI is the task of determining the relationship between them.
 The relationship is typically shown by one of three labels:
+
 - `"entailment"`: the hypothesis is supported or proved by the premise
 - `"contradiction"`: the hypothesis is refuted or contradicts the premise
 - `"neutral"`: the hypothesis is neither supported nor refuted by the premise
@@ -35,8 +36,8 @@ question-answering system generates.
 
 ### Features
 
-- Supports models provided by different backends, including Ollama, HuggingFace, or OpenRouter
-- Supports REST API (for traditional applications) and MCP (for AI agent integration) interfaces
+- Supports models provided by different backends, including Ollama, HuggingFace, and OpenRouter
+- Supports REST API (for traditional applications) and MCP (for AI agents) interfaces
 - Fully configurable and very scalable
 
 See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
@@ -49,7 +50,7 @@ See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 
 ### Quickstart
 
-#### 1. Install the Server
+#### 1. Installation
 
 ```sh
 pip install omni-nli
@@ -111,124 +112,10 @@ Response:
 
 ---
 
-### API Reference
-
-#### REST API: `POST /api/v1/tools/evaluate_nli/invoke`
-
-Request body schema:
-
-```json
-{
-    "premise": "The base factual statement.",
-    "hypothesis": "The statement to test against the premise.",
-    "context": "An optional background context to prime the model.",
-    "backend": "ollama",
-    "model": "llama3.2",
-    "use_reasoning": false
-}
-```
-
-Parameters in the request body:
-
-| Parameter       | Type    | Default  | Description                                                                     |
-|-----------------|---------|----------|---------------------------------------------------------------------------------|
-| `premise`       | string  | required | The base factual statement                                                      |
-| `hypothesis`    | string  | required | The statement to test                                                           |
-| `context`       | string  | null     | Optional background context to ground the inference                             |
-| `backend`       | string  | null     | `"ollama"`, `"huggingface"`, or `"openrouter"`. Uses configured default if null |
-| `model`         | string  | null     | Specific model to use. Uses backend default if null                             |
-| `use_reasoning` | boolean | `false`  | Enable extended thinking (when supported by the model)                          |
-
-Response:
-
-| Field            | Type           | Description                                       |
-|------------------|----------------|---------------------------------------------------|
-| `label`          | string         | `"entailment"`, `"contradiction"`, or `"neutral"` |
-| `confidence`     | float          | Confidence score (0.0 - 1.0)                      |
-| `thinking_trace` | string or null | Reasoning trace if `use_reasoning` is enabled     |
-| `model`          | string         | Model that was used                               |
-| `backend`        | string         | Backend provider used                             |
-| `usage`          | object         | Token usage statistics                            |
-
----
-
-### MCP Integration
-
-The server exposes its tools over MCP at `http://127.0.0.1:8000/mcp/`.
-
-Claude Desktop / LM Studio Configuration:
-
-```json
-{
-    "mcpServers": {
-        "omni-nli": {
-            "url": "http://127.0.0.1:8000/mcp/"
-        }
-    }
-}
-```
-
-Available MCP Tools:
-
-| Tool             | Description                                                               |
-|------------------|---------------------------------------------------------------------------|
-| `evaluate_nli`   | Analyzes premise/hypothesis pairs to determine their logical relationship |
-| `list_providers` | Lists available backend providers and their configuration status          |
-
----
-
-### Configuration
-
-All settings can be configured via environment variables or CLI arguments.
-
-See [.env.example](.env.example) for the complete list:
-
-```bash
-# Server settings
-HOST=127.0.0.1
-PORT=8000
-LOG_LEVEL=INFO
-
-# Backend configuration
-OLLAMA_HOST=http://localhost:11434
-HUGGINGFACE_TOKEN=your_token_here
-OPENROUTER_API_KEY=your_key_here
-
-# Default backend and model for NLI evaluation
-DEFAULT_BACKEND=ollama
-DEFAULT_MODEL=llama3.2
-
-# Token limits
-MAX_THINKING_TOKENS=4096
-MAX_TOTAL_TOKENS=8192
-```
-
-CLI Arguments:
-
-```sh
-omni-nli --host 0.0.0.0 --port 8080 --default-backend openrouter --default-model anthropic/claude-3.5-sonnet
-```
-
----
-
-### Supported Backends
-
-| Backend     | Local | Reasoning Support | Example Models                                        |
-|-------------|-------|-------------------|-------------------------------------------------------|
-| Ollama      | Yes   | No                | `llama3.2`, `mistral`, `qwen2.5`                      |
-| HuggingFace | Yes   | No                | `meta-llama/Llama-3.2-3B-Instruct`                    |
-| OpenRouter  | No    | Yes               | `anthropic/claude-3.5-sonnet`, `deepseek/deepseek-r1` |
-
----
-
 ### Documentation
 
-The REST API includes interactive documentation available when running the server:
-
-- **Swagger UI**: `/docs` (e.g., http://127.0.0.1:8000/docs)
-- **ReDoc**: `/redoc` (e.g., http://127.0.0.1:8000/redoc)
-
-These interfaces provide complete details on all available endpoints, parameters, and response schemas.
+Check out the [Omni-NLI Documentation](https://cogitatortech.github.io/omni-nli/) for more information, including configuration options, API
+reference, and examples.
 
 ---
 

@@ -95,9 +95,8 @@ build: ## Build distributions
 	$(DEP_MNGR) build
 
 .PHONY: publish
-publish: ## Publish to PyPI (requires PYPI_TOKEN)
-	$(DEP_MNGR) config pypi-token.pypi $(PYPI_TOKEN)
-	$(DEP_MNGR) publish --build
+publish: build ## Publish to PyPI (requires PYPI_TOKEN)
+	@$(DEP_MNGR) publish --token $(PYPI_TOKEN)
 
 # ==============================================================================
 # EXAMPLES

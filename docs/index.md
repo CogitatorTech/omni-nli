@@ -8,6 +8,9 @@
 
 Omni-NLI is a self-hostable server that provides Natural Language Inference (NLI) capabilities via a REST API and the Model Context Protocol (MCP).
 
+!!! warning
+    Omni-NLI is in early development (Alpha). Bugs and breaking changes are expected.
+
 It is designed to be a scalable standalone microservice or a tool layer for AI agents, allowing them to verify logical consistency and detect hallucinations.
 
 ## Key Features
@@ -20,7 +23,7 @@ It is designed to be a scalable standalone microservice or a tool layer for AI a
     - Entailment/Contradiction Detection: Determine if a hypothesis follows from a premise.
     - Thinking Traces: Extract reasoning steps from models that support it.
     - Confidence Scores: Get numerical confidence for predictions.
-- Production Ready:
+- Scalable Architecture:
     - Asynchronous I/O for high concurrency.
     - Caching for provider instances.
     - Standardized error handling and validation.

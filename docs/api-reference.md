@@ -13,42 +13,35 @@ When the server is running, detailed interactive documentation is available at:
 
 Evaluates the logical relationship between a premise and a hypothesis.
 
-| Parameter | Type | Required | Description |
+Request Body Parameters:
+
+| Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| premise | string | Yes | The factual statement to rely on. |
-| hypothesis | string | Yes | The claim to be verified against the premise. |
-| context | string | No | Additional background context. |
-| backend | string | No | ollama, huggingface, or openrouter. |
-| model | string | No | Specific model identifier (e.g., llama3.2). |
-| use_reasoning | boolean | No | Request reasoning trace (default: false). |
+| premise | string | required | The base factual statement |
+| hypothesis | string | required | The statement to test against the premise |
+| context | string | null | Optional background context to ground the inference |
+| backend | string | null | ollama, huggingface, or openrouter. Uses configured default if null |
+| model | string | null | Specific model to use. Uses backend default if null |
+| use_reasoning | boolean | false | Enable extended thinking (when supported by the model) |
 
-Response Schema:
+Response Fields:
 
-The response follows the MCP tool call result format.
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| label | string | entailment, contradiction, or neutral |
+| confidence | float | Confidence score (0.0 - 1.0) |
+| thinking_trace | string \| null | Reasoning trace if use_reasoning is enabled |
+| model | string | Model that was used |
+| backend | string | Backend provider used |
+| usage | object | Token usage statistics |
 
-```json
-{
-  "content": [
-    {
-      "type": "json",
-      "data": {
-        "label": "entailment | contradiction | neutral",
-        "confidence": 0.0-1.0,
-        "thinking_trace": "string (optional)",
-        "model": "string",
-        "backend": "string"
-      }
-    }
-  ]
-}
-```
+## MCP Integration
 
-## MCP Tools
+The server exposes its tools over MCP at http://127.0.0.1:8000/mcp/.
 
-The server exposes the following tools via MCP:
+Available MCP Tools:
 
-### evaluate_nli
-Same functionality as the REST endpoint described above.
-
-### list_providers
-Lists the currently configured backend providers and their status.
+| Tool | Description |
+| :--- | :--- |
+| evaluate_nli | Analyzes premise/hypothesis pairs to determine their logical relationship |
+| list_providers | Lists available backend providers and their configuration status |
