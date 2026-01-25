@@ -115,7 +115,7 @@ Response:
 
 #### REST API: `POST /api/v1/tools/evaluate_nli/invoke`
 
-Request body schema: 
+Request body schema:
 
 ```json
 {

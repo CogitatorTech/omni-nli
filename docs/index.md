@@ -1,58 +1,33 @@
-# Vq
+# Omni-NLI
 
-Vq (**v**ector **q**uantizer) is a vector quantization library for Rust 🦀.
-It provides efficient implementations of popular quantization algorithms for compressing high-dimensional vectors.
+<div align="center">
+  <picture>
+    <img alt="Omni-NLI Logo" src="https://raw.githubusercontent.com/CogitatorTech/omni-nli/main/logo.svg" width="200">
+  </picture>
+</div>
 
-## Features
+Omni-NLI is a self-hostable server that provides Natural Language Inference (NLI) capabilities via a REST API and the Model Context Protocol (MCP).
 
-- Simple and generic API via the `Quantizer` trait
-- More than 50% reduction in storage size of input vectors
-- SIMD acceleration support (AVX/AVX2/AVX512/NEON/SVE) via the `simd` feature
-- Multi-threaded training via the `parallel` feature
-- Multiple distance metrics: Euclidean, Manhattan, and cosine
+It is designed to be a scalable standalone microservice or a tool layer for AI agents, allowing them to verify logical consistency and detect hallucinations.
 
-## Supported Algorithms
+## Key Features
 
-| Algorithm              | Training Complexity | Quantization Complexity | Minimum Storage Reduction |
-|------------------------|---------------------|-------------------------|---------------------------|
-| Binary (BQ)            | $O(1)$              | $O(nd)$                 | 75%                       |
-| Scalar (SQ)            | $O(1)$              | $O(nd)$                 | 75%                       |
-| Product (PQ)           | $O(nkd)$            | $O(nd)$                 | 50%                       |
-| Tree-Structured (TSVQ) | $O(n \log k)$       | $O(d \log k)$           | 50%                       |
-
-Where $n$ is number of vectors, $d$ is the number of dimensions of a vector, and $k$ is the number of centroids used in clustering (for PQ and TSVQ).
-
-## Quick Example
-
-```rust
-use vq::{BinaryQuantizer, Quantizer};
-
-fn main() -> vq::VqResult<()> {
-    // Create a binary quantizer with threshold 0.0
-    let bq = BinaryQuantizer::new(0.0, 0, 1)?;
-
-    // Quantize a vector
-    let quantized = bq.quantize(&[-1.0, 0.5, 1.0])?;
-    assert_eq!(quantized, vec![0, 1, 1]);
-
-    Ok(())
-}
-```
-
-## Python Bindings
-
-Python 🐍 bindings are available via [PyVq](https://pypi.org/project/pyvq/):
-
-```bash
-pip install pyvq
-```
-
-See the [PyVq documentation](https://cogitatortech.github.io/vq/python/) for Python-specific guides.
+- Multi-Backend Support: Use generic models through Ollama (local), HuggingFace (local transformers), or OpenRouter (cloud APIs).
+- Dual Interface:
+    - REST API: For traditional web/backend integration.
+    - MCP Server: For direct integration with Claude Desktop, LM Studio, and other MCP clients.
+- Advanced Logic:
+    - Entailment/Contradiction Detection: Determine if a hypothesis follows from a premise.
+    - Thinking Traces: Extract reasoning steps from models that support it.
+    - Confidence Scores: Get numerical confidence for predictions.
+- Production Ready:
+    - Asynchronous I/O for high concurrency.
+    - Caching for provider instances.
+    - Standardized error handling and validation.
 
 ## Quick Links
 
-- [Getting Started](getting-started.md) - Installation and first steps
-- [Examples](examples.md) - Complete code examples
-- [API Reference](api-reference.md) - API overview
-- [docs.rs/vq](https://docs.rs/vq) - Full Rust API documentation
-- [GitHub Repository](https://github.com/CogitatorTech/vq)
+- [Getting Started](getting-started.md): Installation and configuration guide.
+- [Examples](examples.md): Usage examples for REST and MCP.
+- [API Reference](api-reference.md): Detailed API documentation.
+- [GitHub Repository](https://github.com/CogitatorTech/omni-nli): Source code and contributions.

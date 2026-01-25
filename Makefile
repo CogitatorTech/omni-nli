@@ -43,7 +43,7 @@ setup: ## Install system dependencies and dependency manager (e.g., Poetry)
 
 .PHONY: install
 install: ## Install Python dependencies
-	$(DEP_MNGR) install --extras dev --no-interaction
+	$(DEP_MNGR) sync --all-extras
 
 # ==============================================================================
 # QUALITY & TESTING
@@ -156,3 +156,16 @@ clean: ## Remove caches and build artifacts
 docker-prune: ## Remove dangling (untagged) Docker images
 	@echo "Removing dangling Docker images..."
 	docker image prune -f
+
+# ==============================================================================
+# DOCUMENTATION
+# ==============================================================================
+.PHONY: docs
+docs: ## Generate documentation using MkDocs
+	@echo "Generating MkDocs documentation..."
+	@$(DEP_MNGR) run mkdocs build
+
+.PHONY: docs-serve
+docs-serve: ## Serve documentation locally
+	@echo "Serving MkDocs documentation locally..."
+	@$(DEP_MNGR) run mkdocs serve --dev-addr localhost:8001
