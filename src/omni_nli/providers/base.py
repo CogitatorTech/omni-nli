@@ -92,14 +92,37 @@ Respond with ONLY a JSON object in this exact format:
         if think_match:
             thinking_trace = think_match.group(1).strip()
 
-        json_match = re.search(r"\{[^{}]*\}", response_text)
-        if not json_match:
-            raise ValueError(f"Could not find JSON in response: {response_text[:200]}")
-
+        # Use json_repair to parse and fix the JSON
         try:
-            result_data = json.loads(json_match.group())
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON in response: {e}") from e
+            from json_repair import repair_json
+
+            # First attempt: let json_repair find objects (return_objects=True)
+            # We pass the whole text because json_repair is good at finding JSON in text
+            result_data = repair_json(response_text, return_objects=True)
+
+            # If it returns a list, try to find the relevant object
+            if isinstance(result_data, list):
+                for item in result_data:
+                    if isinstance(item, dict) and "label" in item:
+                        result_data = item
+                        break
+                else:
+                    # Fallback if no valid object found in list
+                    if result_data and isinstance(result_data[0], dict):
+                        result_data = result_data[0]
+                    else:
+                        # If it's still not a dict, maybe try parsing just the matched string if we found one
+                        # But let's rely on repair_json first.
+                        # If result_data is empty list or not dict, fail
+                        pass
+
+            if not isinstance(result_data, dict):
+                raise ValueError("Parsed result is not a dictionary")
+
+        except Exception as e:
+            raise ValueError(
+                f"Failed to parse JSON response: {e}. content: {response_text[:200]}..."
+            ) from e
 
         label = result_data.get("label", "").lower().strip()
         if label not in ("entailment", "contradiction", "neutral"):

@@ -48,7 +48,15 @@ async def _parse_tool_arguments(request: Request, model: BaseModel) -> BaseModel
 
     if "application/json" in content_type:
         _logger.debug("Processing 'application/json' request.")
+
+        # DoS Protection: Limit body size to 10MB
+        if int(request.headers.get("content-length", 0)) > 10 * 1024 * 1024:
+            raise ValueError("Request payload too large (limit: 10MB).")
+
         body = await request.body()
+        if len(body) > 10 * 1024 * 1024:
+            raise ValueError("Request payload too large (limit: 10MB).")
+
         json_data = json.loads(body) if body else {}
         return model(**json_data)
 

@@ -54,11 +54,11 @@ omni-nli --host 0.0.0.0 --port 8080 --default-backend openrouter --default-model
 
 ## Supported Backends
 
-| Backend | Local | Reasoning Support | Example Models |
-| :--- | :--- | :--- | :--- |
-| Ollama | Yes | No | llama3.2, mistral, qwen2.5 |
-| HuggingFace | Yes | No | meta-llama/Llama-3.2-3B-Instruct |
-| OpenRouter | No | Yes | anthropic/claude-3.5-sonnet, deepseek/deepseek-r1 |
+| Backend     | Local | Reasoning Support | Example Models                                    |
+|:------------|:------|:------------------|:--------------------------------------------------|
+| Ollama      | Yes   | No                | llama3.2, mistral, qwen2.5                        |
+| HuggingFace | Yes   | No                | meta-llama/Llama-3.2-3B-Instruct                  |
+| OpenRouter  | No    | Yes               | anthropic/claude-3.5-sonnet, deepseek/deepseek-r1 |
 
 ## Running the Server
 

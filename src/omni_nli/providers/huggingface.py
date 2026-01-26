@@ -1,5 +1,8 @@
 import logging
 from typing import Any
+import asyncio
+import functools
+
 
 from async_lru import alru_cache
 from transformers import pipeline
@@ -24,19 +27,23 @@ class HuggingFaceProvider(NLIProvider):
         self.cache_dir = cache_dir or settings.hf_cache_dir
         self._pipelines: dict[str, Any] = {}
 
-    def _get_pipeline(self, model_id: str) -> Any:  # noqa: ANN401
+    async def _get_pipeline(self, model_id: str) -> Any:  # noqa: ANN401
         if model_id in self._pipelines:
             return self._pipelines[model_id]
 
         _logger.info(f"Loading local model: {model_id} (this may take a while)...")
 
         try:
-            pipe = pipeline(
-                "text-generation",
-                model=model_id,
-                token=self.token,
-                model_kwargs={"cache_dir": self.cache_dir},
-                device_map="auto",
+            # Run model loading in a separate thread to avoid blocking the event loop
+            pipe = await asyncio.to_thread(
+                functools.partial(
+                    pipeline,
+                    "text-generation",
+                    model=model_id,
+                    token=self.token,
+                    model_kwargs={"cache_dir": self.cache_dir},
+                    device_map="auto",
+                )
             )
             self._pipelines[model_id] = pipe
             return pipe
@@ -58,7 +65,7 @@ class HuggingFaceProvider(NLIProvider):
             else:
                 model = DEFAULT_HF_MODELS[0]
 
-        pipe = self._get_pipeline(model)
+        pipe = await self._get_pipeline(model)
 
         prompt = self._build_nli_prompt(premise, hypothesis, context=context, use_reasoning=False)
 
@@ -72,12 +79,16 @@ class HuggingFaceProvider(NLIProvider):
 
         _logger.debug(f"Running inference on {model}...")
 
-        outputs = pipe(
-            prompt_formatted,
-            max_new_tokens=256,
-            temperature=0.1,
-            return_full_text=False,
-            do_sample=False,
+        # Run inference in a separate thread
+        outputs = await asyncio.to_thread(
+            functools.partial(
+                pipe,
+                prompt_formatted,
+                max_new_tokens=256,
+                temperature=0.1,
+                return_full_text=False,
+                do_sample=False,
+            )
         )
 
         response_text = outputs[0]["generated_text"]
