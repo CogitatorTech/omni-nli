@@ -10,6 +10,7 @@
 [![Code Coverage](https://img.shields.io/codecov/c/github/CogitatorTech/omni-nli?style=flat&label=coverage&labelColor=333333&logo=codecov&logoColor=white)](https://codecov.io/gh/CogitatorTech/omni-nli)
 [![Python Version](https://img.shields.io/badge/python-%3E=3.10-3776ab?style=flat&labelColor=333333&logo=python&logoColor=white)](https://github.com/CogitatorTech/omni-nli)
 [![PyPI](https://img.shields.io/pypi/v/omni-nli?style=flat&labelColor=333333&logo=pypi&logoColor=white)](https://pypi.org/project/omni-nli/)
+[![Documentation](https://img.shields.io/badge/docs-read-00acc1?style=flat&labelColor=282c34&logo=readthedocs)](https://CogitatorTech.github.io/omni-nli/)
 [![License](https://img.shields.io/badge/license-MIT-00acc1?style=flat&labelColor=333333&logo=open-source-initiative&logoColor=white)](https://github.com/CogitatorTech/omni-nli/blob/main/LICENSE)
 
 A multi-interface (REST and MCP) server for natural language inference
@@ -85,7 +86,7 @@ curl -X POST \
   http://127.0.0.1:8000/api/v1/tools/evaluate_nli/invoke
 ```
 
-Response:
+Example response:
 
 ```json
 {
@@ -97,13 +98,13 @@ Response:
                 "confidence": 1.0,
                 "thinking_trace": null,
                 "usage": {
-                    "total_tokens": 188,
+                    "total_tokens": 185,
                     "thinking_tokens": 0,
-                    "prompt_tokens": 172,
-                    "completion_tokens": 16
+                    "prompt_tokens": 168,
+                    "completion_tokens": 17
                 },
-                "model": "Qwen/Qwen2.5-1.5B-Instruct",
-                "backend": "huggingface"
+                "model": "llama3.2:3b",
+                "backend": "ollama"
             }
         }
     ]

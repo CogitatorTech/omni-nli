@@ -4,7 +4,7 @@
 
 When the server is running, detailed interactive documentation is available at:
 
-- Swagger UI: /docs ([http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs))
+- Swagger UI: /docs ([http://127.0.0.1:8000/api/v1/apidoc/swagger](http://127.0.0.1:8000/api/v1/apidoc/swagger))
 - ReDoc: /redoc ([http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc))
 
 ## Endpoints
