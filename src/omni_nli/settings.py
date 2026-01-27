@@ -24,7 +24,7 @@ class ServerSettings(BaseSettings):
     openrouter_api_key: str | None = None
 
     default_backend: str = "ollama"
-    default_model: str = "llama3.2"
+    default_model: str = "qwen3:8b"
 
     max_thinking_tokens: int = 4096
     max_total_tokens: int = 8192

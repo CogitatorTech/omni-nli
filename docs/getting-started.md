@@ -34,17 +34,29 @@ LOG_LEVEL=INFO
 
 # Backend configuration
 OLLAMA_HOST=http://localhost:11434
-HUGGINGFACE_TOKEN=your_token_here
-OPENROUTER_API_KEY=your_key_here
+
+# HuggingFace (optional; token is needed for gated models)
+HUGGINGFACE_TOKEN=
+
+# OpenRouter (optional)
+OPENROUTER_API_KEY=
 
 # Default backend and model for NLI evaluation
 DEFAULT_BACKEND=ollama
-DEFAULT_MODEL=llama3.2
+# Example (Ollama): qwen3:8b
+DEFAULT_MODEL=qwen3:8b
 
 # Token limits
 MAX_THINKING_TOKENS=4096
 MAX_TOTAL_TOKENS=8192
 ```
+
+!!! note
+    `DEFAULT_MODEL` is backend-specific. For example:
+
+    - Ollama: `qwen3:8b`, `llama3.2:3b`
+    - HuggingFace: `microsoft/Phi-3.5-mini-instruct` (token only needed for gated models)
+    - OpenRouter: `deepseek/deepseek-r1` (reasoning), `openai/gpt-4o-mini` (standard)
 
 CLI Arguments example:
 

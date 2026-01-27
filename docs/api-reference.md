@@ -2,10 +2,15 @@
 
 ## Interactive Documentation
 
-When the server is running, interactive documentation is available at:
+When the server is running, interactive documentation is typically available at:
 
-- Swagger UI: /api/v1/docs (http://127.0.0.1:8000/api/v1/docs)
-- ReDoc: /api/v1/redoc (http://127.0.0.1:8000/api/v1/redoc)
+- Swagger UI: `/api/v1/docs`
+- ReDoc: `/api/v1/redoc`
+
+If those paths return 404, try:
+
+- Swagger UI (alternate): `/api/v1/apidoc/swagger`
+- ReDoc (alternate): `/api/v1/apidoc/redoc`
 
 ## Endpoints
 
@@ -39,9 +44,20 @@ Response Fields:
 
 Returns provider status and configuration metadata.
 
+Notes:
+
+- `configured` indicates whether Omni-NLI believes the backend can be used.
+- `token_configured` is reported for providers that use credentials (HuggingFace/OpenRouter).
+- HuggingFace also reports whether "public models" are enabled without a token.
+
 ### GET /api/v1/models?backend=ollama|huggingface|openrouter
 
 Lists models available for a backend.
+
+Response shape:
+
+- `backend`: backend name
+- `models`: list of model identifiers
 
 ## MCP Integration
 

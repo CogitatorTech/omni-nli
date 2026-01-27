@@ -52,6 +52,18 @@ curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   }'
 ```
 
+### Providers
+
+```bash
+curl http://127.0.0.1:8000/api/v1/providers
+```
+
+### List Models
+
+```bash
+curl "http://127.0.0.1:8000/api/v1/models?backend=ollama"
+```
+
 ---
 
 ## MCP (Model Context Protocol)
