@@ -509,10 +509,32 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#post-apiv1toolsevaluate_nliinvoke" class="md-nav__link">
+  <a href="#post-apiv1nlievaluate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        POST /api/v1/tools/evaluate_nli/invoke
+        POST /api/v1/nli/evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiv1providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/v1/providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/v1/models?backend=ollama|huggingface|openrouter
       
     </span>
   </a>
@@ -593,10 +615,32 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#post-apiv1toolsevaluate_nliinvoke" class="md-nav__link">
+  <a href="#post-apiv1nlievaluate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        POST /api/v1/tools/evaluate_nli/invoke
+        POST /api/v1/nli/evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiv1providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/v1/providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/v1/models?backend=ollama|huggingface|openrouter
       
     </span>
   </a>
@@ -641,13 +685,13 @@
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
 <h2 id="interactive-documentation">Interactive Documentation<a class="headerlink" href="#interactive-documentation" title="Permanent link">&para;</a></h2>
-<p>When the server is running, detailed interactive documentation is available at:</p>
+<p>When the server is running, interactive documentation is available at:</p>
 <ul>
-<li>Swagger UI: /docs (<a href="http://127.0.0.1:8000/api/v1/apidoc/swagger">http://127.0.0.1:8000/api/v1/apidoc/swagger</a>)</li>
-<li>ReDoc: /redoc (<a href="http://127.0.0.1:8000/redoc">http://127.0.0.1:8000/redoc</a>)</li>
+<li>Swagger UI: /api/v1/docs (http://127.0.0.1:8000/api/v1/docs)</li>
+<li>ReDoc: /api/v1/redoc (http://127.0.0.1:8000/api/v1/redoc)</li>
 </ul>
 <h2 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h2>
-<h3 id="post-apiv1toolsevaluate_nliinvoke">POST /api/v1/tools/evaluate_nli/invoke<a class="headerlink" href="#post-apiv1toolsevaluate_nliinvoke" title="Permanent link">&para;</a></h3>
+<h3 id="post-apiv1nlievaluate">POST /api/v1/nli/evaluate<a class="headerlink" href="#post-apiv1nlievaluate" title="Permanent link">&para;</a></h3>
 <p>Evaluates the logical relationship between a premise and a hypothesis.</p>
 <p>Request Body Parameters:</p>
 <table>
@@ -664,13 +708,13 @@
 <td style="text-align: left;">premise</td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">required</td>
-<td style="text-align: left;">The base factual statement</td>
+<td style="text-align: left;">The base factual statement (premise)</td>
 </tr>
 <tr>
 <td style="text-align: left;">hypothesis</td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">required</td>
-<td style="text-align: left;">The statement to test against the premise</td>
+<td style="text-align: left;">The statement to test against the premise (hypothesis)</td>
 </tr>
 <tr>
 <td style="text-align: left;">context</td>
@@ -694,7 +738,7 @@
 <td style="text-align: left;">use_reasoning</td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;">false</td>
-<td style="text-align: left;">Enable extended thinking (when supported by the model)</td>
+<td style="text-align: left;">Enable extended thinking (only for reasoning-capable backends)</td>
 </tr>
 </tbody>
 </table>
@@ -740,6 +784,10 @@
 </tr>
 </tbody>
 </table>
+<h3 id="get-apiv1providers">GET /api/v1/providers<a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
+<p>Returns provider status and configuration metadata.</p>
+<h3 id="get-apiv1modelsbackendollamahuggingfaceopenrouter">GET /api/v1/models?backend=ollama|huggingface|openrouter<a class="headerlink" href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" title="Permanent link">&para;</a></h3>
+<p>Lists models available for a backend.</p>
 <h2 id="mcp-integration">MCP Integration<a class="headerlink" href="#mcp-integration" title="Permanent link">&para;</a></h2>
 <p>The server exposes its tools over MCP at http://127.0.0.1:8000/mcp/.</p>
 <p>Available MCP Tools:</p>
