@@ -2,15 +2,10 @@
 
 ## Interactive Documentation
 
-When the server is running, interactive documentation is typically available at:
+This project provides interactive API documentation (Swagger UI and ReDoc). Once the server is running, you can access them at:
 
-- Swagger UI: `/api/v1/docs`
-- ReDoc: `/api/v1/redoc`
-
-If those paths return 404, try:
-
-- Swagger UI (alternate): `/api/v1/apidoc/swagger`
-- ReDoc (alternate): `/api/v1/apidoc/redoc`
+    Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger
+    ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
 
 ## Endpoints
 
@@ -26,8 +21,8 @@ Request Body Parameters:
 | hypothesis    | string  | required | The statement to test against the premise (hypothesis)              |
 | context       | string  | null     | Optional background context to ground the inference                 |
 | backend       | string  | null     | ollama, huggingface, or openrouter. Uses configured default if null |
-| model         | string  | null     | Specific model to use. Uses backend default if null                 |
-| use_reasoning | boolean | false    | Enable extended thinking (only for reasoning-capable backends)      |
+| model         | string  | null     | Specific model to use. Uses the backend's default if null           |
+| use_reasoning | boolean | false    | Enable extended thinking                                            |
 
 Response Fields:
 
@@ -42,22 +37,14 @@ Response Fields:
 
 ### GET /api/v1/providers
 
-Returns provider status and configuration metadata.
+Returns provider configuration metadata.
 
 Notes:
 
-- `configured` indicates whether Omni-NLI believes the backend can be used.
-- `token_configured` is reported for providers that use credentials (HuggingFace/OpenRouter).
-- HuggingFace also reports whether "public models" are enabled without a token.
-
-### GET /api/v1/models?backend=ollama|huggingface|openrouter
-
-Lists models available for a backend.
-
-Response shape:
-
-- `backend`: backend name
-- `models`: list of model identifiers
+- `token_configured` is **true** when credentials are present in the environment:
+  - HuggingFace: `HUGGINGFACE_TOKEN` is set (needed for gated/private models)
+  - OpenRouter: `OPENROUTER_API_KEY` is set
+- Each provider always includes a `default_model` (there is no global default model).
 
 ## MCP Integration
 

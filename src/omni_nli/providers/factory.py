@@ -1,5 +1,5 @@
 import logging
-from typing import Literal
+from typing import Literal, cast
 
 from .base import NLIProvider
 from .huggingface import get_huggingface_provider
@@ -14,7 +14,7 @@ BackendType = Literal["ollama", "huggingface", "openrouter"]
 
 async def get_provider(backend: BackendType | None = None) -> NLIProvider:
     if backend is None:
-        backend = settings.default_backend
+        backend = cast(BackendType, settings.default_backend)
 
     _logger.debug(f"Getting provider: backend={backend}")
 
@@ -38,11 +38,11 @@ async def get_provider(backend: BackendType | None = None) -> NLIProvider:
 
 
 async def _get_fallback_provider() -> NLIProvider:
-    fallback_order = ["huggingface", "openrouter"]
+    fallback_order: list[BackendType] = ["huggingface", "openrouter"]
 
-    for backend in fallback_order:
+    for fallback_backend in fallback_order:
         try:
-            provider = await get_provider(backend)
+            provider = await get_provider(fallback_backend)
             if await provider.health_check():
                 return provider
         except ValueError:
@@ -53,27 +53,19 @@ async def _get_fallback_provider() -> NLIProvider:
 
 def list_available_providers() -> dict[str, dict]:
     huggingface_token_set = settings.huggingface_token is not None
-    public_models_enabled = True
 
     return {
         "ollama": {
-            "configured": True,
-            "supports_reasoning": False,
             "host": settings.ollama_host,
-            "default_model": settings.default_model,
+            "default_model": settings.get_default_model("ollama"),
         },
         "huggingface": {
-            "configured": public_models_enabled or huggingface_token_set,
-            "supports_reasoning": False,
             "token_configured": huggingface_token_set,
-            "public_models_enabled": public_models_enabled,
-            "cache_dir": settings.hf_cache_dir,
-            "default_model": settings.default_model,
+            "cache_dir": settings.hf_cache_dir_effective,
+            "default_model": settings.get_default_model("huggingface"),
         },
         "openrouter": {
-            "configured": settings.openrouter_api_key is not None,
-            "supports_reasoning": True,
             "token_configured": settings.openrouter_api_key is not None,
-            "default_model": settings.default_model,
+            "default_model": settings.get_default_model("openrouter"),
         },
     }

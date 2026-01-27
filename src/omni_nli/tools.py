@@ -1,6 +1,7 @@
 import json
 import logging
-from typing import Literal, Type
+from collections.abc import Awaitable, Callable
+from typing import Any, Literal, Type
 
 import mcp.types as types
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -41,7 +42,7 @@ class EvaluateNLIArgs(BaseModel):
     )
     use_reasoning: bool = Field(
         False,
-        description="If True, uses extended thinking/reasoning tokens (when supported).",
+        description="If True, uses extended thinking/reasoning tokens.",
     )
 
     @field_validator("premise", "hypothesis")
@@ -56,14 +57,20 @@ class ListProvidersArgs(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+# Keep this intentionally permissive so individual tools can type their args precisely.
+ToolCallable = Callable[[Any], Awaitable[list[types.ContentBlock]]]
+
+
 class ToolRegistry:
     def __init__(self) -> None:
-        self._tools: dict[str, callable] = {}
+        self._tools: dict[str, ToolCallable] = {}
         self._tool_definitions: dict[str, types.Tool] = {}
         self._tool_models: dict[str, Type[BaseModel]] = {}
 
-    def register(self, tool_definition: types.Tool, model: Type[BaseModel]) -> callable:
-        def decorator(func: callable) -> callable:
+    def register(
+        self, tool_definition: types.Tool, model: Type[BaseModel]
+    ) -> Callable[[ToolCallable], ToolCallable]:
+        def decorator(func: ToolCallable) -> ToolCallable:
             self.register_tool(tool_definition, model, func)
             return func
 
@@ -73,7 +80,7 @@ class ToolRegistry:
         self,
         tool_definition: types.Tool,
         model: Type[BaseModel],
-        func: callable,
+        func: ToolCallable,
     ) -> None:
         name = tool_definition.name
         if name in self._tools:
@@ -135,18 +142,13 @@ async def evaluate_nli(args: EvaluateNLIArgs) -> list[types.ContentBlock]:
             message=str(e),
         ) from e
 
-    use_reasoning = args.use_reasoning
-    if use_reasoning and not provider.supports_reasoning:
-        _logger.warning(f"Provider {provider.name} does not support reasoning, disabling")
-        use_reasoning = False
-
     try:
         result = await provider.evaluate(
             premise=args.premise,
             hypothesis=args.hypothesis,
             context=args.context,
             model=args.model,
-            use_reasoning=use_reasoning,
+            use_reasoning=args.use_reasoning,
         )
     except Exception as e:
         _logger.error(f"NLI evaluation failed: {e}")

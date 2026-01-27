@@ -4,13 +4,12 @@ import logging
 from pydantic import ValidationError
 from spectree import Response, SpecTree
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
 
 from .api_models import (
     ErrorBody,
     ErrorResponse,
-    ModelsResponse,
     NLIResultResponse,
     ProvidersResponse,
 )
@@ -27,8 +26,10 @@ api_spec = SpecTree(
     description="Clean REST API for natural language inference (NLI).",
     version=settings.pkg_version,
     mode="strict",
-    swagger_url="/docs",
-    redoc_url="/redoc",
+    swagger_url="/apidoc/swagger",
+    # Some Spectree/starlette plugin versions don't reliably mount ReDoc at custom paths.
+    # We provide our own deterministic /apidoc/redoc route below.
+    redoc_url=None,
     naming_strategy=lambda model: model.__name__,
     servers=[{"url": "/api/v1"}],
 )
@@ -75,21 +76,12 @@ async def evaluate_nli(request: Request) -> JSONResponse:
 
         provider = await get_provider(backend=args.backend)
 
-        use_reasoning = args.use_reasoning
-        if use_reasoning and not provider.supports_reasoning:
-            # Clean REST: explicit client feedback rather than silent downgrade
-            return _error(
-                code=ErrorCode.BAD_REQUEST.value,
-                message=f"Backend '{provider.name}' does not support reasoning.",
-                status_code=400,
-            )
-
         result = await provider.evaluate(
             premise=args.premise,
             hypothesis=args.hypothesis,
             context=args.context,
             model=args.model,
-            use_reasoning=use_reasoning,
+            use_reasoning=args.use_reasoning,
         )
 
         response_data = NLIResultResponse(**result.model_dump())
@@ -131,43 +123,35 @@ async def providers(request: Request) -> JSONResponse:
     response_data = ProvidersResponse(
         **data,
         default_backend=settings.default_backend,
-        default_model=settings.default_model,
     )
     return JSONResponse(response_data.model_dump())
 
 
-@api_spec.validate(
-    resp=Response(HTTP_200=ModelsResponse, HTTP_400=ErrorResponse, HTTP_404=ErrorResponse),
-    tags=["Models"],
-)
-async def list_models(request: Request) -> JSONResponse:
-    backend = request.query_params.get("backend")
-    if not backend:
-        return _error(
-            code=ErrorCode.BAD_REQUEST.value,
-            message="Missing required query parameter: backend",
-            status_code=400,
-        )
+async def redoc(request: Request) -> HTMLResponse:
+    """Serve ReDoc at a deterministic URL: /api/v1/apidoc/redoc."""
+    # Spectree exposes the OpenAPI JSON at /api/v1/apidoc/openapi.json in this project.
+    # Use a relative URL so it works behind proxies and with the /api/v1 mount.
+    openapi_url = "./openapi.json"
 
-    if backend not in ("ollama", "huggingface", "openrouter"):
-        return _error(
-            code=ErrorCode.BAD_REQUEST.value,
-            message=f"Unknown backend: {backend}",
-            status_code=400,
-        )
+    html = f"""<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'/>
+    <title>Omni-NLI API Docs</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+  </head>
+  <body>
+    <redoc spec-url='{openapi_url}'></redoc>
+    <script src='https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js'></script>
+  </body>
+</html>"""
 
-    try:
-        provider = await get_provider(backend=backend)  # type: ignore[arg-type]
-        models = await provider.list_models()
-        response_data = ModelsResponse(backend=backend, models=models)
-        return JSONResponse(response_data.model_dump())
-    except ValueError as e:
-        return _error(code=ErrorCode.PROVIDER_ERROR.value, message=str(e), status_code=502)
+    return HTMLResponse(html)
 
 
 def setup_rest_routes() -> list[Route]:
     return [
         Route("/nli/evaluate", endpoint=evaluate_nli, methods=["POST"]),
         Route("/providers", endpoint=providers, methods=["GET"]),
-        Route("/models", endpoint=list_models, methods=["GET"]),
+        Route("/apidoc/redoc", endpoint=redoc, methods=["GET"]),
     ]

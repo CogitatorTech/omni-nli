@@ -19,11 +19,11 @@ DEFAULT_HF_MODELS = [
 
 class HuggingFaceProvider(NLIProvider):
     name = "huggingface"
-    supports_reasoning = False
+    supports_reasoning = True
 
     def __init__(self, token: str | None = None, cache_dir: str | None = None) -> None:
         self.token = token or settings.huggingface_token
-        self.cache_dir = cache_dir or settings.hf_cache_dir
+        self.cache_dir = cache_dir or settings.hf_cache_dir_effective
         self._pipelines: dict[str, Any] = {}
 
     async def _get_pipeline(self, model_id: str) -> Any:  # noqa: ANN401
@@ -59,14 +59,16 @@ class HuggingFaceProvider(NLIProvider):
         use_reasoning: bool = False,
     ) -> NLIResult:
         if model is None:
-            if "/" in settings.default_model:
-                model = settings.default_model
-            else:
-                model = DEFAULT_HF_MODELS[0]
+            model = settings.get_default_model(self.name)
 
         pipe = await self._get_pipeline(model)
 
-        prompt = self._build_nli_prompt(premise, hypothesis, context=context, use_reasoning=False)
+        prompt = self._build_nli_prompt(
+            premise,
+            hypothesis,
+            context=context,
+            use_reasoning=use_reasoning,
+        )
 
         if pipe.tokenizer.chat_template:
             messages = [{"role": "user", "content": prompt}]
@@ -76,17 +78,17 @@ class HuggingFaceProvider(NLIProvider):
         else:
             prompt_formatted = prompt
 
-        _logger.debug(f"Running inference on {model}...")
+        _logger.debug(f"Running inference on {model} (reasoning={use_reasoning})...")
 
         # Run inference in a separate thread
         outputs = await asyncio.to_thread(
             functools.partial(
                 pipe,
                 prompt_formatted,
-                max_new_tokens=256,
-                temperature=0.1,
+                max_new_tokens=512 if use_reasoning else 256,
+                temperature=0.3 if use_reasoning else 0.1,
                 return_full_text=False,
-                do_sample=False,
+                do_sample=use_reasoning,
             )
         )
 
@@ -101,12 +103,18 @@ class HuggingFaceProvider(NLIProvider):
             total_tokens=prompt_tokens + completion_tokens,
             prompt_tokens=prompt_tokens,
             completion_tokens=completion_tokens,
+            thinking_tokens=completion_tokens if use_reasoning else 0,
         )
 
         return result
 
     async def list_models(self) -> list[str]:
-        return DEFAULT_HF_MODELS.copy()
+        # Provide a small curated list plus the configured default.
+        models = DEFAULT_HF_MODELS.copy()
+        default_model = settings.get_default_model(self.name)
+        if default_model not in models:
+            models.insert(0, default_model)
+        return models
 
     async def health_check(self) -> bool:
         try:

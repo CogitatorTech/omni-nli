@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 class OllamaProvider(NLIProvider):
     name = "ollama"
-    supports_reasoning = False
+    supports_reasoning = True
 
     def __init__(self, host: str | None = None) -> None:
         self.host = host or settings.ollama_host
@@ -25,16 +25,21 @@ class OllamaProvider(NLIProvider):
         model: str | None = None,
         use_reasoning: bool = False,
     ) -> NLIResult:
-        model = model or settings.default_model
-        prompt = self._build_nli_prompt(premise, hypothesis, context=context, use_reasoning=False)
+        model = model or settings.get_default_model(self.name)
+        prompt = self._build_nli_prompt(
+            premise,
+            hypothesis,
+            context=context,
+            use_reasoning=use_reasoning,
+        )
 
-        _logger.debug(f"Calling Ollama model {model}")
+        _logger.debug(f"Calling Ollama model {model} (reasoning={use_reasoning})")
 
         try:
             response = await self._client.chat(
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
-                options={"temperature": 0.1},
+                options={"temperature": 0.1 if not use_reasoning else 0.3},
             )
         except ollama.ResponseError as e:
             _logger.error(f"Ollama error: {e}")
@@ -46,11 +51,13 @@ class OllamaProvider(NLIProvider):
         result = self._parse_nli_response(response_text, model)
 
         if "eval_count" in response:
-            result.usage = TokenUsage(
+            # pyright sometimes fails to see pydantic BaseModel keyword args here.
+            result.usage = TokenUsage(  # type: ignore[call-arg]
                 total_tokens=response.get("eval_count", 0) + response.get("prompt_eval_count", 0),
                 prompt_tokens=response.get("prompt_eval_count", 0),
                 completion_tokens=response.get("eval_count", 0),
-            )
+                thinking_tokens=(response.get("eval_count", 0) if use_reasoning else 0),
+            )  # type: ignore[arg-type]
 
         return result
 

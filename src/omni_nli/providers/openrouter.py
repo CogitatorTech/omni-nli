@@ -52,7 +52,7 @@ class OpenRouterProvider(NLIProvider):
         client = self._get_client()
 
         if model is None:
-            model = settings.default_model
+            model = settings.get_default_model(self.name)
 
         prompt = self._build_nli_prompt(
             premise, hypothesis, context=context, use_reasoning=use_reasoning
@@ -60,9 +60,11 @@ class OpenRouterProvider(NLIProvider):
 
         _logger.debug(f"Calling OpenRouter model {model} (reasoning={use_reasoning})")
 
+        messages = [{"role": "user", "content": prompt}]  # type: ignore[var-annotated]
+
         response = await client.chat.completions.create(
             model=model,
-            messages=[{"role": "user", "content": prompt}],
+            messages=messages,  # type: ignore[arg-type]
             temperature=0.1 if not use_reasoning else 0.3,
             max_tokens=settings.max_thinking_tokens if use_reasoning else 512,
         )

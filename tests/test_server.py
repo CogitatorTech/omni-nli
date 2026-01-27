@@ -23,7 +23,11 @@ async def test_list_providers(test_app_client):
     assert "huggingface" in data
     assert "openrouter" in data
     assert "default_backend" in data
-    assert "default_model" in data
+
+    # Provider defaults are per-backend (no global default_model).
+    assert data["ollama"]["default_model"]
+    assert data["huggingface"]["default_model"]
+    assert data["openrouter"]["default_model"]
 
 
 @pytest.mark.asyncio
@@ -36,20 +40,3 @@ async def test_evaluate_nli_validation_error(test_app_client):
     assert response.status_code == 400
     data = response.json()
     assert data["error"]["code"] == "VALIDATION_ERROR"
-
-
-@pytest.mark.asyncio
-async def test_list_models_missing_backend(test_app_client):
-    """Test that /models requires backend query param."""
-    response = await test_app_client.get("/api/v1/models")
-    assert response.status_code == 400
-    data = response.json()
-    assert data["error"]["code"] == "BAD_REQUEST"
-
-
-@pytest.mark.asyncio
-async def test_list_models_unknown_backend(test_app_client):
-    response = await test_app_client.get("/api/v1/models?backend=unknown")
-    assert response.status_code == 400
-    data = response.json()
-    assert data["error"]["code"] == "BAD_REQUEST"

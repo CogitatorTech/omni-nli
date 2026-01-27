@@ -44,7 +44,7 @@ async def handle_streamable_http(scope: Scope, receive: Receive, send: Send) -> 
 
 @asynccontextmanager
 async def lifespan(app: Starlette) -> AsyncGenerator[None, None]:
-    async with session_manager.run():
+    async with session_manager.run():  # type: ignore[attr-defined]
         _logger.info("Omni-NLI started with StreamableHTTP session manager.")
         try:
             yield
@@ -102,10 +102,22 @@ starlette_app = CORSMiddleware(
     envvar="DEFAULT_BACKEND",
 )
 @click.option(
-    "--default-model",
+    "--ollama-default-model",
     default=None,
-    help="Default model to use for NLI evaluation.",
-    envvar="DEFAULT_MODEL",
+    help="Default Ollama model to use for NLI evaluation.",
+    envvar="OLLAMA_DEFAULT_MODEL",
+)
+@click.option(
+    "--huggingface-default-model",
+    default=None,
+    help="Default HuggingFace model to use for NLI evaluation.",
+    envvar="HUGGINGFACE_DEFAULT_MODEL",
+)
+@click.option(
+    "--openrouter-default-model",
+    default=None,
+    help="Default OpenRouter model to use for NLI evaluation.",
+    envvar="OPENROUTER_DEFAULT_MODEL",
 )
 def main(
     host: str | None,
@@ -113,7 +125,9 @@ def main(
     log_level: str | None,
     ollama_host: str | None,
     default_backend: str | None,
-    default_model: str | None,
+    ollama_default_model: str | None,
+    huggingface_default_model: str | None,
+    openrouter_default_model: str | None,
 ) -> int:
     import uvicorn
 
@@ -127,8 +141,13 @@ def main(
         settings.ollama_host = ollama_host
     if default_backend:
         settings.default_backend = default_backend
-    if default_model:
-        settings.default_model = default_model
+
+    if ollama_default_model:
+        settings.ollama_default_model = ollama_default_model
+    if huggingface_default_model:
+        settings.huggingface_default_model = huggingface_default_model
+    if openrouter_default_model:
+        settings.openrouter_default_model = openrouter_default_model
 
     setup_logging(settings.log_level)
     _logger.info("Setting up cache...")
