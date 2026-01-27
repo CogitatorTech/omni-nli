@@ -530,17 +530,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GET /api/v1/models?backend=ollama|huggingface|openrouter
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -636,17 +625,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GET /api/v1/models?backend=ollama|huggingface|openrouter
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -685,16 +663,10 @@
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
 <h2 id="interactive-documentation">Interactive Documentation<a class="headerlink" href="#interactive-documentation" title="Permanent link">&para;</a></h2>
-<p>When the server is running, interactive documentation is typically available at:</p>
-<ul>
-<li>Swagger UI: <code>/api/v1/docs</code></li>
-<li>ReDoc: <code>/api/v1/redoc</code></li>
-</ul>
-<p>If those paths return 404, try:</p>
-<ul>
-<li>Swagger UI (alternate): <code>/api/v1/apidoc/swagger</code></li>
-<li>ReDoc (alternate): <code>/api/v1/apidoc/redoc</code></li>
-</ul>
+<p>This project provides interactive API documentation (Swagger UI and ReDoc). Once the server is running, you can access them at:</p>
+<div class="highlight"><pre><span></span><code>Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger
+ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
+</code></pre></div>
 <h2 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h2>
 <h3 id="post-apiv1nlievaluate">POST /api/v1/nli/evaluate<a class="headerlink" href="#post-apiv1nlievaluate" title="Permanent link">&para;</a></h3>
 <p>Evaluates the logical relationship between a premise and a hypothesis.</p>
@@ -737,13 +709,13 @@
 <td style="text-align: left;">model</td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">null</td>
-<td style="text-align: left;">Specific model to use. Uses backend default if null</td>
+<td style="text-align: left;">Specific model to use. Uses the backend's default if null</td>
 </tr>
 <tr>
 <td style="text-align: left;">use_reasoning</td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;">false</td>
-<td style="text-align: left;">Enable extended thinking (only for reasoning-capable backends)</td>
+<td style="text-align: left;">Enable extended thinking</td>
 </tr>
 </tbody>
 </table>
@@ -790,19 +762,13 @@
 </tbody>
 </table>
 <h3 id="get-apiv1providers">GET /api/v1/providers<a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
-<p>Returns provider status and configuration metadata.</p>
+<p>Returns provider configuration metadata.</p>
 <p>Notes:</p>
 <ul>
-<li><code>configured</code> indicates whether Omni-NLI believes the backend can be used.</li>
-<li><code>token_configured</code> is reported for providers that use credentials (HuggingFace/OpenRouter).</li>
-<li>HuggingFace also reports whether "public models" are enabled without a token.</li>
-</ul>
-<h3 id="get-apiv1modelsbackendollamahuggingfaceopenrouter">GET /api/v1/models?backend=ollama|huggingface|openrouter<a class="headerlink" href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" title="Permanent link">&para;</a></h3>
-<p>Lists models available for a backend.</p>
-<p>Response shape:</p>
-<ul>
-<li><code>backend</code>: backend name</li>
-<li><code>models</code>: list of model identifiers</li>
+<li><code>token_configured</code> is <strong>true</strong> when credentials are present in the environment:</li>
+<li>HuggingFace: <code>HUGGINGFACE_TOKEN</code> is set (needed for gated/private models)</li>
+<li>OpenRouter: <code>OPENROUTER_API_KEY</code> is set</li>
+<li>Each provider always includes a <code>default_model</code> (there is no global default model).</li>
 </ul>
 <h2 id="mcp-integration">MCP Integration<a class="headerlink" href="#mcp-integration" title="Permanent link">&para;</a></h2>
 <p>The server exposes its tools over MCP at http://127.0.0.1:8000/mcp/.</p>

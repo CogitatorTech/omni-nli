@@ -735,26 +735,24 @@
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># OpenRouter (optional)</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Default backend and model for NLI evaluation</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Default backend for NLI evaluation</span>
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nv">DEFAULT_BACKEND</span><span class="o">=</span>ollama
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Example (Ollama): qwen3:8b</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="nv">DEFAULT_MODEL</span><span class="o">=</span>qwen3:8b
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="c1"># Token limits</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nv">MAX_THINKING_TOKENS</span><span class="o">=</span><span class="m">4096</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="nv">MAX_TOTAL_TOKENS</span><span class="o">=</span><span class="m">8192</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Per-provider default models (used when request model is omitted)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nv">OLLAMA_DEFAULT_MODEL</span><span class="o">=</span>qwen3:8b
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="nv">HUGGINGFACE_DEFAULT_MODEL</span><span class="o">=</span>microsoft/Phi-3.5-mini-instruct
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>deepseek/deepseek-r1
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="c1"># Token limits</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="nv">MAX_THINKING_TOKENS</span><span class="o">=</span><span class="m">4096</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="nv">MAX_TOTAL_TOKENS</span><span class="o">=</span><span class="m">8192</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>DEFAULT_MODEL</code> is backend-specific. For example:</p>
-<ul>
-<li>Ollama: <code>qwen3:8b</code>, <code>llama3.2:3b</code></li>
-<li>HuggingFace: <code>microsoft/Phi-3.5-mini-instruct</code> (token only needed for gated models)</li>
-<li>OpenRouter: <code>deepseek/deepseek-r1</code> (reasoning), <code>openai/gpt-4o-mini</code> (standard)</li>
-</ul>
-</div>
 <p>CLI Arguments example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>omni-nli<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--default-backend<span class="w"> </span>openrouter<span class="w"> </span>--default-model<span class="w"> </span>anthropic/claude-3.5-sonnet
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>omni-nli<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--default-backend<span class="w"> </span>openrouter<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--openrouter-default-model<span class="w"> </span>anthropic/claude-3.5-sonnet
 </code></pre></div>
 <h2 id="supported-backends">Supported Backends<a class="headerlink" href="#supported-backends" title="Permanent link">&para;</a></h2>
 <table>
@@ -762,7 +760,6 @@
 <tr>
 <th style="text-align: left;">Backend</th>
 <th style="text-align: left;">Local</th>
-<th style="text-align: left;">Reasoning Support</th>
 <th style="text-align: left;">Example Models</th>
 </tr>
 </thead>
@@ -770,20 +767,17 @@
 <tr>
 <td style="text-align: left;">Ollama</td>
 <td style="text-align: left;">Yes</td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">llama3.2, mistral, qwen2.5</td>
+<td style="text-align: left;">qwen3:8b, llama3.2:3b, mistral</td>
 </tr>
 <tr>
 <td style="text-align: left;">HuggingFace</td>
 <td style="text-align: left;">Yes</td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">meta-llama/Llama-3.2-3B-Instruct</td>
+<td style="text-align: left;">Qwen/Qwen2.5-1.5B-Instruct</td>
 </tr>
 <tr>
 <td style="text-align: left;">OpenRouter</td>
 <td style="text-align: left;">No</td>
-<td style="text-align: left;">Yes</td>
-<td style="text-align: left;">anthropic/claude-3.5-sonnet, deepseek/deepseek-r1</td>
+<td style="text-align: left;">deepseek/deepseek-r1, anthropic/claude-3.5-sonnet</td>
 </tr>
 </tbody>
 </table>
