@@ -1,24 +1,26 @@
 import asyncio
-import json
-import pytest
 from unittest.mock import MagicMock, patch
-from starlette.requests import Request
-from starlette.types import Scope, Receive, Send
 
+import pytest
+from starlette.requests import Request
+
+from omni_nli.providers.base import NLIProvider
 from omni_nli.providers.huggingface import HuggingFaceProvider
-from omni_nli.providers.base import NLIProvider, NLIResult
-from omni_nli.rest import _parse_tool_arguments
-from omni_nli.tools import EvaluateNLIArgs
+from omni_nli.rest import _parse_json_body
+
 
 # --- 1. JSON Parsing Verification ---
 
 class TestProvider(NLIProvider):
     async def evaluate(self, *args, **kwargs):
         pass
+
     async def list_models(self):
         return []
+
     async def health_check(self):
         return True
+
 
 def test_robust_json_parsing():
     provider = TestProvider()
@@ -87,22 +89,27 @@ async def test_huggingface_async_execution():
 @pytest.mark.asyncio
 async def test_rest_dos_protection():
     # legitimate request
-    scope = {"type": "http", "headers": [(b"content-type", b"application/json"), (b"content-length", b"10")]}
+    scope = {
+        "type": "http",
+        "headers": [(b"content-type", b"application/json"), (b"content-length", b"10")],
+    }
 
     async def receive_small():
         return {"type": "http.request", "body": b'{"a": 1}', "more_body": False}
 
     req = Request(scope, receive=receive_small)
-    # Should pass (we mock the validation model)
-    class MockModel(EvaluateNLIArgs):
-        pass
+    data = await _parse_json_body(req)
+    assert data == {"a": 1}
 
-    # We can't easily run _parse_tool_arguments fully without valid model,
-    # but we can check the length check logic by simulating a large request.
-
-    # Large request header
-    large_scope = {"type": "http", "headers": [(b"content-type", b"application/json"), (b"content-length", b"10485761")]} # 10MB + 1
+    # Large request header (10MB + 1)
+    large_scope = {
+        "type": "http",
+        "headers": [
+            (b"content-type", b"application/json"),
+            (b"content-length", b"10485761"),
+        ],
+    }
     req_large = Request(large_scope, receive=receive_small)
 
     with pytest.raises(ValueError, match="Request payload too large"):
-        await _parse_tool_arguments(req_large, MagicMock())
+        await _parse_json_body(req_large)

@@ -1,5 +1,4 @@
 import argparse
-import os
 
 
 def get_args(default_url: str):

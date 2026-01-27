@@ -9,7 +9,7 @@ from shared import get_args
 
 def main():
     """Sends an NLI request to the REST API and prints the result."""
-    args = get_args(default_url="http://127.0.0.1:8000/api/v1/tools/evaluate_nli/invoke")
+    args = get_args(default_url="http://127.0.0.1:8000/api/v1/nli/evaluate")
 
     payload = {
         "premise": args.premise,

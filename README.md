@@ -83,31 +83,24 @@ curl -X POST \
     "premise": "A soccer player kicks a ball into the goal.",
     "hypothesis": "The soccer player is asleep on the field."
   }' \
-  http://127.0.0.1:8000/api/v1/tools/evaluate_nli/invoke
+  http://127.0.0.1:8000/api/v1/nli/evaluate
 ```
 
 Example response:
 
 ```json
 {
-    "content": [
-        {
-            "type": "json",
-            "data": {
-                "label": "contradiction",
-                "confidence": 1.0,
-                "thinking_trace": null,
-                "usage": {
-                    "total_tokens": 185,
-                    "thinking_tokens": 0,
-                    "prompt_tokens": 168,
-                    "completion_tokens": 17
-                },
-                "model": "llama3.2:3b",
-                "backend": "ollama"
-            }
-        }
-    ]
+    "label": "contradiction",
+    "confidence": 1.0,
+    "thinking_trace": null,
+    "usage": {
+        "total_tokens": 185,
+        "thinking_tokens": 0,
+        "prompt_tokens": 168,
+        "completion_tokens": 17
+    },
+    "model": "llama3.2:3b",
+    "backend": "ollama"
 }
 ```
 

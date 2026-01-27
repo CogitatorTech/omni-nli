@@ -100,9 +100,32 @@ class ProviderInfo(BaseModel):
         ..., description="Whether the provider supports extended thinking/reasoning."
     )
     host: Optional[str] = Field(None, description="Host URL for local providers like Ollama.")
+    token_configured: Optional[bool] = Field(
+        None,
+        description="Whether an access token or API key is configured for this provider.",
+    )
+    public_models_enabled: Optional[bool] = Field(
+        None,
+        description="Whether public models can be used without authentication.",
+    )
+    cache_dir: Optional[str] = Field(
+        None,
+        description="Cache directory for local model artifacts, if applicable.",
+    )
+    default_model: Optional[str] = Field(
+        None,
+        description="Default model name used when no explicit model is provided.",
+    )
 
 
 class ProvidersResponse(BaseModel):
     ollama: ProviderInfo
     huggingface: ProviderInfo
     openrouter: ProviderInfo
+    default_backend: str = Field(..., description="Default backend for NLI evaluation.")
+    default_model: str = Field(..., description="Default model used when none is provided.")
+
+
+class ModelsResponse(BaseModel):
+    backend: str = Field(..., description="Backend provider name.")
+    models: List[str] = Field(..., description="Available models for the backend.")

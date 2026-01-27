@@ -1,14 +1,13 @@
-import logging
-from typing import Any
 import asyncio
 import functools
-
+import logging
+from typing import Any
 
 from async_lru import alru_cache
 from transformers import pipeline
 
-from ..settings import settings
 from .base import NLIProvider, NLIResult, TokenUsage
+from ..settings import settings
 
 _logger = logging.getLogger(__name__)
 

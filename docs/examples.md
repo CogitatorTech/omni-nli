@@ -9,7 +9,7 @@ You can interact with Omni-NLI using standard HTTP requests.
 Request:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/v1/tools/evaluate_nli/invoke \
+curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   -H "Content-Type: application/json" \
   -d '{
     "premise": "A soccer player kicks a ball into the goal.",
@@ -21,32 +21,26 @@ Response:
 
 ```json
 {
-  "content": [
-    {
-      "type": "json",
-      "data": {
-        "label": "contradiction",
-        "confidence": 0.99,
-        "thinking_trace": null,
-        "usage": {
-          "total_tokens": 150,
-          "prompt_tokens": 120,
-          "completion_tokens": 30
-        },
-        "model": "llama3.2",
-        "backend": "ollama"
-      }
-    }
-  ]
+  "label": "contradiction",
+  "confidence": 0.99,
+  "thinking_trace": null,
+  "usage": {
+    "total_tokens": 150,
+    "prompt_tokens": 120,
+    "completion_tokens": 30,
+    "thinking_tokens": 0
+  },
+  "model": "llama3.2",
+  "backend": "ollama"
 }
 ```
 
 ### Using Context and Reasoning
 
-You can provide context and request "reasoning" (if the model supports it, e.g., deepseek-r1).
+You can provide context and request "reasoning" (only supported by some backends/models).
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/v1/tools/evaluate_nli/invoke \
+curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   -H "Content-Type: application/json" \
   -d '{
     "premise": "The user has clicked the delete button.",

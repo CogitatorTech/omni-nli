@@ -14,34 +14,23 @@ async def test_health_check(test_app_client):
 
 
 @pytest.mark.asyncio
-async def test_list_tools(test_app_client):
-    """Test that listing tools returns available NLI tools."""
-    response = await test_app_client.get("/api/v1/tools")
+async def test_list_providers(test_app_client):
+    """Test that providers endpoint returns provider metadata."""
+    response = await test_app_client.get("/api/v1/providers")
     assert response.status_code == 200
     data = response.json()
-    assert "tools" in data
-    tool_names = [t["name"] for t in data["tools"]]
-    assert "evaluate_nli" in tool_names
-    assert "list_providers" in tool_names
+    assert "ollama" in data
+    assert "huggingface" in data
+    assert "openrouter" in data
+    assert "default_backend" in data
+    assert "default_model" in data
 
 
 @pytest.mark.asyncio
-async def test_invoke_unknown_tool(test_app_client):
-    """Test that invoking an unknown tool returns 404."""
-    response = await test_app_client.post(
-        "/api/v1/tools/unknown_tool/invoke",
-        json={},
-    )
-    assert response.status_code == 404
-    data = response.json()
-    assert data["error"]["code"] == "NOT_FOUND"
-
-
-@pytest.mark.asyncio
-async def test_invoke_tool_validation_error(test_app_client):
+async def test_evaluate_nli_validation_error(test_app_client):
     """Test that validation errors return 400."""
     response = await test_app_client.post(
-        "/api/v1/tools/evaluate_nli/invoke",
+        "/api/v1/nli/evaluate",
         json={"premise": "", "hypothesis": "test"},
     )
     assert response.status_code == 400
@@ -50,14 +39,17 @@ async def test_invoke_tool_validation_error(test_app_client):
 
 
 @pytest.mark.asyncio
-async def test_list_providers_tool(test_app_client):
-    """Test invoking the list_providers tool."""
-    response = await test_app_client.post(
-        "/api/v1/tools/list_providers/invoke",
-        json={},
-    )
-    assert response.status_code == 200
+async def test_list_models_missing_backend(test_app_client):
+    """Test that /models requires backend query param."""
+    response = await test_app_client.get("/api/v1/models")
+    assert response.status_code == 400
     data = response.json()
-    assert "content" in data
-    providers = data["content"][0]["data"]
-    assert "ollama" in providers
+    assert data["error"]["code"] == "BAD_REQUEST"
+
+
+@pytest.mark.asyncio
+async def test_list_models_unknown_backend(test_app_client):
+    response = await test_app_client.get("/api/v1/models?backend=unknown")
+    assert response.status_code == 400
+    data = response.json()
+    assert data["error"]["code"] == "BAD_REQUEST"

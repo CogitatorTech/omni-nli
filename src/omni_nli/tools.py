@@ -188,7 +188,7 @@ def setup_tools() -> None:
         name="list_providers",
         title="List NLI Providers",
         description=(
-            "Lists available NLI backend providers (Ollama, HuggingFace, OpenRouter) "
+            "Lists available NLI backend providers (Ollama, HuggingFace, or OpenRouter) "
             "and their configuration status."
         ),
         inputSchema=ListProvidersArgs.model_json_schema(),

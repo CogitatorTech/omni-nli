@@ -20,7 +20,7 @@ The example scripts are designed to be run from the root of the repository.
    ```bash
    python examples/rest/evaluate_nli_example.py \
        --premise "Cats are mammals." --hypothesis "Cats are animals." \
-       --backend ollama --model qwen3:8b
+       --backend ollama
    ```
 
 2. **List Providers**
@@ -28,7 +28,12 @@ The example scripts are designed to be run from the root of the repository.
    python examples/rest/list_providers_example.py
    ```
 
-3. **Health Check**
+3. **List Models**
+   ```bash
+   python examples/rest/list_models_example.py --backend ollama
+   ```
+
+4. **Health Check**
    ```bash
    python examples/rest/health_check_example.py
    ```
@@ -40,14 +45,15 @@ The example scripts are designed to be run from the root of the repository.
    python examples/mcp/evaluate_nli_example.py \
        --url "http://127.0.0.1:8000/mcp/" \
        --premise "It is raining." --hypothesis "The ground is wet." \
-       --backend huggingface --model "microsoft/Phi-3.5-mini-instruct"
+       --backend huggingface
    ```
 
 ## Options
 
 Most examples accept the following arguments:
+
 - `--url`: The endpoint URL (default depends on the example).
 - `--premise`: The premise text.
 - `--hypothesis`: The hypothesis text.
 - `--backend`: The backend to use (`ollama`, `huggingface`, and `openrouter`).
-- `--model`: Specific model name (optional).
+- `--model`: Specific model name (optional, mainly used for evaluate examples).

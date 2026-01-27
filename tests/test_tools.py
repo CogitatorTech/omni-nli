@@ -1,7 +1,7 @@
 """Tests for NLI tools and tool registry."""
 
 import json
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 
 import pytest
 from mcp import types
@@ -10,7 +10,6 @@ from pydantic import BaseModel
 from omni_nli.errors import ErrorCode, ToolLogicError
 from omni_nli.providers.base import NLIResult, TokenUsage
 from omni_nli.tools import (
-    EvaluateNLIArgs,
     ListProvidersArgs,
     ToolRegistry,
     list_providers_tool,
@@ -73,6 +72,7 @@ def test_register_and_list_tools(tool_registry_fixture: ToolRegistry):
 @pytest.mark.asyncio
 async def test_call_tool_success(tool_registry_fixture: ToolRegistry):
     """Test successful tool execution."""
+
     class TestArgs(BaseModel):
         message: str
 
@@ -96,6 +96,7 @@ async def test_call_tool_success(tool_registry_fixture: ToolRegistry):
 @pytest.mark.asyncio
 async def test_call_tool_validation_error(tool_registry_fixture: ToolRegistry):
     """Test that validation errors are properly raised."""
+
     class TestArgs(BaseModel):
         message: str
 

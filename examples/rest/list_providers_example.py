@@ -9,12 +9,12 @@ from shared import get_args
 
 def main():
     """Requests list of providers from the REST API."""
-    args = get_args(default_url="http://127.0.0.1:8000/api/v1/tools/list_providers/invoke")
+    args = get_args(default_url="http://127.0.0.1:8000/api/v1/providers")
 
     print(f"Requesting providers list from {args.url}")
 
     try:
-        response = httpx.post(args.url, json={}, timeout=30)
+        response = httpx.get(args.url, timeout=30)
         response.raise_for_status()
 
         print("\nResponse from server:")

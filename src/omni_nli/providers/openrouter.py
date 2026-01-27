@@ -3,8 +3,8 @@ import logging
 from async_lru import alru_cache
 from openai import AsyncOpenAI
 
-from ..settings import settings
 from .base import NLIProvider, NLIResult, TokenUsage
+from ..settings import settings
 
 _logger = logging.getLogger(__name__)
 

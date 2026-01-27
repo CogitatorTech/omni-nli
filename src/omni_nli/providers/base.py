@@ -84,7 +84,6 @@ Respond with ONLY a JSON object in this exact format:
 {{"label": "<entailment|contradiction|neutral>", "confidence": <0.0-1.0>}}"""
 
     def _parse_nli_response(self, response_text: str, model: str) -> NLIResult:
-        import json
         import re
 
         thinking_trace = None

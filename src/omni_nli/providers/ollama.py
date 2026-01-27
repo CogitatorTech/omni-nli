@@ -3,8 +3,8 @@ import logging
 import ollama
 from async_lru import alru_cache
 
-from ..settings import settings
 from .base import NLIProvider, NLIResult, TokenUsage
+from ..settings import settings
 
 _logger = logging.getLogger(__name__)
 
