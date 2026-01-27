@@ -685,10 +685,15 @@
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
 <h2 id="interactive-documentation">Interactive Documentation<a class="headerlink" href="#interactive-documentation" title="Permanent link">&para;</a></h2>
-<p>When the server is running, interactive documentation is available at:</p>
+<p>When the server is running, interactive documentation is typically available at:</p>
 <ul>
-<li>Swagger UI: /api/v1/docs (http://127.0.0.1:8000/api/v1/docs)</li>
-<li>ReDoc: /api/v1/redoc (http://127.0.0.1:8000/api/v1/redoc)</li>
+<li>Swagger UI: <code>/api/v1/docs</code></li>
+<li>ReDoc: <code>/api/v1/redoc</code></li>
+</ul>
+<p>If those paths return 404, try:</p>
+<ul>
+<li>Swagger UI (alternate): <code>/api/v1/apidoc/swagger</code></li>
+<li>ReDoc (alternate): <code>/api/v1/apidoc/redoc</code></li>
 </ul>
 <h2 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h2>
 <h3 id="post-apiv1nlievaluate">POST /api/v1/nli/evaluate<a class="headerlink" href="#post-apiv1nlievaluate" title="Permanent link">&para;</a></h3>
@@ -786,8 +791,19 @@
 </table>
 <h3 id="get-apiv1providers">GET /api/v1/providers<a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
 <p>Returns provider status and configuration metadata.</p>
+<p>Notes:</p>
+<ul>
+<li><code>configured</code> indicates whether Omni-NLI believes the backend can be used.</li>
+<li><code>token_configured</code> is reported for providers that use credentials (HuggingFace/OpenRouter).</li>
+<li>HuggingFace also reports whether "public models" are enabled without a token.</li>
+</ul>
 <h3 id="get-apiv1modelsbackendollamahuggingfaceopenrouter">GET /api/v1/models?backend=ollama|huggingface|openrouter<a class="headerlink" href="#get-apiv1modelsbackendollamahuggingfaceopenrouter" title="Permanent link">&para;</a></h3>
 <p>Lists models available for a backend.</p>
+<p>Response shape:</p>
+<ul>
+<li><code>backend</code>: backend name</li>
+<li><code>models</code>: list of model identifiers</li>
+</ul>
 <h2 id="mcp-integration">MCP Integration<a class="headerlink" href="#mcp-integration" title="Permanent link">&para;</a></h2>
 <p>The server exposes its tools over MCP at http://127.0.0.1:8000/mcp/.</p>
 <p>Available MCP Tools:</p>
