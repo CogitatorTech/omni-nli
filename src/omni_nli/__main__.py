@@ -86,68 +86,142 @@ starlette_app = CORSMiddleware(
 
 
 @click.command()
-@click.option("--host", default=None, help="The host to bind to.", envvar="HOST")
-@click.option("--port", default=None, type=int, help="The port to bind to.", envvar="PORT")
-@click.option("--log-level", default=None, help="The log level to use.", envvar="LOG_LEVEL")
+@click.option(
+    "--host",
+    default=settings.host,
+    show_default=True,
+    help="The host to bind to.",
+    envvar="HOST",
+)
+@click.option(
+    "--port",
+    default=settings.port,
+    show_default=True,
+    type=int,
+    help="The port to bind to.",
+    envvar="PORT",
+)
+@click.option(
+    "--log-level",
+    default=settings.log_level,
+    show_default=True,
+    help="The log level to use.",
+    envvar="LOG_LEVEL",
+)
 @click.option(
     "--ollama-host",
-    default=None,
+    default=settings.ollama_host,
+    show_default=True,
     help="Ollama server URL.",
     envvar="OLLAMA_HOST",
 )
 @click.option(
     "--default-backend",
-    default=None,
-    help="Default backend provider (valid values: ollama, huggingface, or openrouter).",
+    default=settings.default_backend,
+    show_default=True,
+    type=click.Choice(["ollama", "huggingface", "openrouter"], case_sensitive=False),
+    help="Default backend provider.",
     envvar="DEFAULT_BACKEND",
 )
 @click.option(
     "--ollama-default-model",
-    default=None,
+    default=settings.ollama_default_model,
+    show_default=True,
     help="Default Ollama model to use for NLI evaluation.",
     envvar="OLLAMA_DEFAULT_MODEL",
 )
 @click.option(
     "--huggingface-default-model",
-    default=None,
+    default=settings.huggingface_default_model,
+    show_default=True,
     help="Default HuggingFace model to use for NLI evaluation.",
     envvar="HUGGINGFACE_DEFAULT_MODEL",
 )
 @click.option(
     "--openrouter-default-model",
-    default=None,
+    default=settings.openrouter_default_model,
+    show_default=True,
     help="Default OpenRouter model to use for NLI evaluation.",
     envvar="OPENROUTER_DEFAULT_MODEL",
 )
+@click.option(
+    "--openrouter-api-key",
+    default=settings.openrouter_api_key,
+    show_default=False,
+    help="OpenRouter API Key.",
+    envvar="OPENROUTER_API_KEY",
+)
+@click.option(
+    "--huggingface-token",
+    default=settings.huggingface_token,
+    show_default=False,
+    help="HuggingFace API Token.",
+    envvar="HUGGINGFACE_TOKEN",
+)
+@click.option(
+    "--hf-cache-dir",
+    default=settings.hf_cache_dir,
+    show_default=True,
+    help="HuggingFace models cache directory.",
+    envvar="HF_CACHE_DIR",
+)
+@click.option(
+    "--max-thinking-tokens",
+    default=settings.max_thinking_tokens,
+    show_default=True,
+    type=int,
+    help="Max tokens for thinking traces.",
+    envvar="MAX_THINKING_TOKENS",
+)
+@click.option(
+    "--provider-cache-size",
+    default=settings.provider_cache_size,
+    show_default=True,
+    type=int,
+    help="Number of provider instances to cache.",
+    envvar="PROVIDER_CACHE_SIZE",
+)
+@click.option(
+    "--return-thinking-trace/--no-return-thinking-trace",
+    is_flag=True,
+    default=settings.return_thinking_trace,
+    show_default=True,
+    help="Return raw thinking trace in response.",
+    envvar="RETURN_THINKING_TRACE",
+)
 def main(
-    host: str | None,
-    port: int | None,
-    log_level: str | None,
-    ollama_host: str | None,
-    default_backend: str | None,
-    ollama_default_model: str | None,
-    huggingface_default_model: str | None,
-    openrouter_default_model: str | None,
+    host: str,
+    port: int,
+    log_level: str,
+    ollama_host: str,
+    default_backend: str,
+    ollama_default_model: str,
+    huggingface_default_model: str,
+    openrouter_default_model: str,
+    openrouter_api_key: str | None,
+    huggingface_token: str | None,
+    hf_cache_dir: str | None,
+    max_thinking_tokens: int,
+    provider_cache_size: int,
+    return_thinking_trace: bool,
 ) -> int:
     import uvicorn
 
-    if host:
-        settings.host = host
-    if port:
-        settings.port = port
-    if log_level:
-        settings.log_level = log_level
-    if ollama_host:
-        settings.ollama_host = ollama_host
-    if default_backend:
-        settings.default_backend = default_backend
-
-    if ollama_default_model:
-        settings.ollama_default_model = ollama_default_model
-    if huggingface_default_model:
-        settings.huggingface_default_model = huggingface_default_model
-    if openrouter_default_model:
-        settings.openrouter_default_model = openrouter_default_model
+    # Update settings with resolved values from CLI or Env
+    settings.host = host
+    settings.port = port
+    settings.log_level = log_level
+    settings.ollama_host = ollama_host
+    settings.default_backend = default_backend
+    settings.ollama_default_model = ollama_default_model
+    settings.huggingface_default_model = huggingface_default_model
+    settings.openrouter_default_model = openrouter_default_model
+    settings.openrouter_api_key = openrouter_api_key
+    settings.huggingface_token = huggingface_token
+    settings.hf_cache_dir = hf_cache_dir
+    settings.max_thinking_tokens = max_thinking_tokens
+    settings.provider_cache_size = provider_cache_size
+    settings.return_thinking_trace = return_thinking_trace
 
     setup_logging(settings.log_level)
     _logger.info("Setting up cache...")
