@@ -21,7 +21,7 @@ jobs:
     needs: call_tests
     strategy:
       matrix:
-        image_type: [ cpu, openvino, cuda ]
+        image_type: [ cpu, cuda ]
 
     steps:
       - name: Checkout Repository
@@ -42,11 +42,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Lowercase Repository
+        id: repo_name
+        run: |
+          echo "REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_OUTPUT}
+
       - name: Extract Docker Metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}-${{ matrix.image_type }}
+          images: ghcr.io/${{ steps.repo_name.outputs.REPO }}-${{ matrix.image_type }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -56,7 +61,7 @@ jobs:
         id: fallback
         run: |
           if [ -z "${{ steps.meta.outputs.tags }}" ]; then
-            echo "tags=ghcr.io/${{ github.repository }}-${{ matrix.image_type }}:latest" >> $GITHUB_OUTPUT
+            echo "tags=ghcr.io/${{ steps.repo_name.outputs.REPO }}-${{ matrix.image_type }}:latest" >> $GITHUB_OUTPUT
           else
             # Make sure tags value is trimmed and only the first tag is used if there are multiple
             first_tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)

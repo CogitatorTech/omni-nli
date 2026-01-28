@@ -29,7 +29,7 @@ BIND="${HOST}:${PORT}"
 
 # Word-split GUNICORN_EXTRA_ARGS and store them in an array.
 read -ra GUNICORN_EXTRA_ARGS_ARRAY <<< "${GUNICORN_EXTRA_ARGS:-}"
-echo "Running: ${GUNICORN_BIN} -w ${GUNICORN_WORKERS} -k uvicorn.workers.UvicornWorker --bind ${BIND} ${GUNICORN_EXTRA_ARGS} omni_lpr:starlette_app"
+echo "Running: ${GUNICORN_BIN} -w ${GUNICORN_WORKERS} -k uvicorn.workers.UvicornWorker --bind ${BIND} ${GUNICORN_EXTRA_ARGS} omni_nli:starlette_app"
 
 # Exec so Gunicorn is PID 1
 exec "${GUNICORN_BIN}" \

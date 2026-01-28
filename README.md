@@ -12,6 +12,10 @@
 [![PyPI](https://img.shields.io/pypi/v/omni-nli?style=flat&labelColor=333333&logo=pypi&logoColor=white)](https://pypi.org/project/omni-nli/)
 [![Documentation](https://img.shields.io/badge/docs-read-00acc1?style=flat&labelColor=282c34&logo=readthedocs)](https://CogitatorTech.github.io/omni-nli/)
 [![License](https://img.shields.io/badge/license-MIT-00acc1?style=flat&labelColor=333333&logo=open-source-initiative&logoColor=white)](https://github.com/CogitatorTech/omni-nli/blob/main/LICENSE)
+<br>
+[![Examples](https://img.shields.io/badge/examples-view-green?style=flat&labelColor=382c34)](https://github.com/CogitatorTech/omni-nli/tree/main/examples)
+[![Docker Image (CPU)](https://img.shields.io/badge/Docker-CPU-007ec6?style=flat&logo=docker)](https://github.com/CogitatorTech/omni-nli/pkgs/container/omni-lpr-cpu)
+[![Docker Image (CUDA)](https://img.shields.io/badge/Docker-CUDA-007ec6?style=flat&logo=docker)](https://github.com/CogitatorTech/omni-nli/pkgs/container/omni-lpr-cuda)
 
 A multi-interface (REST and MCP) server for natural language inference
 
@@ -19,9 +23,10 @@ A multi-interface (REST and MCP) server for natural language inference
 
 ---
 
-Omni-NLI is a self-hostable server that provides natural language inference (NLI) capabilities via a REST API and the Model Context Protocol (MCP).
-It can be used both as a very scalable standalone microservice and also as an MCP server for AI agents to implement a verification layer for AI-based
-applications.
+Omni-NLI is a self-hostable server that provides [natural language inference (NLI)](https://en.wikipedia.org/wiki/Textual_entailment) capabilities via
+RESTful and the Model Context Protocol (MCP) interfaces.
+It can be used both as a very scalable standalone stateless microservice and also as an MCP server for AI agents to implement a verification layer
+for AI-based applications like chatbots or virtual assistants.
 
 ### What is NLI?
 
@@ -59,11 +64,10 @@ pip install omni-nli
 
 #### 2. Configure Backends
 
-Copy the example config and add your API keys:
+Copy the example config and add your API keys and other settings in the `.env` file.
 
 ```sh
 cp .env.example .env
-# Edit .env to configure the model backends and other settings
 ```
 
 #### 3. Start the Server
@@ -80,8 +84,8 @@ The server will be listening on `http://127.0.0.1:8000` by default.
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{
-    "premise": "A soccer player kicks a ball into the goal.",
-    "hypothesis": "The soccer player is asleep on the field."
+    "premise": "A football player kicks a ball into the goal.",
+    "hypothesis": "The football player is asleep on the field."
   }' \
   http://127.0.0.1:8000/api/v1/nli/evaluate
 ```
@@ -91,16 +95,9 @@ Example response:
 ```json
 {
     "label": "contradiction",
-    "confidence": 1.0,
-    "thinking_trace": null,
-    "usage": {
-        "total_tokens": 185,
-        "thinking_tokens": 0,
-        "prompt_tokens": 168,
-        "completion_tokens": 17
-    },
-    "model": "llama3.2:3b",
-    "backend": "ollama"
+    "confidence": 0.99,
+    "model": "microsoft/Phi-3.5-mini-instruct",
+    "backend": "huggingface"
 }
 ```
 

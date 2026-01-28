@@ -9,7 +9,6 @@ from pydantic import BaseModel
 
 from omni_nli.errors import ErrorCode, ToolLogicError
 from omni_nli.providers.base import NLIResult
-
 from omni_nli.tools import (
     ListProvidersArgs,
     ToolRegistry,

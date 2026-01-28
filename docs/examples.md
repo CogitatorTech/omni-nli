@@ -21,23 +21,18 @@ Response:
 
 ```json
 {
-  "label": "contradiction",
-  "confidence": 0.99,
-  "thinking_trace": null,
-  "usage": {
-    "total_tokens": 150,
-    "prompt_tokens": 120,
-    "completion_tokens": 30,
-    "thinking_tokens": 0
-  },
-  "model": "llama3.2",
-  "backend": "ollama"
+    "label": "contradiction",
+    "confidence": 0.99,
+    "thinking_trace": null,
+    "thinking_trace": null,
+    "model": "llama3.2",
+    "backend": "ollama"
 }
 ```
 
 ### Using Context and Reasoning
 
-You can provide context and request "reasoning" (only supported by some backends/models).
+You can provide context and request "reasoning".
 
 ```bash
 curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
@@ -46,22 +41,26 @@ curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
     "premise": "The user has clicked the delete button.",
     "hypothesis": "The file is permanently removed.",
     "context": "The system implements a soft-delete mechanism where files are moved to a trash bin first.",
-    "use_reasoning": true,
     "backend": "openrouter",
     "model": "deepseek/deepseek-r1"
   }'
+```
+
+Example response:
+
+```json
+{
+    "label": "contradiction",
+    "confidence": 1.0,
+    "model": "deepseek/deepseek-r1",
+    "backend": "openrouter"
+}
 ```
 
 ### Providers
 
 ```bash
 curl http://127.0.0.1:8000/api/v1/providers
-```
-
-### List Models
-
-```bash
-curl "http://127.0.0.1:8000/api/v1/models?backend=ollama"
 ```
 
 ---
@@ -76,11 +75,11 @@ Add the following to your Claude Desktop config file:
 
 ```json
 {
-  "mcpServers": {
-    "omni-nli": {
-      "url": "http://127.0.0.1:8000/mcp/"
+    "mcpServers": {
+        "omni-nli": {
+            "url": "http://127.0.0.1:8000/mcp/"
+        }
     }
-  }
 }
 ```
 
@@ -89,5 +88,4 @@ Add the following to your Claude Desktop config file:
 Once connected, you can ask Claude to verify statements:
 
 > "User: Verify if the following claim contradicts the provided text..."
->
 > Claude: Calls evaluate_nli tool...

@@ -29,11 +29,10 @@ Response Fields:
 | Field          | Type           | Description                                 |
 |:---------------|:---------------|:--------------------------------------------|
 | label          | string         | entailment, contradiction, or neutral       |
-| confidence     | float          | Confidence score (0.0 - 1.0)                |
+| confidence     | float          | Confidence score (between 0.0 to 1.0)       |
 | thinking_trace | string \| null | Reasoning trace if use_reasoning is enabled |
 | model          | string         | Model that was used                         |
 | backend        | string         | Backend provider used                       |
-| usage          | object         | Token usage statistics                      |
 
 ### GET /api/v1/providers
 

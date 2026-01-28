@@ -4,10 +4,12 @@
 
 ### 1. Install via Pip
 
-Access the package from PyPI (coming soon) or install directly from source:
+Clone the repository and install dependencies:
 
 ```bash
-pip install omni-nli
+git clone https://github.com/CogitatorTech/omni-nli.git
+cd omni-nli
+pip install .
 ```
 
 ### 2. Configure Environment
@@ -42,16 +44,16 @@ HUGGINGFACE_TOKEN=
 OPENROUTER_API_KEY=
 
 # Default backend for NLI evaluation
-DEFAULT_BACKEND=ollama
+# Default backend for NLI evaluation
+DEFAULT_BACKEND=huggingface
 
 # Per-provider default models (used when request model is omitted)
 OLLAMA_DEFAULT_MODEL=qwen3:8b
 HUGGINGFACE_DEFAULT_MODEL=microsoft/Phi-3.5-mini-instruct
-OPENROUTER_DEFAULT_MODEL=deepseek/deepseek-r1
+OPENROUTER_DEFAULT_MODEL=openai/gpt-5-mini
 
 # Token limits
 MAX_THINKING_TOKENS=4096
-MAX_TOTAL_TOKENS=8192
 ```
 
 CLI Arguments example:
