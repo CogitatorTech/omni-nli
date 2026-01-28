@@ -14,8 +14,8 @@
 [![License](https://img.shields.io/badge/license-MIT-00acc1?style=flat&labelColor=333333&logo=open-source-initiative&logoColor=white)](https://github.com/CogitatorTech/omni-nli/blob/main/LICENSE)
 <br>
 [![Examples](https://img.shields.io/badge/examples-view-green?style=flat&labelColor=382c34)](https://github.com/CogitatorTech/omni-nli/tree/main/examples)
-[![Docker Image (CPU)](https://img.shields.io/badge/Docker-CPU-007ec6?style=flat&logo=docker)](https://github.com/CogitatorTech/omni-nli/pkgs/container/omni-lpr-cpu)
-[![Docker Image (CUDA)](https://img.shields.io/badge/Docker-CUDA-007ec6?style=flat&logo=docker)](https://github.com/CogitatorTech/omni-nli/pkgs/container/omni-lpr-cuda)
+[![Docker Image (CPU)](https://img.shields.io/badge/Docker-CPU-007ec6?style=flat&logo=docker)](https://github.com/CogitatorTech/omni-nli/pkgs/container/omni-nli-cpu)
+[![Docker Image (CUDA)](https://img.shields.io/badge/Docker-CUDA-007ec6?style=flat&logo=docker)](https://github.com/CogitatorTech/omni-nli/pkgs/container/omni-nli-cuda)
 
 A multi-interface (REST and MCP) server for natural language inference
 
@@ -30,12 +30,12 @@ for AI-based applications like chatbots or virtual assistants.
 
 ### What is NLI?
 
-Given two pieces of text called premise (or fact) and hypothesis (or claim), NLI is the task of determining the relationship between them.
+Given two pieces of text called premise and hypothesis, NLI is the task of determining the relationship between them.
 The relationship is typically shown by one of three labels:
 
-- `"entailment"`: the hypothesis is supported or proved by the premise
-- `"contradiction"`: the hypothesis is refuted or contradicts the premise
-- `"neutral"`: the hypothesis is neither supported nor refuted by the premise
+- `"entailment"`: the hypothesis is supported by the premise
+- `"contradiction"`: the hypothesis is contradicted by the premise
+- `"neutral"`: the hypothesis is neither supported nor contradicted by the premise
 
 NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
 question-answering system generates.
