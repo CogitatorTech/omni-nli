@@ -15,14 +15,14 @@ class ErrorCode(str, Enum):
 class ToolError:
     code: ErrorCode
     message: str
-    details: str | None = None
+    details: object | None = None
 
 
 @dataclass
 class ToolLogicError(Exception):
     code: ErrorCode
     message: str
-    details: str | None = None
+    details: object | None = None
     error: ToolError = field(init=False)
 
     def __post_init__(self) -> None:

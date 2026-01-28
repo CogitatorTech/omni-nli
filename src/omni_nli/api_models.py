@@ -49,8 +49,8 @@ class ErrorBody(BaseModel):
         description="A high-level, human-readable error message.",
         examples=["Input validation failed."],
     )
-    details: Optional[List[ErrorDetail]] = Field(
-        None, description="Optional list of specific validation errors."
+    details: Any = Field(
+        None, description="Optional details about the error (validation errors or other context)."
     )
 
 
