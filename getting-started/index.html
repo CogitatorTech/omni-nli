@@ -710,8 +710,10 @@
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <h3 id="1-install-via-pip">1. Install via Pip<a class="headerlink" href="#1-install-via-pip" title="Permanent link">&para;</a></h3>
-<p>Access the package from PyPI (coming soon) or install directly from source:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>omni-nli
+<p>Clone the repository and install dependencies:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/CogitatorTech/omni-nli.git
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>omni-nli
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pip<span class="w"> </span>install<span class="w"> </span>.
 </code></pre></div>
 <h3 id="2-configure-environment">2. Configure Environment<a class="headerlink" href="#2-configure-environment" title="Permanent link">&para;</a></h3>
 <p>Omni-NLI uses environment variables for configuration. You can create a .env file in your working directory.</p>
@@ -736,16 +738,16 @@
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Default backend for NLI evaluation</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nv">DEFAULT_BACKEND</span><span class="o">=</span>ollama
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Per-provider default models (used when request model is omitted)</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nv">OLLAMA_DEFAULT_MODEL</span><span class="o">=</span>qwen3:8b
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="nv">HUGGINGFACE_DEFAULT_MODEL</span><span class="o">=</span>microsoft/Phi-3.5-mini-instruct
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>deepseek/deepseek-r1
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="c1"># Token limits</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="nv">MAX_THINKING_TOKENS</span><span class="o">=</span><span class="m">4096</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="nv">MAX_TOTAL_TOKENS</span><span class="o">=</span><span class="m">8192</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="c1"># Default backend for NLI evaluation</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="nv">DEFAULT_BACKEND</span><span class="o">=</span>huggingface
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="c1"># Per-provider default models (used when request model is omitted)</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="nv">OLLAMA_DEFAULT_MODEL</span><span class="o">=</span>qwen3:8b
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nv">HUGGINGFACE_DEFAULT_MODEL</span><span class="o">=</span>microsoft/Phi-3.5-mini-instruct
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>openai/gpt-5-mini
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="c1"># Token limits</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="nv">MAX_THINKING_TOKENS</span><span class="o">=</span><span class="m">4096</span>
 </code></pre></div>
 <p>CLI Arguments example:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>omni-nli<span class="w"> </span><span class="se">\</span>
