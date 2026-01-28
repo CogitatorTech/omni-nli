@@ -4,14 +4,9 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from ..settings import settings
+
 _logger = logging.getLogger(__name__)
-
-
-class TokenUsage(BaseModel):
-    total_tokens: int = Field(0, description="Total tokens used in the request and response.")
-    thinking_tokens: int = Field(0, description="Tokens used in the thinking/reasoning trace.")
-    prompt_tokens: int = Field(0, description="Tokens used in the prompt.")
-    completion_tokens: int = Field(0, description="Tokens used in the completion.")
 
 
 class NLIResult(BaseModel):
@@ -24,7 +19,6 @@ class NLIResult(BaseModel):
     thinking_trace: str | None = Field(
         None, description="The reasoning trace from models that support extended thinking."
     )
-    usage: TokenUsage = Field(default_factory=TokenUsage, description="Token usage statistics.")
     model: str = Field(..., description="The model that was used for evaluation.")
     backend: str = Field(..., description="The backend provider that was used.")
 
@@ -91,13 +85,20 @@ Respond with ONLY a JSON object in this exact format:
         if think_match:
             thinking_trace = think_match.group(1).strip()
 
+        if not settings.return_thinking_trace:
+            thinking_trace = None
+
+        # Try to find JSON block first
+        json_match = re.search(r"```json\s*(.*?)\s*```", response_text, re.DOTALL)
+        text_to_parse = json_match.group(1) if json_match else response_text
+
         # Use json_repair to parse and fix the JSON
         try:
             from json_repair import repair_json
 
             # First attempt: let json_repair find objects (return_objects=True)
-            # We pass the whole text because json_repair is good at finding JSON in text
-            result_data = repair_json(response_text, return_objects=True)
+            # We pass the text because json_repair is good at finding JSON in text
+            result_data = repair_json(text_to_parse, return_objects=True)
 
             # If it returns a list, try to find the relevant object
             if isinstance(result_data, list):
@@ -110,9 +111,6 @@ Respond with ONLY a JSON object in this exact format:
                     if result_data and isinstance(result_data[0], dict):
                         result_data = result_data[0]
                     else:
-                        # If it's still not a dict, maybe try parsing just the matched string if we found one
-                        # But let's rely on repair_json first.
-                        # If result_data is empty list or not dict, fail
                         pass
 
             if not isinstance(result_data, dict):

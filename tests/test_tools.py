@@ -8,7 +8,8 @@ from mcp import types
 from pydantic import BaseModel
 
 from omni_nli.errors import ErrorCode, ToolLogicError
-from omni_nli.providers.base import NLIResult, TokenUsage
+from omni_nli.providers.base import NLIResult
+
 from omni_nli.tools import (
     ListProvidersArgs,
     ToolRegistry,
@@ -42,7 +43,7 @@ def mock_nli_result():
         label="contradiction",
         confidence=0.95,
         thinking_trace=None,
-        usage=TokenUsage(total_tokens=50, prompt_tokens=30, completion_tokens=20),
+
         model="llama3.2",
         backend="ollama",
     )
@@ -157,7 +158,7 @@ async def test_evaluate_nli_with_reasoning(mocker):
         label="entailment",
         confidence=0.92,
         thinking_trace="Let me analyze this step by step...",
-        usage=TokenUsage(total_tokens=200, thinking_tokens=100),
+
         model="claude-3.5-sonnet",
         backend="openrouter",
     )
@@ -167,6 +168,7 @@ async def test_evaluate_nli_with_reasoning(mocker):
     mock_provider.supports_reasoning = True
 
     mocker.patch("omni_nli.tools.get_provider", return_value=mock_provider)
+    mocker.patch("omni_nli.providers.base.settings.return_thinking_trace", True)
 
     result = await global_tool_registry.call(
         "evaluate_nli",

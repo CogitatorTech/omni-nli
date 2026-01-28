@@ -7,7 +7,7 @@ import httpx
 from shared import get_args
 
 
-def main():
+def main() -> None:
     """Requests list of providers from the REST API."""
     args = get_args(default_url="http://127.0.0.1:8000/api/v1/providers")
 

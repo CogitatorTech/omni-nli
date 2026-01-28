@@ -157,7 +157,7 @@ async def evaluate_nli(args: EvaluateNLIArgs) -> list[types.ContentBlock]:
             message=f"NLI evaluation failed: {e}",
         ) from e
 
-    return [types.TextContent(type="text", text=result.model_dump_json())]
+    return [types.TextContent(type="text", text=result.model_dump_json(exclude_none=True))]
 
 
 async def list_providers_tool(args: ListProvidersArgs) -> list[types.ContentBlock]:

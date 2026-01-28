@@ -6,7 +6,7 @@ from typing import Any
 from async_lru import alru_cache
 from transformers import pipeline
 
-from .base import NLIProvider, NLIResult, TokenUsage
+from .base import NLIProvider, NLIResult
 from ..settings import settings
 
 _logger = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ class HuggingFaceProvider(NLIProvider):
             functools.partial(
                 pipe,
                 prompt_formatted,
-                max_new_tokens=512 if use_reasoning else 256,
+                max_new_tokens=settings.max_thinking_tokens if use_reasoning else 256,
                 temperature=0.3 if use_reasoning else 0.1,
                 return_full_text=False,
                 do_sample=use_reasoning,
@@ -97,14 +97,7 @@ class HuggingFaceProvider(NLIProvider):
 
         result = self._parse_nli_response(response_text, model)
 
-        prompt_tokens = len(pipe.tokenizer.encode(prompt_formatted))
-        completion_tokens = len(pipe.tokenizer.encode(response_text))
-        result.usage = TokenUsage(
-            total_tokens=prompt_tokens + completion_tokens,
-            prompt_tokens=prompt_tokens,
-            completion_tokens=completion_tokens,
-            thinking_tokens=completion_tokens if use_reasoning else 0,
-        )
+        # Token usage tracking removed by user request
 
         return result
 

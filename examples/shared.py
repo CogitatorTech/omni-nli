@@ -1,7 +1,7 @@
 import argparse
 
 
-def get_args(default_url: str):
+def get_args(default_url: str) -> argparse.Namespace:
     """Parses and returns command-line arguments for the examples."""
     parser = argparse.ArgumentParser()
     parser.add_argument(

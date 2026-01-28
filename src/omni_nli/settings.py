@@ -15,7 +15,7 @@ def get_default_hf_cache_dir() -> str:
 
     We delegate to the official Hugging Face implementation, so it respects:
     - HF_HOME / TRANSFORMERS_CACHE / HF_HUB_CACHE env vars
-    - platform defaults (e.g. ~/.cache/huggingface on Linux)
+    - platform defaults (like `~/.cache/huggingface` on Linux)
     """
 
     # Import lazily so importing settings doesn't hard-require transformers.
@@ -57,13 +57,14 @@ class ServerSettings(BaseSettings):
 
     default_backend: str = "huggingface"
 
-    # Provider-specific defaults (required for a clean, predictable API).
+    # Provider-specific defaults
     ollama_default_model: str = "qwen3:8b"
     huggingface_default_model: str = "microsoft/Phi-3.5-mini-instruct"
     openrouter_default_model: str = "openai/gpt-5-mini"
 
     max_thinking_tokens: int = 4096
-    max_total_tokens: int = 8192
+
+    return_thinking_trace: bool = False
 
     provider_cache_size: int = 8
 
@@ -78,7 +79,7 @@ class ServerSettings(BaseSettings):
 
     @property
     def hf_cache_dir_effective(self) -> str:
-        # If user set HF_CACHE_DIR to an empty string, treat it as unset.
+        # If user set HF_CACHE_DIR to an empty string, it is treated as unset.
         return _normalize_optional_str(self.hf_cache_dir) or get_default_hf_cache_dir()
 
 

@@ -35,7 +35,9 @@ api_spec = SpecTree(
 )
 
 
-def _error(code: str, message: str, details=None, status_code: int = 400) -> JSONResponse:
+def _error(
+    code: str, message: str, details: object | None = None, status_code: int = 400
+) -> JSONResponse:
     error_body = ErrorBody(code=code, message=message, details=details)
     payload = ErrorResponse(error=error_body)
     return JSONResponse(payload.model_dump(), status_code=status_code)
@@ -85,7 +87,7 @@ async def evaluate_nli(request: Request) -> JSONResponse:
         )
 
         response_data = NLIResultResponse(**result.model_dump())
-        return JSONResponse(response_data.model_dump())
+        return JSONResponse(response_data.model_dump(exclude_none=True))
 
     except ValidationError as e:
         return _error(

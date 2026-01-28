@@ -32,9 +32,10 @@ def test_robust_json_parsing():
 
     # Case 2: Thinking trace before JSON
     text = '<think>some reasoning</think>\n{"label": "contradiction", "confidence": 0.1}'
-    result = provider._parse_nli_response(text, "test")
-    assert result.label == "contradiction"
-    assert result.thinking_trace == "some reasoning"
+    with patch("omni_nli.providers.base.settings.return_thinking_trace", True):
+        result = provider._parse_nli_response(text, "test")
+        assert result.label == "contradiction"
+        assert result.thinking_trace == "some reasoning"
 
     # Case 3: Extra text around JSON
     text = 'Sure, here is the JSON:\n{"label": "neutral", "confidence": 0.5}\nHope this helps!'

@@ -3,7 +3,7 @@ import logging
 import ollama
 from async_lru import alru_cache
 
-from .base import NLIProvider, NLIResult, TokenUsage
+from .base import NLIProvider, NLIResult
 from ..settings import settings
 
 _logger = logging.getLogger(__name__)
@@ -51,13 +51,7 @@ class OllamaProvider(NLIProvider):
         result = self._parse_nli_response(response_text, model)
 
         if "eval_count" in response:
-            # pyright sometimes fails to see pydantic BaseModel keyword args here.
-            result.usage = TokenUsage(  # type: ignore[call-arg]
-                total_tokens=response.get("eval_count", 0) + response.get("prompt_eval_count", 0),
-                prompt_tokens=response.get("prompt_eval_count", 0),
-                completion_tokens=response.get("eval_count", 0),
-                thinking_tokens=(response.get("eval_count", 0) if use_reasoning else 0),
-            )  # type: ignore[arg-type]
+            pass  # Token usage tracking removed by user request
 
         return result
 

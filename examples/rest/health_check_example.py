@@ -3,7 +3,7 @@ import argparse
 import httpx
 
 
-def main():
+def main() -> None:
     """Performs a health check against the server."""
     parser = argparse.ArgumentParser()
     parser.add_argument(

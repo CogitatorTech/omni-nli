@@ -1,6 +1,6 @@
 [project]
 name = "omni-nli"
-version = "0.1.0-alpha.1"
+version = "0.1.0-alpha.2"
 description = "A multi-interface (REST and MCP) server for natural language inference (NLI)"
 readme = "README.md"
 license = { text = "MIT" }

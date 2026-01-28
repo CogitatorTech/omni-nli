@@ -1,4 +1,4 @@
-from .base import NLIProvider, NLIResult, TokenUsage
+from .base import NLIProvider, NLIResult
 from .factory import get_provider, list_available_providers
 
 __all__ = [

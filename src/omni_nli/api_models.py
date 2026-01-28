@@ -3,13 +3,6 @@ from typing import Any, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 
-class TokenUsage(BaseModel):
-    total_tokens: int = Field(0, description="Total tokens used in the request and response.")
-    thinking_tokens: int = Field(0, description="Tokens used in the thinking/reasoning trace.")
-    prompt_tokens: int = Field(0, description="Tokens used in the prompt.")
-    completion_tokens: int = Field(0, description="Tokens used in the completion.")
-
-
 class NLIResultResponse(BaseModel):
     label: Literal["entailment", "contradiction", "neutral"] = Field(
         ..., description="The predicted NLI label."
@@ -20,7 +13,6 @@ class NLIResultResponse(BaseModel):
     thinking_trace: Optional[str] = Field(
         None, description="The reasoning trace from models that support extended thinking."
     )
-    usage: TokenUsage = Field(default_factory=TokenUsage, description="Token usage statistics.")
     model: str = Field(..., description="The model that was used for evaluation.")
     backend: str = Field(..., description="The backend provider that was used.")
 

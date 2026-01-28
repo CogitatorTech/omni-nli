@@ -3,7 +3,7 @@ import logging
 from async_lru import alru_cache
 from openai import AsyncOpenAI
 
-from .base import NLIProvider, NLIResult, TokenUsage
+from .base import NLIProvider, NLIResult
 from ..settings import settings
 
 _logger = logging.getLogger(__name__)
@@ -75,16 +75,7 @@ class OpenRouterProvider(NLIProvider):
         result = self._parse_nli_response(response_text, model)
 
         if response.usage:
-            thinking_tokens = 0
-            if result.thinking_trace:
-                thinking_tokens = len(result.thinking_trace.split()) * 1.3
-
-            result.usage = TokenUsage(
-                total_tokens=response.usage.total_tokens,
-                prompt_tokens=response.usage.prompt_tokens,
-                completion_tokens=response.usage.completion_tokens,
-                thinking_tokens=int(thinking_tokens),
-            )
+            pass  # Token usage tracking removed by user request
 
         return result
 

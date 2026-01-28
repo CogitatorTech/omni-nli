@@ -28,12 +28,7 @@ The example scripts are designed to be run from the root of the repository.
    python examples/rest/list_providers_example.py
    ```
 
-3. **List Models**
-   ```bash
-   python examples/rest/list_models_example.py --backend ollama
-   ```
-
-4. **Health Check**
+3. **Health Check**
    ```bash
    python examples/rest/health_check_example.py
    ```
