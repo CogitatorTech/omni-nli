@@ -37,6 +37,10 @@ question-answering system generates.
     - Asynchronous I/O for high throughput.
     - Built-in caching.
 
+Below is the high-level architecture of Omni-NLI:
+
+![Architecture Diagram](https://raw.githubusercontent.com/CogitatorTech/omni-nli/main/docs/assets/diagrams/architecture.svg)
+
 ## Quick Links
 
 - [Getting Started](getting-started.md): Installation and configuration guide.
