@@ -1,19 +1,18 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json",
-  "name": "io.github.cogitatortech/omni-nli",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.CogitatorTech/omni-nli",
   "description": "An MCP server for natural language inference",
-  "status": "active",
   "repository": {
     "url": "https://github.com/CogitatorTech/omni-nli",
     "source": "github"
   },
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "omni-nli",
-      "version": "0.3.3",
+      "version": "0.1.0-alpha.3",
       "transport": {
         "type": "streamable-http",
         "url": "http://127.0.0.1:8000/mcp/"

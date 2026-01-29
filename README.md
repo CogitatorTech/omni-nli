@@ -125,4 +125,4 @@ Omni-NLI is licensed under the MIT License (see [LICENSE](LICENSE)).
 
 
 <!-- Need to add this line for MCP registry publication -->
-<!-- mcp-name: io.github.cogitatortech/omni-nli -->
+<!-- mcp-name: io.github.CogitatorTech/omni-nli -->
