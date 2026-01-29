@@ -674,19 +674,24 @@
 
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
-<p>This project provides interactive API documentation (via Swagger UI and ReDoc).
+<p>Omni-NLI includes interactive API documentation (via Swagger UI and ReDoc) for the REST API.
 When the server is running, you can access them at:</p>
 <ul>
 <li>Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger</li>
 <li>ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc</li>
 </ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The REST API and MCP interface provide more or less the same functionality.
+The REST API can be more scalable because it is stateless compared to the MCP, which is a stateful service protocol.</p>
+</div>
 <h2 id="rest-api">REST API<a class="headerlink" href="#rest-api" title="Permanent link">&para;</a></h2>
 <p>The REST API provides endpoints for NLI evaluation and provider management.
 All endpoints are available under the <code>/api/v1</code> prefix.
 A health check endpoint is also available at <code>GET /api/health</code>.</p>
-<h3 id="post-apiv1nlievaluate">POST /api/v1/nli/evaluate<a class="headerlink" href="#post-apiv1nlievaluate" title="Permanent link">&para;</a></h3>
+<h3 id="post-apiv1nlievaluate">POST <code>/api/v1/nli/evaluate</code><a class="headerlink" href="#post-apiv1nlievaluate" title="Permanent link">&para;</a></h3>
 <p>Evaluates the logical relationship between a premise and a hypothesis.</p>
-<p>Request Body Parameters:</p>
+<p>Request body parameters:</p>
 <table>
 <thead>
 <tr>
@@ -735,7 +740,7 @@ A health check endpoint is also available at <code>GET /api/health</code>.</p>
 </tr>
 </tbody>
 </table>
-<p>Response Fields:</p>
+<p>Response fields:</p>
 <table>
 <thead>
 <tr>
@@ -772,7 +777,7 @@ A health check endpoint is also available at <code>GET /api/health</code>.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="get-apiv1providers">GET /api/v1/providers<a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
+<h3 id="get-apiv1providers">GET <code>/api/v1/providers</code><a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
 <p>Returns provider configuration metadata.</p>
 <p>Response includes:</p>
 <ul>
