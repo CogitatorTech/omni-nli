@@ -1,8 +1,8 @@
-# Omni-NLI Examples
+## Omni-NLI Examples
 
 This directory contains examples of how to use the Omni-NLI server via the REST and MCP interfaces.
 
-## Prerequisites
+### Prerequisites
 
 Before running the examples, make sure the Omni-NLI server is running.
 
@@ -10,11 +10,11 @@ Before running the examples, make sure the Omni-NLI server is running.
 omni-nli
 ```
 
-## Running the Examples
+### Running the Examples
 
 The example scripts are designed to be run from the root of the repository.
 
-### REST API Examples
+#### REST API Examples
 
 1. **Evaluate NLI**
    ```bash
@@ -33,7 +33,7 @@ The example scripts are designed to be run from the root of the repository.
    python examples/rest/health_check_example.py
    ```
 
-### MCP Examples
+#### MCP Examples
 
 1. **Evaluate NLI**
    ```bash
@@ -43,7 +43,7 @@ The example scripts are designed to be run from the root of the repository.
        --backend huggingface
    ```
 
-## Options
+### Options
 
 Most examples accept the following arguments:
 
