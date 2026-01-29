@@ -60,6 +60,9 @@ Example response:
 !!! note
     The `thinking_trace` field is only returned when `use_reasoning` is enabled and the server is configured with `RETURN_THINKING_TRACE=True`.
 
+!!! important
+    Not all models support reasoning.
+
 ### Listing Providers
 
 ```sh
@@ -79,7 +82,7 @@ Response:
 
 ## MCP Server
 
-Omni-NLI allows AI agents (like Claude Desktop or LM Studio) to use NLI as a tool.
+Omni-NLI allows AI agents and applications that can use MCP (for example, Claude Code or LM Studio) to use NLI as a tool.
 
 ### MCP Client Configuration
 

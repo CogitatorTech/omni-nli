@@ -6,32 +6,39 @@
   </picture>
 </div>
 
-Omni-NLI is a self-hostable server that provides Natural Language Inference (NLI) capabilities via a REST API and the Model Context Protocol (MCP).
+Omni-NLI is a self-hostable server that provides [natural language inference (NLI)](https://en.wikipedia.org/wiki/Textual_entailment) capabilities via
+RESTful and the Model Context Protocol (MCP) interfaces.
+It can be used both as a very scalable standalone stateless microservice and also as an MCP server for AI agents to implement a verification layer
+for AI-based applications like chatbots or virtual assistants.
 
-!!! warning
-    Omni-NLI is in early development. Bugs and breaking changes are expected.
+## What is NLI?
 
-It is designed to be a scalable standalone microservice or a tool layer for AI agents, allowing them to verify logical consistency and detect
-hallucinations.
+Given two pieces of text called premise and hypothesis, NLI is the task of determining the logical relationship between them if it was done by a human.
+The relationship is typically shown by one of three labels:
 
-## Key Features
+- `"entailment"`: the hypothesis is supported by the premise
+- `"contradiction"`: the hypothesis is contradicted by the premise
+- `"neutral"`: the hypothesis is neither supported nor contradicted by the premise
 
-- Multi-backend support: Use models through Ollama (local), HuggingFace (local transformers), or OpenRouter (cloud APIs).
+NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
+question-answering system generates.
+
+## High-level Features
+
+- Multi-backend support: Use models through Ollama, HuggingFace, or OpenRouter.
 - Dual interface:
-    - REST API for traditional web/backend integration.
-    - MCP Server for direct integration with Claude Desktop, LM Studio, and other MCP clients.
-- Advanced logic:
-    - Entailment/contradiction detection: Determine if a hypothesis follows from a premise.
-    - Thinking traces: Extract reasoning steps from models that support it.
+    - REST API for conventional integration with other applications.
+    - MCP Server for direct integration with AI agents.
+- NLI capabilities:
+    - Entailment and contradiction detection: Determine if a hypothesis follows from a premise given a model.
+    - Thinking traces: Extract reasoning steps from models for explainability.
     - Confidence scores: Get numerical confidence for predictions.
 - Scalable architecture:
-    - Asynchronous I/O for high concurrency.
-    - Caching for provider instances.
-    - Standardized error handling and validation.
+    - Asynchronous I/O for high throughput.
+    - Built-in caching.
 
 ## Quick Links
 
 - [Getting Started](getting-started.md): Installation and configuration guide.
-- [Examples](examples.md): Usage examples for REST and MCP.
+- [Examples](examples.md): Usage examples for REST and MCP interfaces.
 - [API Reference](api-reference.md): Detailed API documentation.
-- [GitHub Repository](https://github.com/CogitatorTech/omni-nli): Source code and contributions.

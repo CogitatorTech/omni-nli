@@ -51,4 +51,4 @@ Most examples accept the following arguments:
 - `--premise`: The premise text.
 - `--hypothesis`: The hypothesis text.
 - `--backend`: The backend to use (`ollama`, `huggingface`, and `openrouter`).
-- `--model`: Specific model name (optional, mainly used for evaluate examples).
+- `--model`: Specific model name (optional).
