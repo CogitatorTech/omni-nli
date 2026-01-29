@@ -25,7 +25,7 @@ question-answering system generates.
 
 ## High-level Features
 
-- Multi-backend support: Use models through Ollama, HuggingFace, or OpenRouter.
+- Multi-backend support: Use models through Ollama, HuggingFace (public and private/gated models), or OpenRouter.
 - Dual interface:
     - REST API for conventional integration with other applications.
     - MCP Server for direct integration with AI agents.

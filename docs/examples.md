@@ -41,7 +41,7 @@ curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
     "context": "The system implements a soft-delete mechanism where files are moved to a trash bin first.",
     "use_reasoning": true,
     "backend": "openrouter",
-    "model": "openai/gpt-5.2"
+    "model": "google/gemini-2.5-flash"
   }'
 ```
 
@@ -49,16 +49,18 @@ Example response:
 
 ```json
 {
-    "label": "contradiction",
-    "confidence": 1.0,
-    "thinking_trace": "Let me analyze this step by step...",
-    "model": "openai/gpt-5.2",
-    "backend": "openrouter"
+  "label": "contradiction",
+  "confidence": 1.0,
+  "thinking_trace": "The user clicked the delete button. The system has a soft-delete mechanism where files are moved to a trash bin first. This means that clicking delete does *not* permanently remove the file; it moves it to the trash. Therefore, the hypothesis that the file is permanently removed contradicts the premise in the context of the system's behavior.",
+  "model": "google/gemini-2.5-flash",
+  "backend": "openrouter"
 }
 ```
 
+
 !!! note
     The `thinking_trace` field is only returned when `use_reasoning` is enabled and the server is configured with `RETURN_THINKING_TRACE=True`.
+    Reasoning is extracted from models that output it via `<think></think>` tags (like DeepSeek-R1, Qwen models, etc.) or from any text the comes before the JSON response from the model.
 
 !!! important
     Not all models support reasoning.
@@ -73,16 +75,29 @@ Response:
 
 ```json
 {
-    "ollama": {"host": "http://localhost:11434", "default_model": "qwen3:8b"},
-    "huggingface": {"token_configured": false, "default_model": "microsoft/Phi-3.5-mini-instruct"},
-    "openrouter": {"token_configured": true, "default_model": "openai/gpt-5-mini"},
+    "ollama": 
+    {
+        "host": "http://localhost:11434",
+        "default_model": "qwen3:8b"
+    },
+    "huggingface": 
+    {
+        "token_configured": false,
+        "default_model": "microsoft/Phi-3.5-mini-instruct"
+    },
+    "openrouter": 
+    {
+        "token_configured": true,
+        "default_model": "openai/gpt-5-mini"
+    },
     "default_backend": "huggingface"
 }
 ```
 
 ## MCP Server
 
-Omni-NLI allows AI agents and applications that can use MCP (for example, Claude Code or LM Studio) to use NLI as a tool.
+Omni-NLI allows AI agents and applications that can use MCP (for example, [Claude Code](https://claude.com/product/claude-code)
+or [LM Studio](https://lmstudio.ai/)) to use NLI as a tool.
 
 ### MCP Client Configuration
 

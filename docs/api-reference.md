@@ -3,8 +3,8 @@
 Omni-NLI includes interactive API documentation (via Swagger UI and ReDoc) for the REST API.
 When the server is running, you can access them at:
 
-- Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger
-- ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
+  - Swagger UI: [http://127.0.0.1:8000/api/v1/apidoc/swagger](http://127.0.0.1:8000/api/v1/apidoc/swagger)
+  - ReDoc: [http://127.0.0.1:8000/api/v1/apidoc/redoc](http://127.0.0.1:8000/api/v1/apidoc/redoc)
 
 !!! important
     The REST API and MCP interface provide more or less the same functionality.
@@ -33,13 +33,13 @@ Request body parameters:
 
 Response fields:
 
-| Field          | Type           | Description                                 |
-|:---------------|:---------------|:--------------------------------------------|
-| label          | string         | `entailment`, `contradiction`, or `neutral` |
-| confidence     | float          | Confidence score (between 0.0 to 1.0)       |
-| thinking_trace | string or null | Reasoning trace if use_reasoning is enabled |
-| model          | string         | Model that was used                         |
-| backend        | string         | Backend provider used                       |
+| Field          | Type           | Description                                                                              |
+|:---------------|:---------------|:-----------------------------------------------------------------------------------------|
+| label          | string         | `entailment`, `contradiction`, or `neutral`                                              |
+| confidence     | float          | Confidence score (between 0.0 to 1.0)                                                    |
+| thinking_trace | string or null | Reasoning trace extracted from `<think>` tags or from pre-JSON text that model generates |
+| model          | string         | Model that was used                                                                      |
+| backend        | string         | Backend provider used                                                                    |
 
 ### GET `/api/v1/providers`
 

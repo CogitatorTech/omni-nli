@@ -1,7 +1,7 @@
 # Getting Started
 
 This document includes installation and configuration instructions for Omni-NLI.
-For a quickstart, please see the main [README.md](../README.md) file.
+For a quickstart, please see the project's main [README.md](https://github.com/CogitatorTech/omni-nli/blob/main/README.md) file.
 
 ## Installation
 
@@ -60,7 +60,7 @@ Environment variables are read from a `.env` file if it exists or from the syste
 !!! note
     Command-line arguments take precedence over environment variables.
 
-You could copy the example [.env.example](../.env.example) in the project's repository to the directory where you run the server and customize it.
+You could copy the example [.env.example](https://github.com/CogitatorTech/omni-nli/blob/main/.env.example) in the project's repository to the directory where you run the server and customize it.
 
 ```sh
 cp .env.example .env
@@ -92,9 +92,9 @@ cp .env.example .env
 
 | Backend     | Local | Example Models                                                         |
 |:------------|:------|:-----------------------------------------------------------------------|
-| Ollama      | Yes   | qwen3:8b, deepseek-r1:7b, phi4:latest                                  |
-| HuggingFace | Yes   | microsoft/Phi-3.5-mini-instruct, Qwen/Qwen2.5-1.5B-Instruct            |
-| OpenRouter  | No    | openai/gpt-5-mini, openai/gpt-5.2, arcee-ai/trinity-large-preview:free |
+| Ollama      | Yes   | `qwen3:8b`, `deepseek-r1:7b`, `phi4:latest`                                  |
+| HuggingFace | Yes   | `microsoft/Phi-3.5-mini-instruct`, `Qwen/Qwen2.5-1.5B-Instruct`            |
+| OpenRouter  | No    | `openai/gpt-5-mini`, `openai/gpt-5.2`, `arcee-ai/trinity-large-preview:free` |
 
 ## Running the Server
 

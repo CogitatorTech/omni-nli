@@ -42,9 +42,10 @@ question-answering system generates.
 
 ### Features
 
-- Supports models provided by different backends, including Ollama, HuggingFace, and OpenRouter
+- Supports models provided by different backends, including Ollama, HuggingFace (public and private/gated models), and OpenRouter
 - Supports REST API (for traditional applications) and MCP (for AI agents) interfaces
-- Fully configurable and very scalable
+- Fully configurable and very scalable, with built-in caching
+- Provides confidence scores and (optional) reasoning traces for explainability
 
 See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 
