@@ -44,7 +44,6 @@ HUGGINGFACE_TOKEN=
 OPENROUTER_API_KEY=
 
 # Default backend for NLI evaluation
-# Default backend for NLI evaluation
 DEFAULT_BACKEND=huggingface
 
 # Per-provider default models (used when request model is omitted)

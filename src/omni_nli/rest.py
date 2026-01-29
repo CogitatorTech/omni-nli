@@ -50,11 +50,13 @@ async def _parse_json_body(request: Request) -> dict:
         raise ValueError("Unsupported Content-Type. Use application/json.")
 
     # DoS protection: limit body size to 10MB
-    if int(request.headers.get("content-length", 0)) > 10 * 1024 * 1024:
+    max_body_size = 10 * 1024 * 1024
+    content_length = request.headers.get("content-length")
+    if content_length is not None and int(content_length) > max_body_size:
         raise ValueError("Request payload too large (limit: 10MB).")
 
     body = await request.body()
-    if len(body) > 10 * 1024 * 1024:
+    if len(body) > max_body_size:
         raise ValueError("Request payload too large (limit: 10MB).")
 
     return json.loads(body) if body else {}

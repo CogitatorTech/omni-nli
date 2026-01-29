@@ -17,17 +17,30 @@ class EventEntry:
 
 
 class InMemoryEventStore(EventStore):
-    def __init__(self, max_events_per_stream: int = 200) -> None:
+    def __init__(self, max_events_per_stream: int = 200, max_streams: int = 1000) -> None:
         self.max_events_per_stream = max_events_per_stream
+        self.max_streams = max_streams
         self.streams: dict[StreamId, deque[EventEntry]] = {}
         self.event_index: dict[EventId, EventEntry] = {}
+        self._stream_order: deque[StreamId] = deque()  # Track stream creation order for LRU
 
     async def store_event(self, stream_id: StreamId, message: JSONRPCMessage) -> EventId:
         event_id = str(uuid4())
         event_entry = EventEntry(event_id=event_id, stream_id=stream_id, message=message)
 
-        if stream_id not in self.streams:
+        is_new_stream = stream_id not in self.streams
+        if is_new_stream:
+            # Evict the oldest stream if we've reached the limit
+            while len(self.streams) >= self.max_streams and self._stream_order:
+                oldest_stream_id = self._stream_order.popleft()
+                if oldest_stream_id in self.streams:
+                    # Remove all events from this stream from the index
+                    for event in self.streams[oldest_stream_id]:
+                        self.event_index.pop(event.event_id, None)
+                    del self.streams[oldest_stream_id]
+
             self.streams[stream_id] = deque(maxlen=self.max_events_per_stream)
+            self._stream_order.append(stream_id)
 
         if len(self.streams[stream_id]) == self.max_events_per_stream:
             oldest_event = self.streams[stream_id][0]

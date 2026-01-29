@@ -51,6 +51,9 @@ FROM common-final AS cpu
 # Install the wheel (and dependencies)
 RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir omni_nli-*.whl
 
+USER appuser
+ENTRYPOINT ["/bin/bash", "/home/appuser/app/scripts/docker_entrypoint.sh"]
+
 # --- CUDA Target ---
 FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04 AS cuda
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -83,4 +86,5 @@ RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir torch torchvision tor
 # Install the app
 RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir omni_nli-*.whl
 
+USER appuser
 ENTRYPOINT ["/bin/bash", "/home/appuser/app/scripts/docker_entrypoint.sh"]

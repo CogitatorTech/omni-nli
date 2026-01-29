@@ -52,7 +52,7 @@ async def lifespan(app: Starlette) -> AsyncGenerator[None, None]:
             _logger.info("Omni-NLI shutting down...")
 
 
-starlette_app = Starlette(debug=True, lifespan=lifespan)
+starlette_app = Starlette(debug=settings.debug, lifespan=lifespan)
 
 
 def setup_app_routes(main_app: Starlette) -> None:
@@ -107,6 +107,14 @@ starlette_app = CORSMiddleware(
     show_default=True,
     help="The log level to use.",
     envvar="LOG_LEVEL",
+)
+@click.option(
+    "--debug/--no-debug",
+    is_flag=True,
+    default=settings.debug,
+    show_default=True,
+    help="Enable debug mode (detailed error tracebacks).",
+    envvar="DEBUG",
 )
 @click.option(
     "--ollama-host",
@@ -174,14 +182,6 @@ starlette_app = CORSMiddleware(
     envvar="MAX_THINKING_TOKENS",
 )
 @click.option(
-    "--provider-cache-size",
-    default=settings.provider_cache_size,
-    show_default=True,
-    type=int,
-    help="Number of provider instances to cache.",
-    envvar="PROVIDER_CACHE_SIZE",
-)
-@click.option(
     "--return-thinking-trace/--no-return-thinking-trace",
     is_flag=True,
     default=settings.return_thinking_trace,
@@ -193,6 +193,7 @@ def main(
     host: str,
     port: int,
     log_level: str,
+    debug: bool,
     ollama_host: str,
     default_backend: str,
     ollama_default_model: str,
@@ -202,7 +203,6 @@ def main(
     huggingface_token: str | None,
     hf_cache_dir: str | None,
     max_thinking_tokens: int,
-    provider_cache_size: int,
     return_thinking_trace: bool,
 ) -> int:
     import uvicorn
@@ -211,6 +211,7 @@ def main(
     settings.host = host
     settings.port = port
     settings.log_level = log_level
+    settings.debug = debug
     settings.ollama_host = ollama_host
     settings.default_backend = default_backend
     settings.ollama_default_model = ollama_default_model
@@ -220,7 +221,6 @@ def main(
     settings.huggingface_token = huggingface_token
     settings.hf_cache_dir = hf_cache_dir
     settings.max_thinking_tokens = max_thinking_tokens
-    settings.provider_cache_size = provider_cache_size
     settings.return_thinking_trace = return_thinking_trace
 
     setup_logging(settings.log_level)

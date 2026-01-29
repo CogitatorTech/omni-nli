@@ -42,9 +42,10 @@ def create_test_app(with_tools: bool = True) -> Starlette:
         await session_manager.handle_request(scope, receive, send)
 
     # Create a fresh Starlette app with the isolated lifespan
-    app = Starlette(debug=True, lifespan=lifespan)
+    from omni_nli.settings import settings
+    app = Starlette(debug=settings.debug, lifespan=lifespan)
 
-    # Manage tool registry state based on test type
+    # Manage tool registry state based on a test type
     if with_tools:
         tool_registry._tools.clear()
         tool_registry._tool_definitions.clear()

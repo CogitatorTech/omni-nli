@@ -132,7 +132,8 @@ tool_registry = ToolRegistry()
 
 
 async def evaluate_nli(args: EvaluateNLIArgs) -> list[types.ContentBlock]:
-    _logger.info(f"Evaluating NLI: premise='{args.premise[:50]}...'")
+    premise_preview = args.premise[:50] + ("..." if len(args.premise) > 50 else "")
+    _logger.info(f"Evaluating NLI: premise='{premise_preview}'")
 
     try:
         provider = await get_provider(backend=args.backend)
@@ -162,8 +163,10 @@ async def evaluate_nli(args: EvaluateNLIArgs) -> list[types.ContentBlock]:
 
 async def list_providers_tool(args: ListProvidersArgs) -> list[types.ContentBlock]:
     from .providers import list_available_providers
+    from .settings import settings
 
     providers = list_available_providers()
+    providers["default_backend"] = settings.default_backend
     return [types.TextContent(type="text", text=json.dumps(providers, indent=2))]
 
 

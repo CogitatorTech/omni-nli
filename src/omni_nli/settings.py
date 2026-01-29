@@ -46,6 +46,7 @@ class ServerSettings(BaseSettings):
     host: str = "127.0.0.1"
     port: int = 8000
     log_level: str = "INFO"
+    debug: bool = False
 
     ollama_host: str = "http://localhost:11434"
     huggingface_token: str | None = None
