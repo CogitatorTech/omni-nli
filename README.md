@@ -47,6 +47,9 @@ final answer that is shown to the user.
 > [!IMPORTANT]
 > The quality of the results depends a lot on the model (the LLM) that is used.
 > A good strategy is to first fine-tune the model using a dataset of premise-hypothesis-label triples that are relevant to your application domain.
+> Also, NLI is not the same as logical entailment.
+> It mainly involves checking if the premise supports the hypothesis and does not guarantee that the hypothesis is true.
+> It can be used to help with fact-checking and verification, but it does not guarantee that like when logic is used.
 
 ### Main Features of Omni-NLI
 
