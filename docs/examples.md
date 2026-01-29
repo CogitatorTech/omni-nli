@@ -75,17 +75,17 @@ Response:
 
 ```json
 {
-    "ollama": 
+    "ollama":
     {
         "host": "http://localhost:11434",
         "default_model": "qwen3:8b"
     },
-    "huggingface": 
+    "huggingface":
     {
         "token_configured": false,
         "default_model": "microsoft/Phi-3.5-mini-instruct"
     },
-    "openrouter": 
+    "openrouter":
     {
         "token_configured": true,
         "default_model": "openai/gpt-5-mini"

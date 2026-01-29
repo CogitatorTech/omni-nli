@@ -1,3 +1,9 @@
+"""HuggingFace Transformers provider for local NLI evaluation.
+
+This module provides NLI evaluation using locally-loaded HuggingFace
+transformer models, supporting both CPU and GPU inference.
+"""
+
 import asyncio
 import functools
 import logging
@@ -6,8 +12,8 @@ from typing import Any
 from async_lru import alru_cache
 from transformers import pipeline
 
-from .base import NLIProvider, NLIResult
 from ..settings import settings
+from .base import NLIProvider, NLIResult
 
 _logger = logging.getLogger(__name__)
 
@@ -18,15 +24,42 @@ DEFAULT_HF_MODELS = [
 
 
 class HuggingFaceProvider(NLIProvider):
+    """NLI provider using HuggingFace Transformers for local inference.
+
+    Loads models locally and runs text generation pipelines for NLI tasks.
+    Supports extended thinking/reasoning with configurable token limits.
+
+    Attributes:
+        name: Provider identifier ('huggingface').
+        supports_reasoning: Always True for this provider.
+    """
+
     name = "huggingface"
     supports_reasoning = True
 
     def __init__(self, token: str | None = None, cache_dir: str | None = None) -> None:
+        """Initialize the HuggingFace provider.
+
+        Args:
+            token: HuggingFace API token for gated models.
+            cache_dir: Directory for caching downloaded models.
+        """
         self.token = token or settings.huggingface_token
         self.cache_dir = cache_dir or settings.hf_cache_dir_effective
         self._pipelines: dict[str, Any] = {}
 
     async def _get_pipeline(self, model_id: str) -> Any:  # noqa: ANN401
+        """Get or create a text generation pipeline for a model.
+
+        Args:
+            model_id: The HuggingFace model identifier.
+
+        Returns:
+            A transformers pipeline ready for inference.
+
+        Raises:
+            ValueError: If the model cannot be loaded.
+        """
         if model_id in self._pipelines:
             return self._pipelines[model_id]
 
@@ -58,6 +91,18 @@ class HuggingFaceProvider(NLIProvider):
         model: str | None = None,
         use_reasoning: bool = False,
     ) -> NLIResult:
+        """Evaluate NLI using a local HuggingFace model.
+
+        Args:
+            premise: The base factual statement.
+            hypothesis: The statement to test against the premise.
+            context: Optional background context.
+            model: Model to use (defaults to configured default).
+            use_reasoning: Whether to use extended thinking.
+
+        Returns:
+            NLIResult with label, confidence, and optional reasoning.
+        """
         if model is None:
             model = settings.get_default_model(self.name)
 
@@ -102,6 +147,11 @@ class HuggingFaceProvider(NLIProvider):
         return result
 
     async def list_models(self) -> list[str]:
+        """List available HuggingFace models.
+
+        Returns:
+            List of curated model identifiers plus the configured default.
+        """
         # Provide a small curated list plus the configured default.
         models = DEFAULT_HF_MODELS.copy()
         default_model = settings.get_default_model(self.name)
@@ -110,6 +160,11 @@ class HuggingFaceProvider(NLIProvider):
         return models
 
     async def health_check(self) -> bool:
+        """Check if PyTorch is available for local inference.
+
+        Returns:
+            True if PyTorch is available, False otherwise.
+        """
         try:
             from transformers import is_torch_available
 
@@ -120,4 +175,12 @@ class HuggingFaceProvider(NLIProvider):
 
 @alru_cache(maxsize=settings.provider_cache_size)
 async def get_huggingface_provider(token: str | None = None) -> HuggingFaceProvider:
+    """Get a cached HuggingFace provider instance.
+
+    Args:
+        token: Optional HuggingFace API token.
+
+    Returns:
+        HuggingFaceProvider instance.
+    """
     return HuggingFaceProvider(token=token)

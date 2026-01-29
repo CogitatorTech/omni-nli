@@ -1,3 +1,9 @@
+"""REST API endpoints for Omni-NLI evaluation service.
+
+This module provides HTTP endpoints for NLI evaluation, provider
+information, and API documentation using Spectree for OpenAPI generation.
+"""
+
 import json
 import logging
 
@@ -38,12 +44,34 @@ api_spec = SpecTree(
 def _error(
     code: str, message: str, details: object | None = None, status_code: int = 400
 ) -> JSONResponse:
+    """Create a standardized error response.
+
+    Args:
+        code: The error code (e.g., 'VALIDATION_ERROR').
+        message: Human-readable error message.
+        details: Optional additional error details.
+        status_code: HTTP status code (default 400).
+
+    Returns:
+        JSONResponse containing the formatted error.
+    """
     error_body = ErrorBody(code=code, message=message, details=details)
     payload = ErrorResponse(error=error_body)
     return JSONResponse(payload.model_dump(), status_code=status_code)
 
 
 async def _parse_json_body(request: Request) -> dict:
+    """Parse and validate JSON body from request with DoS protection.
+
+    Args:
+        request: The incoming HTTP request.
+
+    Returns:
+        Parsed JSON body as a dictionary.
+
+    Raises:
+        ValueError: If content type is wrong or body is too large.
+    """
     content_type = request.headers.get("content-type", "")
 
     if "application/json" not in content_type:
@@ -155,6 +183,11 @@ async def redoc(request: Request) -> HTMLResponse:
 
 
 def setup_rest_routes() -> list[Route]:
+    """Create and return the list of REST API routes.
+
+    Returns:
+        List of Starlette Route objects for the REST API.
+    """
     return [
         Route("/nli/evaluate", endpoint=evaluate_nli, methods=["POST"]),
         Route("/providers", endpoint=providers, methods=["GET"]),

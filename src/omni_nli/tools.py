@@ -1,3 +1,9 @@
+"""Tool definitions and registry for Omni-NLI MCP integration.
+
+This module defines the tools available via MCP, including NLI evaluation
+and provider listing, along with the registry for managing tool registration.
+"""
+
 import json
 import logging
 from collections.abc import Awaitable, Callable
@@ -13,6 +19,11 @@ _logger = logging.getLogger(__name__)
 
 
 class EvaluateNLIArgs(BaseModel):
+    """Arguments for the evaluate_nli tool.
+
+    Validates and holds the input parameters for NLI evaluation requests.
+    """
+
     model_config = ConfigDict(extra="forbid")
 
     premise: str = Field(
@@ -48,12 +59,15 @@ class EvaluateNLIArgs(BaseModel):
     @field_validator("premise", "hypothesis")
     @classmethod
     def must_not_be_whitespace(cls, v: str) -> str:
+        """Validate that premise/hypothesis are not whitespace-only."""
         if not v.strip():
             raise ValueError("Cannot be empty or whitespace only")
         return v
 
 
 class ListProvidersArgs(BaseModel):
+    """Arguments for the list_providers tool (currently empty)."""
+
     model_config = ConfigDict(extra="forbid")
 
 
@@ -62,7 +76,13 @@ ToolCallable = Callable[[Any], Awaitable[list[types.ContentBlock]]]
 
 
 class ToolRegistry:
+    """Registry for managing MCP tool definitions and handlers.
+
+    Provides registration, lookup, validation, and invocation of tools.
+    """
+
     def __init__(self) -> None:
+        """Initialize an empty tool registry."""
         self._tools: dict[str, ToolCallable] = {}
         self._tool_definitions: dict[str, types.Tool] = {}
         self._tool_models: dict[str, Type[BaseModel]] = {}
@@ -70,6 +90,16 @@ class ToolRegistry:
     def register(
         self, tool_definition: types.Tool, model: Type[BaseModel]
     ) -> Callable[[ToolCallable], ToolCallable]:
+        """Create a decorator for registering a tool handler.
+
+        Args:
+            tool_definition: The MCP tool definition.
+            model: Pydantic model for argument validation.
+
+        Returns:
+            Decorator function that registers the wrapped function.
+        """
+
         def decorator(func: ToolCallable) -> ToolCallable:
             self.register_tool(tool_definition, model, func)
             return func
@@ -82,6 +112,16 @@ class ToolRegistry:
         model: Type[BaseModel],
         func: ToolCallable,
     ) -> None:
+        """Register a tool with its definition, model, and handler.
+
+        Args:
+            tool_definition: The MCP tool definition.
+            model: Pydantic model for argument validation.
+            func: Async handler function for the tool.
+
+        Raises:
+            ValueError: If a tool with the same name is already registered.
+        """
         name = tool_definition.name
         if name in self._tools:
             raise ValueError(f"Tool '{name}' is already registered.")
@@ -92,6 +132,18 @@ class ToolRegistry:
     async def call_validated(
         self, name: str, validated_args: BaseModel
     ) -> list[types.ContentBlock]:
+        """Call a tool with pre-validated arguments.
+
+        Args:
+            name: The tool name.
+            validated_args: Already-validated Pydantic model instance.
+
+        Returns:
+            List of content blocks from the tool.
+
+        Raises:
+            ToolLogicError: If the tool is not found.
+        """
         if name not in self._tools:
             raise ToolLogicError(
                 code=ErrorCode.UNKNOWN_TOOL,
@@ -100,6 +152,20 @@ class ToolRegistry:
         return await self._tools[name](validated_args)
 
     async def call(self, name: str, arguments: dict) -> list[types.ContentBlock]:
+        """Call a tool by name with raw arguments.
+
+        Validates arguments using the registered model before calling.
+
+        Args:
+            name: The tool name.
+            arguments: Raw argument dictionary.
+
+        Returns:
+            List of content blocks from the tool.
+
+        Raises:
+            ToolLogicError: If tool not found or validation fails.
+        """
         if name not in self._tools:
             raise ToolLogicError(
                 code=ErrorCode.UNKNOWN_TOOL,
@@ -125,6 +191,11 @@ class ToolRegistry:
         return await self._tools[name](validated_args)
 
     def list(self) -> list[types.Tool]:
+        """List all registered tool definitions.
+
+        Returns:
+            List of MCP Tool definitions.
+        """
         return list(self._tool_definitions.values())
 
 
@@ -132,6 +203,17 @@ tool_registry = ToolRegistry()
 
 
 async def evaluate_nli(args: EvaluateNLIArgs) -> list[types.ContentBlock]:
+    """Evaluate NLI relationship between premise and hypothesis.
+
+    Args:
+        args: Validated NLI evaluation arguments.
+
+    Returns:
+        List containing a TextContent block with JSON result.
+
+    Raises:
+        ToolLogicError: If provider unavailable or evaluation fails.
+    """
     premise_preview = args.premise[:50] + ("..." if len(args.premise) > 50 else "")
     _logger.info(f"Evaluating NLI: premise='{premise_preview}'")
 
@@ -162,6 +244,14 @@ async def evaluate_nli(args: EvaluateNLIArgs) -> list[types.ContentBlock]:
 
 
 async def list_providers_tool(args: ListProvidersArgs) -> list[types.ContentBlock]:
+    """List available NLI providers and their configuration.
+
+    Args:
+        args: Empty argument model (no arguments needed).
+
+    Returns:
+        List containing a TextContent block with provider info JSON.
+    """
     from .providers import list_available_providers
     from .settings import settings
 
@@ -171,6 +261,10 @@ async def list_providers_tool(args: ListProvidersArgs) -> list[types.ContentBloc
 
 
 def setup_tools() -> None:
+    """Register all NLI tools with the global registry.
+
+    Clears any existing registrations and registers fresh tool definitions.
+    """
     _logger.info("Setting up NLI tools...")
 
     tool_registry._tools.clear()
@@ -204,4 +298,5 @@ def setup_tools() -> None:
 
 
 def setup_cache() -> None:
+    """Initialize any caching mechanisms (currently a no-op)."""
     pass

@@ -1,3 +1,9 @@
+"""Base classes for NLI provider implementations.
+
+This module defines the abstract base class and result model that all
+NLI providers must implement, along with shared utility methods.
+"""
+
 import logging
 from abc import ABC, abstractmethod
 from typing import Literal
@@ -10,6 +16,16 @@ _logger = logging.getLogger(__name__)
 
 
 class NLIResult(BaseModel):
+    """Result of an NLI evaluation.
+
+    Attributes:
+        label: The predicted relationship (entailment/contradiction/neutral).
+        confidence: Confidence score between 0 and 1.
+        thinking_trace: Optional reasoning trace from extended thinking.
+        model: The model that produced this result.
+        backend: The backend provider that was used.
+    """
+
     label: Literal["entailment", "contradiction", "neutral"] = Field(
         ..., description="The predicted NLI label."
     )
@@ -24,6 +40,16 @@ class NLIResult(BaseModel):
 
 
 class NLIProvider(ABC):
+    """Abstract base class for NLI providers.
+
+    Subclasses must implement evaluate(), list_models(), and health_check().
+    Common functionality like prompt building and response parsing is provided.
+
+    Attributes:
+        name: Provider identifier string.
+        supports_reasoning: Whether the provider supports extended thinking.
+    """
+
     name: str = "base"
     supports_reasoning: bool = False
 
@@ -35,13 +61,38 @@ class NLIProvider(ABC):
         context: str | None = None,
         model: str | None = None,
         use_reasoning: bool = False,
-    ) -> NLIResult: ...
+    ) -> NLIResult:
+        """Evaluate the NLI relationship between premise and hypothesis.
+
+        Args:
+            premise: The base factual statement.
+            hypothesis: The statement to test against the premise.
+            context: Optional background context.
+            model: Specific model to use (None for default).
+            use_reasoning: Whether to use extended thinking.
+
+        Returns:
+            NLIResult with label, confidence, and optional reasoning.
+        """
+        ...
 
     @abstractmethod
-    async def list_models(self) -> list[str]: ...
+    async def list_models(self) -> list[str]:
+        """List available models for this provider.
+
+        Returns:
+            List of model identifiers.
+        """
+        ...
 
     @abstractmethod
-    async def health_check(self) -> bool: ...
+    async def health_check(self) -> bool:
+        """Check if the provider is available and functioning.
+
+        Returns:
+            True if provider is healthy, False otherwise.
+        """
+        ...
 
     def _build_nli_prompt(
         self,
@@ -50,6 +101,17 @@ class NLIProvider(ABC):
         context: str | None = None,
         use_reasoning: bool = False,
     ) -> str:
+        """Build the NLI evaluation prompt.
+
+        Args:
+            premise: The base factual statement.
+            hypothesis: The statement to test.
+            context: Optional background context.
+            use_reasoning: Whether to include reasoning instructions.
+
+        Returns:
+            Formatted prompt string for the LLM.
+        """
         reasoning_instruction = ""
         if use_reasoning:
             reasoning_instruction = """
@@ -78,6 +140,20 @@ Respond with ONLY a JSON object in this exact format:
 {{"label": "<entailment|contradiction|neutral>", "confidence": <0.0-1.0>}}"""
 
     def _parse_nli_response(self, response_text: str, model: str) -> NLIResult:
+        """Parse the LLM response into an NLIResult.
+
+        Handles extraction of thinking traces from <think> tags or pre-JSON text.
+
+        Args:
+            response_text: Raw response from the LLM.
+            model: The model that produced the response.
+
+        Returns:
+            Parsed NLIResult with label, confidence, and optional trace.
+
+        Raises:
+            ValueError: If response cannot be parsed as valid NLI result.
+        """
         import re
 
         thinking_trace = None
@@ -99,7 +175,7 @@ Respond with ONLY a JSON object in this exact format:
         # If still no thinking trace, try to capture text before raw JSON
         if thinking_trace is None:
             # Look for text before a JSON object starts
-            json_start = re.search(r'[\{\[]', response_text)
+            json_start = re.search(r"[\{\[]", response_text)
             if json_start and json_start.start() > 10:  # At least some text before JSON
                 pre_json_text = response_text[: json_start.start()].strip()
                 if pre_json_text:

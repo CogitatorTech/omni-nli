@@ -1,11 +1,17 @@
+"""Factory functions for creating and managing NLI providers.
+
+This module provides the main entry points for obtaining provider instances
+and listing available provider configurations.
+"""
+
 import logging
 from typing import Literal, cast
 
+from ..settings import settings
 from .base import NLIProvider
 from .huggingface import get_huggingface_provider
 from .ollama import get_ollama_provider
 from .openrouter import get_openrouter_provider
-from ..settings import settings
 
 _logger = logging.getLogger(__name__)
 
@@ -13,6 +19,18 @@ BackendType = Literal["ollama", "huggingface", "openrouter"]
 
 
 async def get_provider(backend: BackendType | None = None) -> NLIProvider:
+    """Get an NLI provider instance for the specified backend.
+
+    Args:
+        backend: The backend to use ('ollama', 'huggingface', 'openrouter').
+                 If None, uses the configured default backend.
+
+    Returns:
+        An NLIProvider instance ready for evaluation.
+
+    Raises:
+        ValueError: If the backend is unknown or unavailable.
+    """
     if backend is None:
         backend = cast(BackendType, settings.default_backend)
 
@@ -38,6 +56,14 @@ async def get_provider(backend: BackendType | None = None) -> NLIProvider:
 
 
 async def _get_fallback_provider() -> NLIProvider:
+    """Try to get an alternative provider when the primary is unavailable.
+
+    Returns:
+        The first healthy fallback provider found.
+
+    Raises:
+        ValueError: If no fallback providers are available.
+    """
     fallback_order: list[BackendType] = ["huggingface", "openrouter"]
 
     for fallback_backend in fallback_order:
@@ -52,6 +78,11 @@ async def _get_fallback_provider() -> NLIProvider:
 
 
 def list_available_providers() -> dict[str, dict]:
+    """List all available providers with their configuration status.
+
+    Returns:
+        Dictionary mapping provider names to their config info.
+    """
     huggingface_token_set = settings.huggingface_token is not None
 
     return {

@@ -27,7 +27,7 @@
 <g id="clust4" class="cluster">
 <title>cluster_core</title>
 <polygon fill="#fafafa" stroke="#4caf50" stroke-dasharray="5,2" points="438,-47 438,-262 579,-262 579,-47 438,-47"/>
-<text text-anchor="middle" x="508.5" y="-246.8" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#388e3c">Core</text>
+<text text-anchor="middle" x="508.5" y="-246.8" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#388e3c">Tools and Settings</text>
 </g>
 <g id="clust5" class="cluster">
 <title>cluster_providers</title>
