@@ -38,7 +38,6 @@ This document outlines the features planned for the Omni-NLI project and their c
 
 - [x] Asynchronous I/O for concurrent request handling
 - [x] Provider instance caching (using LRU)
-- [x] Token usage tracking and reporting
 - [ ] Request rate limiting
 - [ ] Response caching for identical queries
 
@@ -50,7 +49,7 @@ This document outlines the features planned for the Omni-NLI project and their c
 - [x] Configuration via environment variables
 - [x] CLI argument overrides
 - [x] Docker support
-- [ ] Pre-built Docker images
+- [x] Pre-built Docker images (CPU and CUDA)
 
 ---
 
@@ -68,4 +67,4 @@ This document outlines the features planned for the Omni-NLI project and their c
 
 - [x] README with a quickstart guide
 - [x] Configuration reference (.env.example)
-- [ ] MkDocs documentation (API reference, getting started, deployment guides, etc.)
+- [x] MkDocs documentation (API reference, getting started, and examples)

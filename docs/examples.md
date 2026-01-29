@@ -8,12 +8,12 @@ You can interact with Omni-NLI using standard HTTP requests.
 
 Request:
 
-```bash
+```sh
 curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   -H "Content-Type: application/json" \
   -d '{
-    "premise": "A soccer player kicks a ball into the goal.",
-    "hypothesis": "The soccer player is asleep on the field."
+    "premise": "A football player kicks a ball into the goal.",
+    "hypothesis": "The football player is asleep on the field."
   }'
 ```
 
@@ -23,26 +23,25 @@ Response:
 {
     "label": "contradiction",
     "confidence": 0.99,
-    "thinking_trace": null,
-    "thinking_trace": null,
-    "model": "llama3.2",
+    "model": "qwen3:8b",
     "backend": "ollama"
 }
 ```
 
 ### Using Context and Reasoning
 
-You can provide context and request "reasoning".
+You can provide context and enable extended thinking for more detailed reasoning traces.
 
-```bash
+```sh
 curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   -H "Content-Type: application/json" \
   -d '{
     "premise": "The user has clicked the delete button.",
     "hypothesis": "The file is permanently removed.",
     "context": "The system implements a soft-delete mechanism where files are moved to a trash bin first.",
+    "use_reasoning": true,
     "backend": "openrouter",
-    "model": "deepseek/deepseek-r1"
+    "model": "openai/gpt-5.2"
   }'
 ```
 
@@ -52,26 +51,39 @@ Example response:
 {
     "label": "contradiction",
     "confidence": 1.0,
-    "model": "deepseek/deepseek-r1",
+    "thinking_trace": "Let me analyze this step by step...",
+    "model": "openai/gpt-5.2",
     "backend": "openrouter"
 }
 ```
 
-### Providers
+!!! note
+    The `thinking_trace` field is only returned when `use_reasoning` is enabled and the server is configured with `RETURN_THINKING_TRACE=True`.
 
-```bash
+### Listing Providers
+
+```sh
 curl http://127.0.0.1:8000/api/v1/providers
 ```
 
----
+Response:
 
-## MCP (Model Context Protocol)
+```json
+{
+    "ollama": {"host": "http://localhost:11434", "default_model": "qwen3:8b"},
+    "huggingface": {"token_configured": false, "default_model": "microsoft/Phi-3.5-mini-instruct"},
+    "openrouter": {"token_configured": true, "default_model": "openai/gpt-5-mini"},
+    "default_backend": "huggingface"
+}
+```
 
-Omni-NLI allows AI agents (like Claude Desktop) to use NLI as a tool.
+## MCP Server
 
-### Claude Desktop Configuration
+Omni-NLI allows AI agents (like Claude Desktop or LM Sudio) to use NLI as a tool.
 
-Add the following to your Claude Desktop config file:
+### MCP Client Configuration
+
+Add the following to your MCP client config file:
 
 ```json
 {
@@ -82,10 +94,3 @@ Add the following to your Claude Desktop config file:
     }
 }
 ```
-
-### Usage in Chat
-
-Once connected, you can ask Claude to verify statements:
-
-> "User: Verify if the following claim contradicts the provided text..."
-> Claude: Calls evaluate_nli tool...
