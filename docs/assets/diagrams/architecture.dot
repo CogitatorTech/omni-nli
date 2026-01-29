@@ -68,7 +68,7 @@ settings [label = "Settings", fillcolor = "#E8F5E9", color = "#4CAF50"]
 }
 
 subgraph cluster_providers {
-label = "Providers"
+label = "Backend"
 style = "dashed"
 color = "#FF9800"
 fontcolor = "#F57C00"

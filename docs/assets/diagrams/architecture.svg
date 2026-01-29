@@ -32,7 +32,7 @@
 <g id="clust5" class="cluster">
 <title>cluster_providers</title>
 <polygon fill="#fafafa" stroke="#ff9800" stroke-dasharray="5,2" points="618,-66 618,-217 977,-217 977,-66 618,-66"/>
-<text text-anchor="middle" x="797.5" y="-201.8" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#f57c00">Providers</text>
+<text text-anchor="middle" x="797.5" y="-201.8" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#f57c00">Backend</text>
 </g>
 <g id="clust6" class="cluster">
 <title>cluster_backends</title>
