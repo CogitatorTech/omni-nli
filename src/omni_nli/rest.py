@@ -23,7 +23,7 @@ _logger = logging.getLogger(__name__)
 api_spec = SpecTree(
     "starlette",
     title="Omni-NLI REST API",
-    description="Clean REST API for natural language inference (NLI).",
+    description="REST API documentation",
     version=settings.pkg_version,
     mode="strict",
     swagger_url="/apidoc/swagger",
@@ -53,11 +53,11 @@ async def _parse_json_body(request: Request) -> dict:
     max_body_size = 10 * 1024 * 1024
     content_length = request.headers.get("content-length")
     if content_length is not None and int(content_length) > max_body_size:
-        raise ValueError("Request payload too large (limit: 10MB).")
+        raise ValueError("Request payload too large (limit is 10MB).")
 
     body = await request.body()
     if len(body) > max_body_size:
-        raise ValueError("Request payload too large (limit: 10MB).")
+        raise ValueError("Request payload too large (limit is 10MB).")
 
     return json.loads(body) if body else {}
 
@@ -70,7 +70,7 @@ async def _parse_json_body(request: Request) -> dict:
         HTTP_502=ErrorResponse,
         HTTP_500=ErrorResponse,
     ),
-    tags=["NLI"],
+    tags=["NLI Evaluation"],
 )
 async def evaluate_nli(request: Request) -> JSONResponse:
     """Evaluate the logical relationship between premise and hypothesis."""
@@ -121,8 +121,9 @@ async def evaluate_nli(request: Request) -> JSONResponse:
         )
 
 
-@api_spec.validate(resp=Response(HTTP_200=ProvidersResponse), tags=["Providers"])
+@api_spec.validate(resp=Response(HTTP_200=ProvidersResponse), tags=["Model Providers"])
 async def providers(request: Request) -> JSONResponse:
+    """Show the model provider metadata like name and default backend."""
     data = list_available_providers()
     response_data = ProvidersResponse(
         **data,
