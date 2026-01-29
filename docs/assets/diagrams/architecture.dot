@@ -1,0 +1,115 @@
+digraph OmniNLIArchitecture {
+fontname = "Helvetica,Arial,sans-serif"
+layout = dot
+rankdir = LR
+ranksep = 0.9;
+nodesep = 0.7;
+splines = true;
+compound = true;
+bgcolor = "white"
+
+node [
+fontname = "Helvetica,Arial,sans-serif",
+shape = box,
+style = "filled,rounded",
+color = "#555555",
+fillcolor = "white",
+penwidth = 1.5
+]
+edge [
+fontname = "Helvetica,Arial,sans-serif",
+color = "#333333",
+fontsize = 9,
+fontcolor = "#555555",
+labeldistance = 2.0,
+penwidth = 1.2
+]
+
+subgraph cluster_clients {
+label = "Clients"
+style = "dashed"
+color = "#888888"
+fontcolor = "#555555"
+margin = 18
+rest_client [label = "REST Client\n(curl, httpx, etc.)", fillcolor = "#E8F4FD", color = "#2196F3"]
+mcp_client [label = "MCP Client\n(Claude, LM Studio, etc.)", fillcolor = "#E8F4FD", color = "#2196F3"]
+}
+
+subgraph cluster_server {
+label = "Omni-NLI Server"
+style = "rounded"
+color = "#666666"
+fontcolor = "#333333"
+bgcolor = "#FAFAFA"
+margin = 20
+
+subgraph cluster_interfaces {
+label = "Interfaces"
+style = "dashed"
+color = "#9C27B0"
+fontcolor = "#7B1FA2"
+margin = 14
+rest_api [label = "REST API\n/api/v1/*", fillcolor = "#F3E5F5", color = "#9C27B0"]
+mcp_server [label = "MCP Server\n/mcp/", fillcolor = "#F3E5F5", color = "#9C27B0"]
+}
+
+subgraph cluster_core {
+label = "Core"
+style = "dashed"
+color = "#4CAF50"
+fontcolor = "#388E3C"
+margin = 14
+tool_registry [label = <<table border="0" cellborder="0" cellspacing="0" cellpadding="4">
+<tr><td align="center"><b>Tool Registry</b></td></tr>
+<tr><td align="left" balign="left">• evaluate_nli</td></tr>
+<tr><td align="left" balign="left">• list_providers</td></tr>
+</table>>, fillcolor = "#E8F5E9", color = "#4CAF50", shape = box]
+settings [label = "Settings", fillcolor = "#E8F5E9", color = "#4CAF50"]
+}
+
+subgraph cluster_providers {
+label = "Backend"
+style = "dashed"
+color = "#FF9800"
+fontcolor = "#F57C00"
+margin = 14
+provider_factory [label = "Provider Factory", fillcolor = "#FFF3E0", color = "#FF9800"]
+base_provider [label = <<table border="0" cellborder="0" cellspacing="0" cellpadding="4">
+<tr><td align="center"><b>NLI Provider</b></td></tr>
+<tr><td align="left" balign="left">• Prompt Building</td></tr>
+<tr><td align="left" balign="left">• Response Parsing</td></tr>
+<tr><td align="left" balign="left">• Thinking Extraction</td></tr>
+</table>>, fillcolor = "#FFF3E0", color = "#FF9800", shape = box]
+}
+}
+
+subgraph cluster_backends {
+label = "Model Providers"
+style = "dashed"
+color = "#888888"
+fontcolor = "#555555"
+margin = 18
+ollama [label = "Ollama", fillcolor = "#ECEFF1", color = "#607D8B"]
+huggingface [label = "HuggingFace", fillcolor = "#ECEFF1", color = "#607D8B"]
+openrouter [label = "OpenRouter", fillcolor = "#ECEFF1", color = "#607D8B"]
+}
+
+// Client connections
+rest_client -> rest_api [label = "HTTP", color = "#2196F3"]
+mcp_client -> mcp_server [label = "MCP", color = "#2196F3"]
+
+// Interface to core
+rest_api -> tool_registry [color = "#9C27B0"]
+mcp_server -> tool_registry [color = "#9C27B0"]
+
+// Core to providers
+tool_registry -> provider_factory [color = "#4CAF50"]
+settings -> provider_factory [style = "dashed", color = "#4CAF50"]
+provider_factory -> base_provider [color = "#FF9800"]
+
+// Providers to backends
+base_provider -> ollama [minlen = 2, color = "#607D8B"]
+base_provider -> huggingface [minlen = 2, color = "#607D8B"]
+base_provider -> openrouter [minlen = 2, color = "#607D8B"]
+
+}

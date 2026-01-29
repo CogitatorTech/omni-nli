@@ -81,15 +81,33 @@ Respond with ONLY a JSON object in this exact format:
         import re
 
         thinking_trace = None
+
+        # First, try to extract thinking from <think> tags
         think_match = re.search(r"<think>(.*?)</think>", response_text, re.DOTALL)
         if think_match:
             thinking_trace = think_match.group(1).strip()
 
+        # Try to find a JSON block
+        json_match = re.search(r"```json\s*(.*?)\s*```", response_text, re.DOTALL)
+
+        # If no <think> tags found, capture pre-JSON text as reasoning
+        if thinking_trace is None and json_match:
+            pre_json_text = response_text[: json_match.start()].strip()
+            if pre_json_text:
+                thinking_trace = pre_json_text
+
+        # If still no thinking trace, try to capture text before raw JSON
+        if thinking_trace is None:
+            # Look for text before a JSON object starts
+            json_start = re.search(r'[\{\[]', response_text)
+            if json_start and json_start.start() > 10:  # At least some text before JSON
+                pre_json_text = response_text[: json_start.start()].strip()
+                if pre_json_text:
+                    thinking_trace = pre_json_text
+
         if not settings.return_thinking_trace:
             thinking_trace = None
 
-        # Try to find JSON block first
-        json_match = re.search(r"```json\s*(.*?)\s*```", response_text, re.DOTALL)
         text_to_parse = json_match.group(1) if json_match else response_text
 
         # Use json_repair to parse and fix the JSON

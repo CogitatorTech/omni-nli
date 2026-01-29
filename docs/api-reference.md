@@ -1,10 +1,14 @@
 # API Reference
 
-This project provides interactive API documentation (via Swagger UI and ReDoc).
+Omni-NLI includes interactive API documentation (via Swagger UI and ReDoc) for the REST API.
 When the server is running, you can access them at:
 
-- Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger
-- ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
+  - Swagger UI: [http://127.0.0.1:8000/api/v1/apidoc/swagger](http://127.0.0.1:8000/api/v1/apidoc/swagger)
+  - ReDoc: [http://127.0.0.1:8000/api/v1/apidoc/redoc](http://127.0.0.1:8000/api/v1/apidoc/redoc)
+
+!!! important
+    The REST API and MCP interface provide more or less the same functionality.
+    The REST API can be more scalable because it is stateless compared to the MCP, which is a stateful service protocol.
 
 ## REST API
 
@@ -12,11 +16,11 @@ The REST API provides endpoints for NLI evaluation and provider management.
 All endpoints are available under the `/api/v1` prefix.
 A health check endpoint is also available at `GET /api/health`.
 
-### POST /api/v1/nli/evaluate
+### POST `/api/v1/nli/evaluate`
 
 Evaluates the logical relationship between a premise and a hypothesis.
 
-Request Body Parameters:
+Request body parameters:
 
 | Parameter     | Type    | Default  | Description                                                               |
 |:--------------|:--------|:---------|:--------------------------------------------------------------------------|
@@ -27,17 +31,17 @@ Request Body Parameters:
 | model         | string  | null     | Specific model to use. Uses the backend's default if null                 |
 | use_reasoning | boolean | false    | Enable extended thinking                                                  |
 
-Response Fields:
+Response fields:
 
-| Field          | Type           | Description                                 |
-|:---------------|:---------------|:--------------------------------------------|
-| label          | string         | `entailment`, `contradiction`, or `neutral` |
-| confidence     | float          | Confidence score (between 0.0 to 1.0)       |
-| thinking_trace | string or null | Reasoning trace if use_reasoning is enabled |
-| model          | string         | Model that was used                         |
-| backend        | string         | Backend provider used                       |
+| Field          | Type           | Description                                                                              |
+|:---------------|:---------------|:-----------------------------------------------------------------------------------------|
+| label          | string         | `entailment`, `contradiction`, or `neutral`                                              |
+| confidence     | float          | Confidence score (between 0.0 to 1.0)                                                    |
+| thinking_trace | string or null | Reasoning trace extracted from `<think>` tags or from pre-JSON text that model generates |
+| model          | string         | Model that was used                                                                      |
+| backend        | string         | Backend provider used                                                                    |
 
-### GET /api/v1/providers
+### GET `/api/v1/providers`
 
 Returns provider configuration metadata.
 

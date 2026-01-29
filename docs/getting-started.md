@@ -1,7 +1,7 @@
 # Getting Started
 
-This document provides installation and configuration instructions for Omni-NLI.
-For a quick start, please see the main [README.md](../README.md) file.
+This document includes installation and configuration instructions for Omni-NLI.
+For a quickstart, please see the project's main [README.md](https://github.com/CogitatorTech/omni-nli/blob/main/README.md) file.
 
 ## Installation
 
@@ -25,13 +25,14 @@ Generic CPU Image:
 docker run --rm -it -p 8000:8000 ghcr.io/cogitatortech/omni-nli-cpu:latest
 ```
 
-GPU Image (CUDA; for NVIDIA GPUs only):
+GPU Image (CUDA; for NVIDIA GPUs):
 
 ```sh
 docker run --rm -it --gpus all -p 8000:8000 ghcr.io/cogitatortech/omni-nli-cuda:latest
 ```
 
-To pass configuration to the container, use the `-e` flag for environment variables:
+Configuration can be passed as environment variables to the container.
+For example, to use OpenRouter with a custom model:
 
 ```sh
 docker run --rm -it -p 8000:8000 \
@@ -42,22 +43,24 @@ docker run --rm -it -p 8000:8000 \
 ```
 
 !!! tip
-    When using the HuggingFace backend, the GPU image is recommended because inference will be a lot faster on GPUs.
+    When using the HuggingFace backend, the GPU image is recommended because inference will be a lot faster when using a GPU.
 
 !!! warning
     When using the Ollama backend with Docker, you must set `OLLAMA_HOST` to point to a valid IP or host name that has Ollama server running on it. The default `localhost` will point to the container itself and will fail to connect.
 
 !!! note
-    The `latest` tag refers to the latest stable release. You can replace `latest` with a specific version tag from
+    The `latest` tag refers to the latest release on top of the `main` branch. You can replace `latest` with a specific version tag from
     the [list of available packages](https://github.com/CogitatorTech/omni-nli/packages).
 
 ## Configuration
 
 The server can be configured using command-line arguments or environment variables.
-Environment variables are read from a `.env` file if it exists.
-Command-line arguments take precedence over environment variables.
+Environment variables are read from a `.env` file if it exists or from the system environment.
 
-Copy the example configuration:
+!!! note
+    Command-line arguments take precedence over environment variables.
+
+You could copy the example [.env.example](https://github.com/CogitatorTech/omni-nli/blob/main/.env.example) in the project's repository to the directory where you run the server and customize it.
 
 ```sh
 cp .env.example .env
@@ -83,15 +86,15 @@ cp .env.example .env
 | `--return-thinking-trace`     | `RETURN_THINKING_TRACE`     | Return raw thinking trace in response    | `False`                           |
 
 !!! note
-    The `PROVIDER_CACHE_SIZE` setting must be configured via environment variable only, not CLI flag, because it is evaluated at module import time.
+    The `PROVIDER_CACHE_SIZE` setting must be configured via environment variable only, not CLI flag.
 
 ### Supported Backends
 
 | Backend     | Local | Example Models                                                         |
 |:------------|:------|:-----------------------------------------------------------------------|
-| Ollama      | Yes   | qwen3:8b, deepseek-r1:7b, phi4:latest                                  |
-| HuggingFace | Yes   | microsoft/Phi-3.5-mini-instruct, Qwen/Qwen2.5-1.5B-Instruct            |
-| OpenRouter  | No    | openai/gpt-5-mini, openai/gpt-5.2, arcee-ai/trinity-large-preview:free |
+| Ollama      | Yes   | `qwen3:8b`, `deepseek-r1:7b`, `phi4:latest`                                  |
+| HuggingFace | Yes   | `microsoft/Phi-3.5-mini-instruct`, `Qwen/Qwen2.5-1.5B-Instruct`            |
+| OpenRouter  | No    | `openai/gpt-5-mini`, `openai/gpt-5.2`, `arcee-ai/trinity-large-preview:free` |
 
 ## Running the Server
 
@@ -112,8 +115,3 @@ omni-nli \
   --default-backend openrouter \
   --openrouter-default-model openai/gpt-5.2
 ```
-
-## Next Steps
-
-- Check the [Examples](examples.md) to see how to make requests.
-- Explore the [API Reference](api-reference.md) for full endpoint details.

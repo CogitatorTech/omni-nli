@@ -1,4 +1,5 @@
 import argparse
+import json
 
 import httpx
 
@@ -23,7 +24,7 @@ def main() -> None:
 
         # Print the result
         print("Response from server:")
-        print(response.json())
+        print(json.dumps(response.json(), indent=2))
 
     except httpx.RequestError as e:
         print(f"An error occurred while requesting {e.request.url!r}.")

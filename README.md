@@ -40,11 +40,16 @@ The relationship is typically shown by one of three labels:
 NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
 question-answering system generates.
 
-### Features
+### Main Features
 
-- Supports models provided by different backends, including Ollama, HuggingFace, and OpenRouter
+- Supports models provided by different backends, including Ollama, HuggingFace (public and private/gated models), and OpenRouter
 - Supports REST API (for traditional applications) and MCP (for AI agents) interfaces
-- Fully configurable and very scalable
+- Fully configurable and very scalable, with built-in caching
+- Provides confidence scores and (optional) reasoning traces for explainability
+
+Below is the high-level architecture of Omni-NLI:
+
+![Architecture Diagram](docs/assets/diagrams/architecture.svg)
 
 See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 
@@ -62,23 +67,13 @@ See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 pip install omni-nli
 ```
 
-#### 2. Configure Backends
-
-Copy the example config and add your API keys and other settings in the `.env` file.
-
-```sh
-cp .env.example .env
-```
-
-#### 3. Start the Server
+#### 2. Start the Server
 
 ```sh
 omni-nli
 ```
 
-The server will be listening on `http://127.0.0.1:8000` by default.
-
-#### 4. Evaluate NLI
+#### 3. Evaluate NLI
 
 ```sh
 curl -X POST \
@@ -125,4 +120,4 @@ Omni-NLI is licensed under the MIT License (see [LICENSE](LICENSE)).
 
 
 <!-- Need to add this line for MCP registry publication -->
-<!-- mcp-name: io.github.cogitatortech/omni-nli -->
+<!-- mcp-name: io.github.CogitatorTech/omni-nli -->
