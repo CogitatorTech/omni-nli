@@ -42,7 +42,11 @@ The relationship is typically shown by one of three labels:
 NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
 question-answering system generates.
 
-### Main Features
+> [!IMPORTANT]
+> The quality of the results depends a lot on the model (the LLM) that is used.
+> A good strategy is to first fine-tune the model using a dataset of premise-hypothesis-label triples that are relevant to your application domain.
+
+### Main Features of Omni-NLI
 
 - Supports models provided by different backends, including Ollama, HuggingFace (public and private/gated models), and OpenRouter
 - Supports REST API (for traditional applications) and MCP (for AI agents) interfaces
