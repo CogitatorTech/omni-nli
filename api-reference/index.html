@@ -486,26 +486,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#interactive-documentation" class="md-nav__link">
+  <a href="#rest-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Interactive Documentation
+        REST API
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#endpoints" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Endpoints
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Endpoints">
+    <nav class="md-nav" aria-label="REST API">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -536,13 +525,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mcp-integration" class="md-nav__link">
+  <a href="#mcp-interface" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MCP Integration
+        MCP Interface
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="MCP Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -581,26 +587,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#interactive-documentation" class="md-nav__link">
+  <a href="#rest-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Interactive Documentation
+        REST API
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#endpoints" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Endpoints
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Endpoints">
+    <nav class="md-nav" aria-label="REST API">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -631,13 +626,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mcp-integration" class="md-nav__link">
+  <a href="#mcp-interface" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MCP Integration
+        MCP Interface
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="MCP Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -662,12 +674,15 @@
 
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
-<h2 id="interactive-documentation">Interactive Documentation<a class="headerlink" href="#interactive-documentation" title="Permanent link">&para;</a></h2>
 <p>This project provides interactive API documentation (Swagger UI and ReDoc). Once the server is running, you can access them at:</p>
-<div class="highlight"><pre><span></span><code>Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger
-ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
-</code></pre></div>
-<h2 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger</li>
+<li>ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc</li>
+</ul>
+<h2 id="rest-api">REST API<a class="headerlink" href="#rest-api" title="Permanent link">&para;</a></h2>
+<p>The REST API provides endpoints for NLI evaluation and provider management.
+All endpoints are available under the <code>/api/v1</code> prefix.
+A health check endpoint is also available at <code>GET /api/health</code>.</p>
 <h3 id="post-apiv1nlievaluate">POST /api/v1/nli/evaluate<a class="headerlink" href="#post-apiv1nlievaluate" title="Permanent link">&para;</a></h3>
 <p>Evaluates the logical relationship between a premise and a hypothesis.</p>
 <p>Request Body Parameters:</p>
@@ -703,7 +718,7 @@ ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
 <td style="text-align: left;">backend</td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">null</td>
-<td style="text-align: left;">ollama, huggingface, or openrouter. Uses configured default if null</td>
+<td style="text-align: left;"><code>ollama</code>, <code>huggingface</code>, or <code>openrouter</code>. Uses configured default if null</td>
 </tr>
 <tr>
 <td style="text-align: left;">model</td>
@@ -732,7 +747,7 @@ ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
 <tr>
 <td style="text-align: left;">label</td>
 <td style="text-align: left;">string</td>
-<td style="text-align: left;">entailment, contradiction, or neutral</td>
+<td style="text-align: left;"><code>entailment</code>, <code>contradiction</code>, or <code>neutral</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">confidence</td>
@@ -741,7 +756,7 @@ ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
 </tr>
 <tr>
 <td style="text-align: left;">thinking_trace</td>
-<td style="text-align: left;">string | null</td>
+<td style="text-align: left;">string or null</td>
 <td style="text-align: left;">Reasoning trace if use_reasoning is enabled</td>
 </tr>
 <tr>
@@ -758,16 +773,14 @@ ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
 </table>
 <h3 id="get-apiv1providers">GET /api/v1/providers<a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
 <p>Returns provider configuration metadata.</p>
-<p>Notes:</p>
-<ul>
-<li><code>token_configured</code> is <strong>true</strong> when credentials are present in the environment:</li>
-<li>HuggingFace: <code>HUGGINGFACE_TOKEN</code> is set (needed for gated/private models)</li>
-<li>OpenRouter: <code>OPENROUTER_API_KEY</code> is set</li>
-<li>Each provider always includes a <code>default_model</code> (there is no global default model).</li>
-</ul>
-<h2 id="mcp-integration">MCP Integration<a class="headerlink" href="#mcp-integration" title="Permanent link">&para;</a></h2>
-<p>The server exposes its tools over MCP at http://127.0.0.1:8000/mcp/.</p>
-<p>Available MCP Tools:</p>
+<p>Response includes:
+- <code>ollama</code>, <code>huggingface</code>, <code>openrouter</code>: Each provider object contains configuration details.
+- <code>token_configured</code>: Indicates if credentials are present in the environment.
+- <code>default_model</code>: The default model for each provider.
+- <code>default_backend</code>: The configured default backend.</p>
+<h2 id="mcp-interface">MCP Interface<a class="headerlink" href="#mcp-interface" title="Permanent link">&para;</a></h2>
+<p>The server exposes its capabilities as tools over the Model Context Protocol (MCP). The MCP endpoint is available at http://127.0.0.1:8000/mcp/.</p>
+<h3 id="available-tools">Available Tools<a class="headerlink" href="#available-tools" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -786,6 +799,8 @@ ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc
 </tr>
 </tbody>
 </table>
+<p>The <code>evaluate_nli</code> tool accepts the same parameters as the REST endpoint.
+The <code>list_providers</code> tool takes no arguments and returns the same information as the <code>GET /api/v1/providers</code> endpoint (including <code>default_backend</code>).</p>
 
 
 

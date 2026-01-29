@@ -446,10 +446,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-install-via-pip" class="md-nav__link">
+  <a href="#python-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Install via Pip
+        Python Installation
       
     </span>
   </a>
@@ -457,10 +457,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-configure-environment" class="md-nav__link">
+  <a href="#docker-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Configure Environment
+        Docker Installation
       
     </span>
   </a>
@@ -473,6 +473,18 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#configuration-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -482,8 +494,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#supported-backends" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -491,6 +503,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -617,10 +634,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-install-via-pip" class="md-nav__link">
+  <a href="#python-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Install via Pip
+        Python Installation
       
     </span>
   </a>
@@ -628,10 +645,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-configure-environment" class="md-nav__link">
+  <a href="#docker-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Configure Environment
+        Docker Installation
       
     </span>
   </a>
@@ -644,6 +661,18 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#configuration-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -653,8 +682,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#supported-backends" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -662,6 +691,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -708,54 +742,144 @@
 
 
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
+<p>This document provides installation and configuration instructions for Omni-NLI.
+For a quick start, please see the main <a href="../README.md">README.md</a> file.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<h3 id="1-install-via-pip">1. Install via Pip<a class="headerlink" href="#1-install-via-pip" title="Permanent link">&para;</a></h3>
-<p>Clone the repository and install dependencies:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/CogitatorTech/omni-nli.git
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>omni-nli
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pip<span class="w"> </span>install<span class="w"> </span>.
+<p>You can run Omni-NLI either by installing it as a Python library or by using a pre-built Docker image.</p>
+<h3 id="python-installation">Python Installation<a class="headerlink" href="#python-installation" title="Permanent link">&para;</a></h3>
+<p>You can install Omni-NLI via pip:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>omni-nli
 </code></pre></div>
-<h3 id="2-configure-environment">2. Configure Environment<a class="headerlink" href="#2-configure-environment" title="Permanent link">&para;</a></h3>
-<p>Omni-NLI uses environment variables for configuration. You can create a .env file in your working directory.</p>
+<p>Alternatively, you can clone the repository and install from source:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/CogitatorTech/omni-nli.git
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>omni-nli
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>pip<span class="w"> </span>install<span class="w"> </span>.
+</code></pre></div>
+<h3 id="docker-installation">Docker Installation<a class="headerlink" href="#docker-installation" title="Permanent link">&para;</a></h3>
+<p>Pre-built Docker images are available from the <a href="https://github.com/CogitatorTech/omni-nli/packages">GitHub Container Registry</a>.</p>
+<ul>
+<li>
+<p>CPU Image:
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ghcr.io/cogitatortech/omni-nli-cpu:latest
+</code></pre></div></p>
+</li>
+<li>
+<p>GPU Image (CUDA):
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ghcr.io/cogitatortech/omni-nli-cuda:latest
+</code></pre></div></p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>latest</code> tag refers to the latest stable release. You can replace <code>latest</code> with a specific version tag from the <a href="https://github.com/CogitatorTech/omni-nli/packages">list of available packages</a>.</p>
+</div>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>The server can be configured using command-line arguments or environment variables. Environment variables are read from a <code>.env</code> file if it exists. Command-line arguments take precedence over environment variables.</p>
 <p>Copy the example configuration:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
 </code></pre></div>
-<p>Edit the .env file to set up your preferred backends.</p>
-<h2 id="configuration-reference">Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h2>
-<p>All settings can be configured via environment variables or CLI arguments.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Server settings</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">HOST</span><span class="o">=</span><span class="m">127</span>.0.0.1
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">PORT</span><span class="o">=</span><span class="m">8000</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>INFO
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Backend configuration</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nv">OLLAMA_HOST</span><span class="o">=</span>http://localhost:11434
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># HuggingFace (optional; token is needed for gated models)</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="nv">HUGGINGFACE_TOKEN</span><span class="o">=</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># OpenRouter (optional)</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Default backend for NLI evaluation</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nv">DEFAULT_BACKEND</span><span class="o">=</span>huggingface
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Per-provider default models (used when request model is omitted)</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nv">OLLAMA_DEFAULT_MODEL</span><span class="o">=</span>qwen3:8b
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="nv">HUGGINGFACE_DEFAULT_MODEL</span><span class="o">=</span>microsoft/Phi-3.5-mini-instruct
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>openai/gpt-5-mini
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="c1"># Token limits</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="nv">MAX_THINKING_TOKENS</span><span class="o">=</span><span class="m">4096</span>
-</code></pre></div>
-<p>CLI Arguments example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>omni-nli<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--default-backend<span class="w"> </span>openrouter<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--openrouter-default-model<span class="w"> </span>anthropic/claude-3.5-sonnet
-</code></pre></div>
-<h2 id="supported-backends">Supported Backends<a class="headerlink" href="#supported-backends" title="Permanent link">&para;</a></h2>
+<h3 id="configuration-reference">Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Argument</th>
+<th style="text-align: left;">Env Var</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>--host</code></td>
+<td style="text-align: left;"><code>HOST</code></td>
+<td style="text-align: left;">Server host</td>
+<td style="text-align: left;"><code>127.0.0.1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--port</code></td>
+<td style="text-align: left;"><code>PORT</code></td>
+<td style="text-align: left;">Server port</td>
+<td style="text-align: left;"><code>8000</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--log-level</code></td>
+<td style="text-align: left;"><code>LOG_LEVEL</code></td>
+<td style="text-align: left;">Logging level</td>
+<td style="text-align: left;"><code>INFO</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--debug</code></td>
+<td style="text-align: left;"><code>DEBUG</code></td>
+<td style="text-align: left;">Enable debug mode</td>
+<td style="text-align: left;"><code>False</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--default-backend</code></td>
+<td style="text-align: left;"><code>DEFAULT_BACKEND</code></td>
+<td style="text-align: left;">Default backend provider</td>
+<td style="text-align: left;"><code>huggingface</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--ollama-host</code></td>
+<td style="text-align: left;"><code>OLLAMA_HOST</code></td>
+<td style="text-align: left;">Ollama server URL</td>
+<td style="text-align: left;"><code>http://localhost:11434</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--ollama-default-model</code></td>
+<td style="text-align: left;"><code>OLLAMA_DEFAULT_MODEL</code></td>
+<td style="text-align: left;">Default Ollama model</td>
+<td style="text-align: left;"><code>qwen3:8b</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--huggingface-default-model</code></td>
+<td style="text-align: left;"><code>HUGGINGFACE_DEFAULT_MODEL</code></td>
+<td style="text-align: left;">Default HuggingFace model</td>
+<td style="text-align: left;"><code>microsoft/Phi-3.5-mini-instruct</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--openrouter-default-model</code></td>
+<td style="text-align: left;"><code>OPENROUTER_DEFAULT_MODEL</code></td>
+<td style="text-align: left;">Default OpenRouter model</td>
+<td style="text-align: left;"><code>openai/gpt-5-mini</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--huggingface-token</code></td>
+<td style="text-align: left;"><code>HUGGINGFACE_TOKEN</code></td>
+<td style="text-align: left;">HuggingFace API token (for gated models)</td>
+<td style="text-align: left;"><code>None</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--openrouter-api-key</code></td>
+<td style="text-align: left;"><code>OPENROUTER_API_KEY</code></td>
+<td style="text-align: left;">OpenRouter API key</td>
+<td style="text-align: left;"><code>None</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--hf-cache-dir</code></td>
+<td style="text-align: left;"><code>HF_CACHE_DIR</code></td>
+<td style="text-align: left;">HuggingFace models cache directory</td>
+<td style="text-align: left;">OS default</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--max-thinking-tokens</code></td>
+<td style="text-align: left;"><code>MAX_THINKING_TOKENS</code></td>
+<td style="text-align: left;">Max tokens for thinking traces</td>
+<td style="text-align: left;"><code>4096</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--return-thinking-trace</code></td>
+<td style="text-align: left;"><code>RETURN_THINKING_TRACE</code></td>
+<td style="text-align: left;">Return raw thinking trace in response</td>
+<td style="text-align: left;"><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>PROVIDER_CACHE_SIZE</code> setting must be configured via environment variable only, not CLI flag, because it is evaluated at module import time.</p>
+</div>
+<h3 id="supported-backends">Supported Backends<a class="headerlink" href="#supported-backends" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -784,9 +908,16 @@
 </table>
 <h2 id="running-the-server">Running the Server<a class="headerlink" href="#running-the-server" title="Permanent link">&para;</a></h2>
 <p>Start the server using the CLI command:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>omni-nli
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>omni-nli
 </code></pre></div>
-<p>The server will start at http://127.0.0.1:8000 (by default).</p>
+<p>The server will start at http://127.0.0.1:8000 by default.</p>
+<p>CLI arguments example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>omni-nli<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--default-backend<span class="w"> </span>openrouter<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--openrouter-default-model<span class="w"> </span>anthropic/claude-3.5-sonnet
+</code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Check the <a href="../examples/">Examples</a> to see how to make requests.</li>

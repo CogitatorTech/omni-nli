@@ -593,25 +593,24 @@
 <p>Omni-NLI is a self-hostable server that provides Natural Language Inference (NLI) capabilities via a REST API and the Model Context Protocol (MCP).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Omni-NLI is in early development (Alpha). Bugs and breaking changes are expected.</p>
+<p>Omni-NLI is in early development. Bugs and breaking changes are expected.</p>
 </div>
-<p>It is designed to be a scalable standalone microservice or a tool layer for AI agents, allowing them to verify logical consistency and detect
-hallucinations.</p>
+<p>It is designed to be a scalable standalone microservice or a tool layer for AI agents, allowing them to verify logical consistency and detect hallucinations.</p>
 <h2 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Multi-Backend Support: Use generic models through Ollama (local), HuggingFace (local transformers), or OpenRouter (cloud APIs).</li>
-<li>Dual Interface:<ul>
-<li>REST API: For traditional web/backend integration.</li>
-<li>MCP Server: For direct integration with Claude Desktop, LM Studio, and other MCP clients.</li>
+<li>Multi-backend support: Use models through Ollama (local), HuggingFace (local transformers), or OpenRouter (cloud APIs).</li>
+<li>Dual interface:<ul>
+<li>REST API for traditional web/backend integration.</li>
+<li>MCP Server for direct integration with Claude Desktop, LM Studio, and other MCP clients.</li>
 </ul>
 </li>
-<li>Advanced Logic:<ul>
-<li>Entailment/Contradiction Detection: Determine if a hypothesis follows from a premise.</li>
-<li>Thinking Traces: Extract reasoning steps from models that support it.</li>
-<li>Confidence Scores: Get numerical confidence for predictions.</li>
+<li>Advanced logic:<ul>
+<li>Entailment/contradiction detection: Determine if a hypothesis follows from a premise.</li>
+<li>Thinking traces: Extract reasoning steps from models that support it.</li>
+<li>Confidence scores: Get numerical confidence for predictions.</li>
 </ul>
 </li>
-<li>Scalable Architecture:<ul>
+<li>Scalable architecture:<ul>
 <li>Asynchronous I/O for high concurrency.</li>
 <li>Caching for provider instances.</li>
 <li>Standardized error handling and validation.</li>
