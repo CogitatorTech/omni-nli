@@ -67,23 +67,13 @@ See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 pip install omni-nli
 ```
 
-#### 2. Configure Backends
-
-Copy the example config and add your API keys and other settings in the `.env` file.
-
-```sh
-cp .env.example .env
-```
-
-#### 3. Start the Server
+#### 2. Start the Server
 
 ```sh
 omni-nli
 ```
 
-The server will be listening on `http://127.0.0.1:8000` by default.
-
-#### 4. Evaluate NLI
+#### 3. Evaluate NLI
 
 ```sh
 curl -X POST \
