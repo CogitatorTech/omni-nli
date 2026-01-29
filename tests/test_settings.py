@@ -1,9 +1,5 @@
 """Tests for settings module."""
 
-import os
-
-import pytest
-
 from omni_nli.settings import ServerSettings
 
 

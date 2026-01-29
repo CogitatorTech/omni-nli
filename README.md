@@ -30,7 +30,7 @@ for AI-based applications like chatbots or virtual assistants.
 
 ### What is NLI?
 
-Given two pieces of text called premise and hypothesis, NLI is the task of determining the relationship between them.
+Given two pieces of text called premise and hypothesis, NLI is the task of determining the logical relationship between them if it was done by a human.
 The relationship is typically shown by one of three labels:
 
 - `"entailment"`: the hypothesis is supported by the premise
@@ -122,3 +122,7 @@ Omni-NLI is licensed under the MIT License (see [LICENSE](LICENSE)).
 ### Acknowledgements
 
 - The logo is from [SVG Repo](https://www.svgrepo.com/svg/480613/puzzle-9) with some modifications.
+
+
+<!-- Need to add this line for MCP registry publication -->
+<!-- mcp-name: io.github.cogitatortech/omni-nli -->

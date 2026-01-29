@@ -1,7 +1,6 @@
 """Tests for the InMemoryEventStore."""
 
 import pytest
-
 from mcp.types import JSONRPCMessage, JSONRPCRequest
 
 from omni_nli.event_store import InMemoryEventStore, EventEntry

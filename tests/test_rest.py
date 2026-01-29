@@ -1,11 +1,10 @@
 """Tests for REST API module."""
 
 import pytest
-from starlette.testclient import TestClient
 from starlette.applications import Starlette
+from starlette.testclient import TestClient
 
-from omni_nli.rest import setup_rest_routes, api_spec, _parse_json_body, _error
-from omni_nli.errors import ErrorCode
+from omni_nli.rest import setup_rest_routes, _parse_json_body, _error
 
 
 class TestRestHelpers:
