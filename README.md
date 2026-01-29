@@ -41,6 +41,8 @@ The relationship is typically shown by one of three labels:
 
 NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
 question-answering system generates.
+It can also be used to make a RAG system more reliable, for example, by checking if the retrieved context by the system actually supports the LLM's
+final answer that is shown to the user.
 
 > [!IMPORTANT]
 > The quality of the results depends a lot on the model (the LLM) that is used.
