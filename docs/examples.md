@@ -79,7 +79,7 @@ Response:
 
 ## MCP Server
 
-Omni-NLI allows AI agents (like Claude Desktop or LM Sudio) to use NLI as a tool.
+Omni-NLI allows AI agents (like Claude Desktop or LM Studio) to use NLI as a tool.
 
 ### MCP Client Configuration
 

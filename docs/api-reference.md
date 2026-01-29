@@ -44,7 +44,7 @@ Returns provider configuration metadata.
 Response includes:
 
 - `ollama`, `huggingface`, and `openrouter`: Each provider object contains configuration details.
-- `token_configured`: Indicates if credentials are avaibale in the environment where the server is running.
+- `token_configured`: Indicates if credentials are available in the environment where the server is running.
 - `default_model`: The default model for each provider.
 - `default_backend`: The configured default backend.
 

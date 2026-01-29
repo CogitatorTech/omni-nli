@@ -37,9 +37,15 @@ To pass configuration to the container, use the `-e` flag for environment variab
 docker run --rm -it -p 8000:8000 \
   -e DEFAULT_BACKEND=openrouter \
   -e OPENROUTER_API_KEY=your-api-key \
-  -e OPENROUTER_DEFAULT_MODEL=anthropic/claude-3.5-sonnet \
+  -e OPENROUTER_DEFAULT_MODEL=openai/gpt-5.2 \
   ghcr.io/cogitatortech/omni-nli-cpu:latest
 ```
+
+!!! tip
+    When using the HuggingFace backend, the GPU image is recommended because inference will be a lot faster on GPUs.
+
+!!! warning
+    When using the Ollama backend with Docker, you must set `OLLAMA_HOST` to point to a valid IP or host name that has Ollama server running on it. The default `localhost` will point to the container itself and will fail to connect.
 
 !!! note
     The `latest` tag refers to the latest stable release. You can replace `latest` with a specific version tag from
