@@ -28,6 +28,8 @@ RESTful and the Model Context Protocol (MCP) interfaces.
 It can be used both as a very scalable standalone stateless microservice and also as an MCP server for AI agents to implement a verification layer
 for AI-based applications like chatbots or virtual assistants.
 
+![Architecture Diagram](docs/assets/diagrams/architecture.svg)
+
 ### What is NLI?
 
 Given two pieces of text called premise and hypothesis, NLI is the task of determining the logical relationship between them if it was done by a human.
@@ -46,10 +48,6 @@ question-answering system generates.
 - Supports REST API (for traditional applications) and MCP (for AI agents) interfaces
 - Fully configurable and very scalable, with built-in caching
 - Provides confidence scores and (optional) reasoning traces for explainability
-
-Below is the high-level architecture of Omni-NLI:
-
-![Architecture Diagram](docs/assets/diagrams/architecture.svg)
 
 See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 
