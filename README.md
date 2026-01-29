@@ -48,6 +48,7 @@ question-answering system generates.
 
 ### Main Features of Omni-NLI
 
+- Helps mitigate LLM hallucinations by verifying if the generated content is supported by facts
 - Supports models provided by different backends, including Ollama, HuggingFace (public and private/gated models), and OpenRouter
 - Supports REST API (for traditional applications) and MCP (for AI agents) interfaces
 - Fully configurable and very scalable, with built-in caching
