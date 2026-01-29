@@ -71,7 +71,7 @@ pip install omni-nli
 omni-nli
 ```
 
-#### 3. Evaluate NLI
+#### 3. Evaluate NLI (with REST API)
 
 ```sh
 curl -X POST \
@@ -93,6 +93,10 @@ Example response:
     "backend": "huggingface"
 }
 ```
+
+#### 4. Evaluate NLI (with MCP Interface)
+
+![lm_studio_mcp_usage_example_1.png](docs/assets/screenshots/lm_studio_mcp_usage_example_1.png)
 
 ---
 
