@@ -721,7 +721,7 @@
 
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
 <p>This document includes installation and configuration instructions for Omni-NLI.
-For a quickstart, please see the main <a href="../README.md">README.md</a> file.</p>
+For a quickstart, please see the project's main <a href="https://github.com/CogitatorTech/omni-nli/blob/main/README.md">README.md</a> file.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>You can run Omni-NLI either by installing it as a Python library or by using a pre-built Docker image.</p>
 <h3 id="python-installation">Python Installation<a class="headerlink" href="#python-installation" title="Permanent link">&para;</a></h3>
@@ -760,11 +760,11 @@ the <a href="https://github.com/CogitatorTech/omni-nli/packages">list of availab
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>The server can be configured using command-line arguments or environment variables.
 Environment variables are read from a <code>.env</code> file if it exists or from the system environment.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
 <p>Command-line arguments take precedence over environment variables.</p>
 </div>
-<p>You could copy the example <a href="../.env.example">.env.example</a> in the project's repository to the directory where you run the server and customize it.</p>
+<p>You could copy the example <a href="https://github.com/CogitatorTech/omni-nli/blob/main/.env.example">.env.example</a> in the project's repository to the directory where you run the server and customize it.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
 </code></pre></div>
 <h3 id="configuration-reference">Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h3>
@@ -881,17 +881,17 @@ Environment variables are read from a <code>.env</code> file if it exists or fro
 <tr>
 <td style="text-align: left;">Ollama</td>
 <td style="text-align: left;">Yes</td>
-<td style="text-align: left;">qwen3:8b, deepseek-r1:7b, phi4:latest</td>
+<td style="text-align: left;"><code>qwen3:8b</code>, <code>deepseek-r1:7b</code>, <code>phi4:latest</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">HuggingFace</td>
 <td style="text-align: left;">Yes</td>
-<td style="text-align: left;">microsoft/Phi-3.5-mini-instruct, Qwen/Qwen2.5-1.5B-Instruct</td>
+<td style="text-align: left;"><code>microsoft/Phi-3.5-mini-instruct</code>, <code>Qwen/Qwen2.5-1.5B-Instruct</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">OpenRouter</td>
 <td style="text-align: left;">No</td>
-<td style="text-align: left;">openai/gpt-5-mini, openai/gpt-5.2, arcee-ai/trinity-large-preview:free</td>
+<td style="text-align: left;"><code>openai/gpt-5-mini</code>, <code>openai/gpt-5.2</code>, <code>arcee-ai/trinity-large-preview:free</code></td>
 </tr>
 </tbody>
 </table>
