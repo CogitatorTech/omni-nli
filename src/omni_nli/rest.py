@@ -1,3 +1,9 @@
+"""REST API endpoints for Omni-NLI evaluation service.
+
+This module provides HTTP endpoints for NLI evaluation, provider
+information, and API documentation using Spectree for OpenAPI generation.
+"""
+
 import json
 import logging
 
@@ -23,7 +29,7 @@ _logger = logging.getLogger(__name__)
 api_spec = SpecTree(
     "starlette",
     title="Omni-NLI REST API",
-    description="Clean REST API for natural language inference (NLI).",
+    description="REST API documentation",
     version=settings.pkg_version,
     mode="strict",
     swagger_url="/apidoc/swagger",
@@ -38,12 +44,34 @@ api_spec = SpecTree(
 def _error(
     code: str, message: str, details: object | None = None, status_code: int = 400
 ) -> JSONResponse:
+    """Create a standardized error response.
+
+    Args:
+        code: The error code (e.g., 'VALIDATION_ERROR').
+        message: Human-readable error message.
+        details: Optional additional error details.
+        status_code: HTTP status code (default 400).
+
+    Returns:
+        JSONResponse containing the formatted error.
+    """
     error_body = ErrorBody(code=code, message=message, details=details)
     payload = ErrorResponse(error=error_body)
     return JSONResponse(payload.model_dump(), status_code=status_code)
 
 
 async def _parse_json_body(request: Request) -> dict:
+    """Parse and validate JSON body from request with DoS protection.
+
+    Args:
+        request: The incoming HTTP request.
+
+    Returns:
+        Parsed JSON body as a dictionary.
+
+    Raises:
+        ValueError: If content type is wrong or body is too large.
+    """
     content_type = request.headers.get("content-type", "")
 
     if "application/json" not in content_type:
@@ -53,11 +81,11 @@ async def _parse_json_body(request: Request) -> dict:
     max_body_size = 10 * 1024 * 1024
     content_length = request.headers.get("content-length")
     if content_length is not None and int(content_length) > max_body_size:
-        raise ValueError("Request payload too large (limit: 10MB).")
+        raise ValueError("Request payload too large (limit is 10MB).")
 
     body = await request.body()
     if len(body) > max_body_size:
-        raise ValueError("Request payload too large (limit: 10MB).")
+        raise ValueError("Request payload too large (limit is 10MB).")
 
     return json.loads(body) if body else {}
 
@@ -70,7 +98,7 @@ async def _parse_json_body(request: Request) -> dict:
         HTTP_502=ErrorResponse,
         HTTP_500=ErrorResponse,
     ),
-    tags=["NLI"],
+    tags=["NLI Evaluation"],
 )
 async def evaluate_nli(request: Request) -> JSONResponse:
     """Evaluate the logical relationship between premise and hypothesis."""
@@ -121,8 +149,9 @@ async def evaluate_nli(request: Request) -> JSONResponse:
         )
 
 
-@api_spec.validate(resp=Response(HTTP_200=ProvidersResponse), tags=["Providers"])
+@api_spec.validate(resp=Response(HTTP_200=ProvidersResponse), tags=["Model Providers"])
 async def providers(request: Request) -> JSONResponse:
+    """Show the model provider metadata like name and default backend."""
     data = list_available_providers()
     response_data = ProvidersResponse(
         **data,
@@ -154,6 +183,11 @@ async def redoc(request: Request) -> HTMLResponse:
 
 
 def setup_rest_routes() -> list[Route]:
+    """Create and return the list of REST API routes.
+
+    Returns:
+        List of Starlette Route objects for the REST API.
+    """
     return [
         Route("/nli/evaluate", endpoint=evaluate_nli, methods=["POST"]),
         Route("/providers", endpoint=providers, methods=["GET"]),

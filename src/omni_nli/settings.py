@@ -1,9 +1,20 @@
+"""Server settings and configuration management for Omni-NLI.
+
+This module provides centralized configuration using Pydantic settings,
+supporting both environment variables and .env files.
+"""
+
 from importlib.metadata import PackageNotFoundError, version
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 def get_pkg_version() -> str:
+    """Get the installed package version.
+
+    Returns:
+        The package version string, or '0.0.0' if not installed.
+    """
     try:
         return version("omni-nli")
     except PackageNotFoundError:
@@ -40,6 +51,26 @@ def _normalize_optional_str(v: str | None) -> str | None:
 
 
 class ServerSettings(BaseSettings):
+    """Application settings with environment variable and .env support.
+
+    All settings can be configured via environment variables or a .env file.
+    Environment variables take precedence over .env file values.
+
+    Attributes:
+        pkg_version: Current package version.
+        host: Server bind address.
+        port: Server bind port.
+        log_level: Logging level (DEBUG, INFO, WARNING, ERROR).
+        debug: Enable debug mode for detailed tracebacks.
+        ollama_host: Ollama server URL.
+        huggingface_token: HuggingFace API token for gated models.
+        hf_cache_dir: HuggingFace model cache directory.
+        openrouter_api_key: OpenRouter API key.
+        default_backend: Default NLI backend provider.
+        max_thinking_tokens: Maximum tokens for reasoning traces.
+        return_thinking_trace: Whether to include reasoning in responses.
+    """
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     pkg_version: str = get_pkg_version()
@@ -70,6 +101,17 @@ class ServerSettings(BaseSettings):
     provider_cache_size: int = 8
 
     def get_default_model(self, backend: str) -> str:
+        """Get the default model for a given backend.
+
+        Args:
+            backend: The backend name ('ollama', 'huggingface', 'openrouter').
+
+        Returns:
+            The default model name for the specified backend.
+
+        Raises:
+            ValueError: If the backend is unknown.
+        """
         if backend == "ollama":
             return self.ollama_default_model
         if backend == "huggingface":
@@ -80,6 +122,11 @@ class ServerSettings(BaseSettings):
 
     @property
     def hf_cache_dir_effective(self) -> str:
+        """Get the effective HuggingFace cache directory.
+
+        Returns:
+            The configured cache dir, or the platform default if not set.
+        """
         # If user set HF_CACHE_DIR to an empty string, it is treated as unset.
         return _normalize_optional_str(self.hf_cache_dir) or get_default_hf_cache_dir()
 

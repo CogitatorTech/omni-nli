@@ -32,7 +32,7 @@ color = "#888888"
 fontcolor = "#555555"
 margin = 18
 rest_client [label = "REST Client\n(curl, httpx, etc.)", fillcolor = "#E8F4FD", color = "#2196F3"]
-mcp_client [label = "MCP Client\n(Claude, LM Studio, etc.)", fillcolor = "#E8F4FD", color = "#2196F3"]
+mcp_client [label = "MCP Client\n(Claude Code, LM Studio, etc.)", fillcolor = "#E8F4FD", color = "#2196F3"]
 }
 
 subgraph cluster_server {
@@ -54,7 +54,7 @@ mcp_server [label = "MCP Server\n/mcp/", fillcolor = "#F3E5F5", color = "#9C27B0
 }
 
 subgraph cluster_core {
-label = "Core"
+label = "Tools and Settings"
 style = "dashed"
 color = "#4CAF50"
 fontcolor = "#388E3C"

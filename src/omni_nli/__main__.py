@@ -1,3 +1,9 @@
+"""Application entry point and server configuration for Omni-NLI.
+
+This module configures and runs the Starlette application server with both
+REST API and MCP (Model Context Protocol) endpoints for NLI evaluation.
+"""
+
 import logging
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
@@ -21,6 +27,11 @@ _logger = logging.getLogger(__name__)
 
 
 def setup_logging(log_level: str) -> None:
+    """Configure JSON-formatted logging with the specified log level.
+
+    Args:
+        log_level: The logging level (e.g., 'DEBUG', 'INFO', 'WARNING').
+    """
     level = logging.getLevelName(log_level.upper())
     logHandler = logging.StreamHandler()
     formatter = jsonlogger.JsonFormatter("%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -30,6 +41,14 @@ def setup_logging(log_level: str) -> None:
 
 
 async def health_check(_request: Request) -> JSONResponse:
+    """Return a health check response with server status and version.
+
+    Args:
+        _request: The incoming HTTP request (unused).
+
+    Returns:
+        JSON response containing status and version information.
+    """
     _logger.debug("Health check requested.")
     return JSONResponse({"status": "ok", "version": settings.pkg_version})
 
@@ -39,11 +58,26 @@ session_manager = StreamableHTTPSessionManager(app=mcp_app, event_store=event_st
 
 
 async def handle_streamable_http(scope: Scope, receive: Receive, send: Send) -> None:
+    """Handle incoming MCP StreamableHTTP requests.
+
+    Args:
+        scope: The ASGI connection scope.
+        receive: The ASGI receive callable.
+        send: The ASGI send callable.
+    """
     await session_manager.handle_request(scope, receive, send)
 
 
 @asynccontextmanager
 async def lifespan(app: Starlette) -> AsyncGenerator[None, None]:
+    """Manage the application lifecycle with MCP session manager.
+
+    Args:
+        app: The Starlette application instance.
+
+    Yields:
+        None during application runtime.
+    """
     async with session_manager.run():  # type: ignore[attr-defined]
         _logger.info("Omni-NLI started with StreamableHTTP session manager.")
         try:
@@ -56,6 +90,11 @@ starlette_app = Starlette(debug=settings.debug, lifespan=lifespan)
 
 
 def setup_app_routes(main_app: Starlette) -> None:
+    """Configure all application routes including REST API and MCP endpoints.
+
+    Args:
+        main_app: The main Starlette application to add routes to.
+    """
     from .rest import api_spec, setup_rest_routes
 
     api_v1_app = Starlette()
@@ -205,6 +244,14 @@ def main(
     max_thinking_tokens: int,
     return_thinking_trace: bool,
 ) -> int:
+    """Run the Omni-NLI server with the specified configuration.
+
+    This is the CLI entry point that configures settings and starts
+    the uvicorn server.
+
+    Returns:
+        Exit code (0 for success).
+    """
     import uvicorn
 
     # Update settings with resolved values from CLI or Env

@@ -1,3 +1,9 @@
+"""Omni-NLI: A multi-interface Natural Language Inference service.
+
+This package provides NLI evaluation through multiple interfaces (REST API and MCP)
+with support for various backend providers, including Ollama, HuggingFace, and OpenRouter.
+"""
+
 from importlib.metadata import PackageNotFoundError, metadata, version
 
 from .settings import settings

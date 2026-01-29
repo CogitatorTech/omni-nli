@@ -1,10 +1,17 @@
+"""OpenRouter API provider for cloud-based NLI evaluation.
+
+This module provides NLI evaluation using OpenRouter's unified API,
+which provides access to various LLM providers including OpenAI,
+Anthropic, and Google models.
+"""
+
 import logging
 
 from async_lru import alru_cache
 from openai import AsyncOpenAI
 
-from .base import NLIProvider, NLIResult
 from ..settings import settings
+from .base import NLIProvider, NLIResult
 
 _logger = logging.getLogger(__name__)
 
@@ -24,14 +31,37 @@ STANDARD_MODELS = [
 
 
 class OpenRouterProvider(NLIProvider):
+    """NLI provider using OpenRouter's unified LLM API.
+
+    Provides access to multiple LLM providers through a single API,
+    supporting models from OpenAI, Anthropic, Google, and others.
+
+    Attributes:
+        name: Provider identifier ('openrouter').
+        supports_reasoning: Always True for this provider.
+    """
+
     name = "openrouter"
     supports_reasoning = True
 
     def __init__(self, api_key: str | None = None) -> None:
+        """Initialize the OpenRouter provider.
+
+        Args:
+            api_key: OpenRouter API key (defaults to configured key).
+        """
         self.api_key = api_key or settings.openrouter_api_key
         self._client: AsyncOpenAI | None = None
 
     def _get_client(self) -> AsyncOpenAI:
+        """Get or create the OpenAI-compatible client.
+
+        Returns:
+            AsyncOpenAI client configured for OpenRouter.
+
+        Raises:
+            ValueError: If API key is not configured.
+        """
         if self._client is None:
             if not self.api_key:
                 raise ValueError("OpenRouter API key not configured")
@@ -49,6 +79,18 @@ class OpenRouterProvider(NLIProvider):
         model: str | None = None,
         use_reasoning: bool = False,
     ) -> NLIResult:
+        """Evaluate NLI using an OpenRouter model.
+
+        Args:
+            premise: The base factual statement.
+            hypothesis: The statement to test against the premise.
+            context: Optional background context.
+            model: Model to use (defaults to configured default).
+            use_reasoning: Whether to use extended thinking.
+
+        Returns:
+            NLIResult with label, confidence, and optional reasoning.
+        """
         client = self._get_client()
 
         if model is None:
@@ -80,9 +122,19 @@ class OpenRouterProvider(NLIProvider):
         return result
 
     async def list_models(self) -> list[str]:
+        """List available OpenRouter models.
+
+        Returns:
+            Combined list of reasoning and standard models.
+        """
         return REASONING_MODELS + STANDARD_MODELS
 
     async def health_check(self) -> bool:
+        """Check if OpenRouter API is accessible.
+
+        Returns:
+            True if API key is set and API responds, False otherwise.
+        """
         if not self.api_key:
             return False
 
@@ -97,4 +149,12 @@ class OpenRouterProvider(NLIProvider):
 
 @alru_cache(maxsize=settings.provider_cache_size)
 async def get_openrouter_provider(api_key: str | None = None) -> OpenRouterProvider:
+    """Get a cached OpenRouter provider instance.
+
+    Args:
+        api_key: Optional OpenRouter API key.
+
+    Returns:
+        OpenRouterProvider instance.
+    """
     return OpenRouterProvider(api_key=api_key)

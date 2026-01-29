@@ -43,7 +43,7 @@ Response fields:
 
 ### GET `/api/v1/providers`
 
-Returns provider configuration metadata.
+Returns model provider configuration metadata.
 
 Response includes:
 
