@@ -750,31 +750,30 @@ For a quick start, please see the main <a href="../README.md">README.md</a> file
 <p>You can install Omni-NLI via pip:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>omni-nli
 </code></pre></div>
-<p>Alternatively, you can clone the repository and install from source:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/CogitatorTech/omni-nli.git
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>omni-nli
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>pip<span class="w"> </span>install<span class="w"> </span>.
-</code></pre></div>
 <h3 id="docker-installation">Docker Installation<a class="headerlink" href="#docker-installation" title="Permanent link">&para;</a></h3>
 <p>Pre-built Docker images are available from the <a href="https://github.com/CogitatorTech/omni-nli/packages">GitHub Container Registry</a>.</p>
-<ul>
-<li>
-<p>CPU Image:
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ghcr.io/cogitatortech/omni-nli-cpu:latest
-</code></pre></div></p>
-</li>
-<li>
-<p>GPU Image (CUDA):
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ghcr.io/cogitatortech/omni-nli-cuda:latest
-</code></pre></div></p>
-</li>
-</ul>
+<p>Generic CPU Image:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ghcr.io/cogitatortech/omni-nli-cpu:latest
+</code></pre></div>
+<p>GPU Image (CUDA; for NVIDIA GPUs only):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>ghcr.io/cogitatortech/omni-nli-cuda:latest
+</code></pre></div>
+<p>To pass configuration to the container, use the <code>-e</code> flag for environment variables:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">DEFAULT_BACKEND</span><span class="o">=</span>openrouter<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>your-api-key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>anthropic/claude-3.5-sonnet<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>ghcr.io/cogitatortech/omni-nli-cpu:latest
+</code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <code>latest</code> tag refers to the latest stable release. You can replace <code>latest</code> with a specific version tag from the <a href="https://github.com/CogitatorTech/omni-nli/packages">list of available packages</a>.</p>
+<p>The <code>latest</code> tag refers to the latest stable release. You can replace <code>latest</code> with a specific version tag from
+the <a href="https://github.com/CogitatorTech/omni-nli/packages">list of available packages</a>.</p>
 </div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>The server can be configured using command-line arguments or environment variables. Environment variables are read from a <code>.env</code> file if it exists. Command-line arguments take precedence over environment variables.</p>
+<p>The server can be configured using command-line arguments or environment variables.
+Environment variables are read from a <code>.env</code> file if it exists.
+Command-line arguments take precedence over environment variables.</p>
 <p>Copy the example configuration:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
 </code></pre></div>
@@ -892,17 +891,17 @@ For a quick start, please see the main <a href="../README.md">README.md</a> file
 <tr>
 <td style="text-align: left;">Ollama</td>
 <td style="text-align: left;">Yes</td>
-<td style="text-align: left;">qwen3:8b, llama3.2:3b, mistral</td>
+<td style="text-align: left;">qwen3:8b, deepseek-r1:7b, phi4:latest</td>
 </tr>
 <tr>
 <td style="text-align: left;">HuggingFace</td>
 <td style="text-align: left;">Yes</td>
-<td style="text-align: left;">Qwen/Qwen2.5-1.5B-Instruct</td>
+<td style="text-align: left;">microsoft/Phi-3.5-mini-instruct, Qwen/Qwen2.5-1.5B-Instruct</td>
 </tr>
 <tr>
 <td style="text-align: left;">OpenRouter</td>
 <td style="text-align: left;">No</td>
-<td style="text-align: left;">deepseek/deepseek-r1, anthropic/claude-3.5-sonnet</td>
+<td style="text-align: left;">openai/gpt-5-mini, openai/gpt-5.2, arcee-ai/trinity-large-preview:free</td>
 </tr>
 </tbody>
 </table>
@@ -916,7 +915,7 @@ For a quick start, please see the main <a href="../README.md">README.md</a> file
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--default-backend<span class="w"> </span>openrouter<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--openrouter-default-model<span class="w"> </span>anthropic/claude-3.5-sonnet
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--openrouter-default-model<span class="w"> </span>openai/gpt-5.2
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>

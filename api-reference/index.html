@@ -674,7 +674,8 @@
 
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
-<p>This project provides interactive API documentation (Swagger UI and ReDoc). Once the server is running, you can access them at:</p>
+<p>This project provides interactive API documentation (via Swagger UI and ReDoc).
+When the server is running, you can access them at:</p>
 <ul>
 <li>Swagger UI: http://127.0.0.1:8000/api/v1/apidoc/swagger</li>
 <li>ReDoc: http://127.0.0.1:8000/api/v1/apidoc/redoc</li>
@@ -773,13 +774,16 @@ A health check endpoint is also available at <code>GET /api/health</code>.</p>
 </table>
 <h3 id="get-apiv1providers">GET /api/v1/providers<a class="headerlink" href="#get-apiv1providers" title="Permanent link">&para;</a></h3>
 <p>Returns provider configuration metadata.</p>
-<p>Response includes:
-- <code>ollama</code>, <code>huggingface</code>, <code>openrouter</code>: Each provider object contains configuration details.
-- <code>token_configured</code>: Indicates if credentials are present in the environment.
-- <code>default_model</code>: The default model for each provider.
-- <code>default_backend</code>: The configured default backend.</p>
+<p>Response includes:</p>
+<ul>
+<li><code>ollama</code>, <code>huggingface</code>, and <code>openrouter</code>: Each provider object contains configuration details.</li>
+<li><code>token_configured</code>: Indicates if credentials are avaibale in the environment where the server is running.</li>
+<li><code>default_model</code>: The default model for each provider.</li>
+<li><code>default_backend</code>: The configured default backend.</li>
+</ul>
 <h2 id="mcp-interface">MCP Interface<a class="headerlink" href="#mcp-interface" title="Permanent link">&para;</a></h2>
-<p>The server exposes its capabilities as tools over the Model Context Protocol (MCP). The MCP endpoint is available at http://127.0.0.1:8000/mcp/.</p>
+<p>The server exposes its capabilities as tools over the Model Context Protocol (MCP).
+The MCP endpoint is available at http://127.0.0.1:8000/mcp/.</p>
 <h3 id="available-tools">Available Tools<a class="headerlink" href="#available-tools" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
