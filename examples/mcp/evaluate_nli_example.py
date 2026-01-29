@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 import sys
 
@@ -39,7 +40,11 @@ async def main() -> None:
             print("\nResult:")
             for content in result.content:
                 if content.type == "text":
-                    print(content.text)
+                    try:
+                        parsed = json.loads(content.text)
+                        print(json.dumps(parsed, indent=2))
+                    except json.JSONDecodeError:
+                        print(content.text)
                 else:
                     print(content)
 

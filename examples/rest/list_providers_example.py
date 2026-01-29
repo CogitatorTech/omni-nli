@@ -3,6 +3,8 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import json
+
 import httpx
 from shared import get_args
 
@@ -18,7 +20,7 @@ def main() -> None:
         response.raise_for_status()
 
         print("\nResponse from server:")
-        print(response.json())
+        print(json.dumps(response.json(), indent=2))
 
     except httpx.RequestError as e:
         print(f"An error occurred while requesting {e.request.url!r}.")

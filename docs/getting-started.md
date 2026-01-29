@@ -57,7 +57,7 @@ docker run --rm -it -p 8000:8000 \
 The server can be configured using command-line arguments or environment variables.
 Environment variables are read from a `.env` file if it exists or from the system environment.
 
-!!! note 
+!!! note
     Command-line arguments take precedence over environment variables.
 
 You could copy the example [.env.example](../.env.example) in the project's repository to the directory where you run the server and customize it.
