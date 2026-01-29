@@ -762,9 +762,17 @@ For a quick start, please see the main <a href="../README.md">README.md</a> file
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">DEFAULT_BACKEND</span><span class="o">=</span>openrouter<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>your-api-key<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>anthropic/claude-3.5-sonnet<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">OPENROUTER_DEFAULT_MODEL</span><span class="o">=</span>openai/gpt-5.2<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>ghcr.io/cogitatortech/omni-nli-cpu:latest
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When using the HuggingFace backend, the GPU image is recommended because inference will be a lot faster on GPUs.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using the Ollama backend with Docker, you must set <code>OLLAMA_HOST</code> to point to a valid IP or host name that has Ollama server running on it. The default <code>localhost</code> will point to the container itself and will fail to connect.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code>latest</code> tag refers to the latest stable release. You can replace <code>latest</code> with a specific version tag from
