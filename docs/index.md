@@ -9,23 +9,19 @@
 Omni-NLI is a self-hostable server that provides [natural language inference (NLI)](https://en.wikipedia.org/wiki/Textual_entailment) capabilities via
 RESTful and the Model Context Protocol (MCP) interfaces.
 It can be used both as a very scalable standalone stateless microservice and also as an MCP server for AI agents to implement a verification layer
-for AI-based applications like chatbots or virtual assistants.
+for AI-based applications.
 
 ![Architecture Diagram](https://raw.githubusercontent.com/CogitatorTech/omni-nli/main/docs/assets/diagrams/architecture.svg)
 
 ## What is NLI?
 
-Given two pieces of text called premise and hypothesis, NLI is the task of determining the logical relationship between them if it was done by a human.
+Given two pieces of text called premise and hypothesis, NLI is the task of determining the directional relationship between them as perceived by
+a human reader.
 The relationship is typically shown by one of three labels:
 
 - `"entailment"`: the hypothesis is supported by the premise
 - `"contradiction"`: the hypothesis is contradicted by the premise
 - `"neutral"`: the hypothesis is neither supported nor contradicted by the premise
-
-NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
-question-answering system generates.
-It can also be used to make a RAG system more reliable, for example, by checking if the retrieved context by the system actually supports the LLM's
-final answer that is shown to the user.
 
 ## High-level Features
 

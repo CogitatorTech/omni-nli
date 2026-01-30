@@ -25,8 +25,8 @@ A multi-interface (REST and MCP) server for natural language inference
 
 Omni-NLI is a self-hostable server that provides [natural language inference (NLI)](https://en.wikipedia.org/wiki/Textual_entailment) capabilities via
 RESTful and the Model Context Protocol (MCP) interfaces.
-It can be used both as a very scalable standalone stateless microservice (via the REST API) and also as an MCP server for AI agents to implement a verification layer
-for AI-based applications like chatbots or virtual assistants.
+It can be used both as a very scalable standalone stateless microservice (via the REST API) and also as an MCP server for AI agents to implement a
+verification layer for AI-based applications.
 
 ![Architecture Diagram](docs/assets/diagrams/architecture.svg)
 
@@ -42,16 +42,17 @@ The relationship is given one of these three labels:
 
 > [!IMPORTANT]
 > NLI is not the same as logical entailment.
-> It determines whether a human would consider the hypothesis to follow from the premise. This checks for consistency rather than the absolute truth of the hypothesis.
-> It is useful for fact-checking and consistency verification, acknowledging that NLI models capture probabilistic associations rather than strict formal logic.
+> It determines whether a human would consider the hypothesis to follow from the premise.
+> This checks for consistency instead of the absolute truth of the hypothesis.
 
 Typical applications of NLI include:
 
 * **Consistency checking**: NLI can be used to check if a given piece of text is consistent with the rest of the text. For example, if a new response
   from a chatbot or AI assistant contradicts something that was said earlier in the conversation.
 * **Verifying summarization**: It can be used to check if a summarization contradicts the original text in some way.
-* **Document search**: It can be used to check if the ranked list of results (documents) entail the query.
-* **Fact-checking and verification**: It can be used to check if a piece of text is supported by some facts. Note that this is not the same as using logic.
+* **Document search**: It can be used to check if the documents in the ranked list of results entail the query.
+* **Fact-checking and verification**: It can be used to check if a piece of text is supported by some facts. Note that this is not the same as using
+  logic.
 
 > [!IMPORTANT]
 > The quality of the results depends a lot on the model (the LLM) that is used.
