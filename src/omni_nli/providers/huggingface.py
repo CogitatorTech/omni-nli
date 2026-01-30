@@ -25,7 +25,9 @@ try:
 
     _HF_AVAILABLE = True
 except ImportError:
-    _logger.debug("HuggingFace transformers not installed. Install with: pip install omni-nli[huggingface]")
+    _logger.debug(
+        "HuggingFace transformers not installed. Install with: pip install omni-nli[huggingface]"
+    )
 
 DEFAULT_HF_MODELS = [
     "Qwen/Qwen2.5-1.5B-Instruct",

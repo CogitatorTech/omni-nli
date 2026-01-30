@@ -17,9 +17,7 @@ app = Server("omni-nli")
 
 
 @app.call_tool()
-async def call_tool_handler(
-    name: str, arguments: dict | None
-) -> list[types.ContentBlock]:
+async def call_tool_handler(name: str, arguments: dict | None) -> list[types.ContentBlock]:
     """Handle incoming MCP tool call requests.
 
     Args:
