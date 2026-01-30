@@ -1,6 +1,6 @@
 [project]
 name = "omni-nli"
-version = "0.1.0-alpha.4"
+version = "0.1.0"
 description = "A multi-interface (REST and MCP) server for natural language inference"
 readme = "README.md"
 license = { text = "MIT" }
@@ -26,7 +26,7 @@ keywords = [
 ]
 
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
