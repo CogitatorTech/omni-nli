@@ -1,7 +1,9 @@
 """HuggingFace Transformers provider for local NLI evaluation.
 
 This module provides NLI evaluation using locally-loaded HuggingFace
-transformer models, supporting both CPU and GPU inference.
+transformer models.
+
+Note: Requires optional dependencies. Install with: pip install omni-nli[huggingface]
 """
 
 import asyncio
@@ -10,12 +12,20 @@ import logging
 from typing import Any
 
 from async_lru import alru_cache
-from transformers import pipeline
 
 from ..settings import settings
 from .base import NLIProvider, NLIResult
 
 _logger = logging.getLogger(__name__)
+
+# Check if HuggingFace dependencies are available
+_HF_AVAILABLE = False
+try:
+    from transformers import pipeline  # noqa: F401
+
+    _HF_AVAILABLE = True
+except ImportError:
+    _logger.debug("HuggingFace transformers not installed. Install with: pip install omni-nli[huggingface]")
 
 DEFAULT_HF_MODELS = [
     "Qwen/Qwen2.5-1.5B-Instruct",

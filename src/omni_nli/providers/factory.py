@@ -44,6 +44,13 @@ async def get_provider(backend: BackendType | None = None) -> NLIProvider:
         return provider
 
     elif backend == "huggingface":
+        from .huggingface import _HF_AVAILABLE
+
+        if not _HF_AVAILABLE:
+            raise ValueError(
+                "HuggingFace backend requires optional dependencies. "
+                "Install with: pip install omni-nli[huggingface]"
+            )
         return await get_huggingface_provider()
 
     elif backend == "openrouter":

@@ -4,14 +4,20 @@ This document includes installation and configuration instructions for Omni-NLI.
 
 ## Installation
 
-You can run Omni-NLI either by installing it as a Python library or by using a pre-built Docker image.
+You can run Omni-NLI either by installing it as a Python package or by using a pre-built Docker image.
 
 ### Python Installation
 
-You can install Omni-NLI via pip:
+The base package supports Ollama and OpenRouter:
 
 ```sh
 pip install omni-nli
+```
+
+For local inference with HuggingFace:
+
+```sh
+pip install omni-nli[huggingface]
 ```
 
 ### Docker Installation
