@@ -78,10 +78,6 @@ See [ROADMAP.md](ROADMAP.md) for the list of implemented and planned features.
 #### 1. Installation
 
 ```sh
-# Base install (to use models from Ollama and OpenRouter backends)
-pip install omni-nli
-
-# If you want to use HuggingFace models, plus Ollama and OpenRouter
 pip install omni-nli[huggingface]
 ```
 

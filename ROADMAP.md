@@ -13,13 +13,14 @@ This document outlines the features planned for the Omni-NLI project and their c
 - [x] Configurable default backend and model
 - [x] Per-request backend and model overrides
 - [x] Context grounding support for logic verification
+- [x] Fallback provider when the primary backend is unavailable
 
 ---
 
 ### Backend Providers
 
 - [x] Ollama
-- [x] HuggingFace (using the Transformers library)
+- [x] HuggingFace
 - [x] OpenRouter
 
 ---
@@ -27,6 +28,7 @@ This document outlines the features planned for the Omni-NLI project and their c
 ### Interfaces
 
 - [x] REST API with OpenAPI documentation (Swagger UI and ReDoc)
+- [x] Health check endpoint (`/api/health`)
 - [x] MCP (Model Context Protocol) for AI agent integration
 - [x] Streamable HTTP transport for MCP
 - [x] Standardized JSON error responses
@@ -49,7 +51,7 @@ This document outlines the features planned for the Omni-NLI project and their c
 - [x] Configuration via environment variables
 - [x] CLI argument overrides
 - [x] Docker support
-- [x] Pre-built Docker images (CPU and CUDA)
+- [x] Pre-built Docker images (generic CPUs and NVIDIA GPUs)
 
 ---
 
@@ -57,8 +59,8 @@ This document outlines the features planned for the Omni-NLI project and their c
 
 - [x] Unit tests with pytest
 - [x] Code coverage reporting
+- [x] End-to-end API tests (REST and MCP endpoints)
 - [ ] Integration tests with live backends
-- [ ] End-to-end API tests
 - [ ] Performance benchmarks
 
 ---

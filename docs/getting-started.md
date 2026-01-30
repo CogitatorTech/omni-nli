@@ -8,15 +8,15 @@ You can run Omni-NLI either by installing it as a Python package or by using a p
 
 ### Python Installation
 
-The base package supports Ollama and OpenRouter:
+The base package (that supports Ollama and OpenRouter):
 
-```sh
+```
 pip install omni-nli
 ```
 
-For local inference with HuggingFace:
+For local inference with HuggingFace (supports models from Ollama, OpenRouter, and HuggingFace):
 
-```sh
+```
 pip install omni-nli[huggingface]
 ```
 
@@ -26,20 +26,20 @@ Pre-built Docker images are available from the [GitHub Container Registry](https
 
 Generic CPU Image:
 
-```sh
+```
 docker run --rm -it -p 8000:8000 ghcr.io/cogitatortech/omni-nli-cpu:latest
 ```
 
 GPU Image (for NVIDIA GPUs):
 
-```sh
+```
 docker run --rm -it --gpus all -p 8000:8000 ghcr.io/cogitatortech/omni-nli-cuda:latest
 ```
 
 Configuration can be passed as environment variables to the container.
 For example, to use OpenRouter with a custom model:
 
-```sh
+```
 docker run --rm -it -p 8000:8000 \
   -e DEFAULT_BACKEND=openrouter \
   -e OPENROUTER_API_KEY=your-api-key \
@@ -52,6 +52,13 @@ docker run --rm -it -p 8000:8000 \
 
 !!! warning
     When using the Ollama backend with Docker, you must set `OLLAMA_HOST` to point to a valid IP or host name that has Ollama server running on it. The default `localhost` will point to the container itself and will fail to connect.
+
+!!! note
+    The Docker images default to 1 Gunicorn worker because currently MCP sessions are stored in-memory per-worker.
+    For REST-only deployments (no MCP), you can increase workers for much better throughput:
+    ```
+    docker run --rm -it -p 8000:8000 -e GUNICORN_WORKERS=4 ghcr.io/cogitatortech/omni-nli-cpu:latest
+    ```
 
 !!! note
     The `latest` tag refers to the latest release on top of the `main` branch. You can replace `latest` with a specific version tag from
@@ -67,7 +74,7 @@ Environment variables are read from a `.env` file if it exists or from the syste
 
 You could copy the example [.env.example](https://github.com/CogitatorTech/omni-nli/blob/main/.env.example) in the project's repository to the directory where you run the server and customize it.
 
-```sh
+```
 cp .env.example .env
 ```
 
@@ -105,7 +112,7 @@ cp .env.example .env
 
 Start the server using the CLI command:
 
-```sh
+```
 omni-nli
 ```
 
@@ -113,7 +120,7 @@ The server will start at http://127.0.0.1:8000 by default.
 
 CLI arguments example:
 
-```sh
+```
 omni-nli \
   --host 0.0.0.0 \
   --port 8080 \
