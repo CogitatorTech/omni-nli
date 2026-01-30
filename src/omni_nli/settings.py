@@ -6,6 +6,7 @@ supporting both environment variables and .env files.
 
 from importlib.metadata import PackageNotFoundError, version
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -99,6 +100,15 @@ class ServerSettings(BaseSettings):
     return_thinking_trace: bool = False
 
     provider_cache_size: int = 8
+
+    @field_validator("huggingface_token", "openrouter_api_key", mode="before")
+    @classmethod
+    def normalize_empty_token(cls, v: str | None) -> str | None:
+        """Treat empty/whitespace strings as None (common with .env vars like FOO=)."""
+        if v is None:
+            return None
+        v2 = v.strip()
+        return v2 or None
 
     def get_default_model(self, backend: str) -> str:
         """Get the default model for a given backend.

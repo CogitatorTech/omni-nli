@@ -80,8 +80,14 @@ async def _parse_json_body(request: Request) -> dict:
     # DoS protection: limit body size to 10MB
     max_body_size = 10 * 1024 * 1024
     content_length = request.headers.get("content-length")
-    if content_length is not None and int(content_length) > max_body_size:
-        raise ValueError("Request payload too large (limit is 10MB).")
+    if content_length is not None:
+        try:
+            if int(content_length) > max_body_size:
+                raise ValueError("Request payload too large (limit is 10MB).")
+        except ValueError as e:
+            if "too large" in str(e):
+                raise
+            raise ValueError("Invalid Content-Length header.") from e
 
     body = await request.body()
     if len(body) > max_body_size:

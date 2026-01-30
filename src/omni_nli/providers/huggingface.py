@@ -138,7 +138,8 @@ class HuggingFaceProvider(NLIProvider):
         )
 
         response_text = outputs[0]["generated_text"]
-        _logger.debug(f"Local model response: {response_text[:200]}...")
+        truncated = len(response_text) > 200
+        _logger.debug(f"Local model response: {response_text[:200]}{'...' if truncated else ''}")
 
         result = self._parse_nli_response(response_text, model)
 
