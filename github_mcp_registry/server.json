@@ -6,13 +6,13 @@
     "url": "https://github.com/CogitatorTech/omni-nli",
     "source": "github"
   },
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "omni-nli",
-      "version": "0.1.0-alpha.4",
+      "version": "0.1.0",
       "transport": {
         "type": "streamable-http",
         "url": "http://127.0.0.1:8000/mcp/"
