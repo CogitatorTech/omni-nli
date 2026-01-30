@@ -48,8 +48,14 @@ RUN python -m venv /home/appuser/app/.venv && \
 
 # --- CPU Target ---
 FROM common-final AS cpu
-# Install the wheel (and dependencies)
+# Install base package first
 RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir omni_nli-*.whl
+
+# Install CPU-only PyTorch + HuggingFace extras (saves ~800MB vs full PyTorch)
+RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir \
+    torch --index-url https://download.pytorch.org/whl/cpu && \
+    /home/appuser/app/.venv/bin/pip install --no-cache-dir \
+    transformers accelerate huggingface-hub
 
 USER appuser
 ENTRYPOINT ["/bin/bash", "/home/appuser/app/scripts/docker_entrypoint.sh"]
@@ -80,11 +86,12 @@ COPY --from=builder /app/scripts ./scripts
 RUN python3.12 -m venv /home/appuser/app/.venv && \
     /home/appuser/app/.venv/bin/pip install --upgrade pip
 
-# Install PyTorch with CUDA support first
-RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+# Install PyTorch with CUDA support (no torchvision/torchaudio - not needed for NLI)
+RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cu124
 
-# Install the app
-RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir omni_nli-*.whl
+# Install the app and HuggingFace extras
+RUN /home/appuser/app/.venv/bin/pip install --no-cache-dir omni_nli-*.whl && \
+    /home/appuser/app/.venv/bin/pip install --no-cache-dir transformers accelerate huggingface-hub
 
 USER appuser
 ENTRYPOINT ["/bin/bash", "/home/appuser/app/scripts/docker_entrypoint.sh"]

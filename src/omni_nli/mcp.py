@@ -17,16 +17,17 @@ app = Server("omni-nli")
 
 
 @app.call_tool()
-async def call_tool_handler(name: str, arguments: dict) -> list[types.ContentBlock]:
+async def call_tool_handler(name: str, arguments: dict | None) -> list[types.ContentBlock]:
     """Handle incoming MCP tool call requests.
 
     Args:
         name: The name of the tool to invoke.
-        arguments: The arguments to pass to the tool.
+        arguments: The arguments to pass to the tool (can be None per MCP spec).
 
     Returns:
         List of content blocks containing the tool's output.
     """
+    arguments = arguments or {}
     _logger.debug(f"MCP tool call received: {name} with arguments: {arguments}")
     return await tool_registry.call(name, arguments)
 

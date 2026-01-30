@@ -4,14 +4,20 @@ This document includes installation and configuration instructions for Omni-NLI.
 
 ## Installation
 
-You can run Omni-NLI either by installing it as a Python library or by using a pre-built Docker image.
+You can run Omni-NLI either by installing it as a Python package or by using a pre-built Docker image.
 
 ### Python Installation
 
-You can install Omni-NLI via pip:
+The base package (that supports Ollama and OpenRouter):
 
 ```sh
 pip install omni-nli
+```
+
+For local inference with HuggingFace (supports models from Ollama, OpenRouter, and HuggingFace):
+
+```sh
+pip install omni-nli[huggingface]
 ```
 
 ### Docker Installation
@@ -46,6 +52,13 @@ docker run --rm -it -p 8000:8000 \
 
 !!! warning
     When using the Ollama backend with Docker, you must set `OLLAMA_HOST` to point to a valid IP or host name that has Ollama server running on it. The default `localhost` will point to the container itself and will fail to connect.
+
+!!! note
+    The Docker images default to 1 Gunicorn worker because currently MCP sessions are stored in-memory per-worker.
+    For REST-only deployments (no MCP), you can increase workers for much better throughput:
+    ```sh
+    docker run --rm -it -p 8000:8000 -e GUNICORN_WORKERS=4 ghcr.io/cogitatortech/omni-nli-cpu:latest
+    ```
 
 !!! note
     The `latest` tag refers to the latest release on top of the `main` branch. You can replace `latest` with a specific version tag from

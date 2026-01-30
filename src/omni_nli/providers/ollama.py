@@ -82,12 +82,10 @@ class OllamaProvider(NLIProvider):
             raise
 
         response_text = response["message"]["content"]
-        _logger.debug(f"Ollama response: {response_text[:200]}...")
+        truncated = len(response_text) > 200
+        _logger.debug(f"Ollama response: {response_text[:200]}{'...' if truncated else ''}")
 
         result = self._parse_nli_response(response_text, model)
-
-        if "eval_count" in response:
-            pass  # Token usage tracking removed by user request
 
         return result
 

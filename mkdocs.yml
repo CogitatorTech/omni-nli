@@ -9,14 +9,6 @@ theme:
   logo: assets/logo.svg
   favicon: assets/logo.svg
   palette:
-    # Dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: dark blue
-      accent: amber
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
     # Light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -25,6 +17,14 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: dark blue
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
   font:
     text: Inter
     code: JetBrains Mono
@@ -126,7 +126,7 @@ markdown_extensions:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-      auto_title: true
+      auto_title: false
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.magiclink:
