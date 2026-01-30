@@ -8,7 +8,7 @@ You can interact with Omni-NLI using standard HTTP requests.
 
 Request:
 
-```
+```sh
 curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   -H "Content-Type: application/json" \
   -d '{
@@ -32,7 +32,7 @@ Response:
 
 You can provide context and enable extended thinking for more detailed reasoning traces.
 
-```
+```sh
 curl -X POST http://127.0.0.1:8000/api/v1/nli/evaluate \
   -H "Content-Type: application/json" \
   -d '{
@@ -67,7 +67,7 @@ Example response:
 
 ### Listing Providers
 
-```
+```sh
 curl http://127.0.0.1:8000/api/v1/providers
 ```
 
