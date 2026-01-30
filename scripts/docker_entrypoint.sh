@@ -5,7 +5,10 @@ echo "Container entrypoint executing..."
 echo "Starting the Omni-NLI server with Gunicorn..."
 
 # Defaults (can be overridden at runtime with -e)
-: "${GUNICORN_WORKERS:=4}"
+# NOTE: MCP sessions are stored in-memory per-worker. With multiple workers,
+# session requests may hit workers that don't have the session, causing 404s.
+# Use GUNICORN_WORKERS=1 for MCP, or higher values for REST-only deployments.
+: "${GUNICORN_WORKERS:=1}"
 : "${HOST:=0.0.0.0}"
 : "${PORT:=8000}"
 : "${GUNICORN_EXTRA_ARGS:=}"
