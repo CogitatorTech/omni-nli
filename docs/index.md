@@ -15,13 +15,31 @@ for AI-based applications.
 
 ## What is NLI?
 
-Given two pieces of text called premise and hypothesis, NLI is the task of determining the directional relationship between them as perceived by
-a human reader.
-The relationship is typically shown by one of three labels:
+Given two pieces of text called premise and hypothesis, NLI (AKA textual entailment) is the task of determining the directional relationship between
+them as it is perceived by a human reader.
+The relationship is given one of these three labels:
 
 - `"entailment"`: the hypothesis is supported by the premise
 - `"contradiction"`: the hypothesis is contradicted by the premise
 - `"neutral"`: the hypothesis is neither supported nor contradicted by the premise
+
+!!! note
+    NLI is not the same as logical entailment.
+    Its goal is to determine if a reasonable human would consider the hypothesis to follow from the premise.
+    This checks for consistency instead of the absolute truth of the hypothesis.
+
+Typical applications of NLI include:
+
+* Consistency checking: NLI can be used to check if a given piece of text is consistent with the rest of the text. For example, if a new response
+  from a chatbot or AI assistant contradicts something that was said earlier in the conversation.
+* Verifying summarization: It can be used to check if a summarization contradicts the original text in some way.
+* Document search: It can be used to check if the documents in the ranked list of results entail the query.
+* Fact-checking and verification: It can be used to check if a piece of text is supported by some facts. Note that this is not the same as using
+  logic.
+
+!!! note
+    The quality of the results depends a lot on the model (the LLM) that is used.
+    A good strategy is to first fine-tune the model using a dataset of premise-hypothesis-label triples that are relevant to your application domain.
 
 ## High-level Features
 

@@ -33,7 +33,7 @@ verification layer for AI-based applications.
 ### What is NLI?
 
 Given two pieces of text called premise and hypothesis, NLI (AKA textual entailment) is the task of determining the directional relationship between
-them as perceived by a human reader.
+them as it is perceived by a human reader.
 The relationship is given one of these three labels:
 
 - `"entailment"`: the hypothesis is supported by the premise
@@ -42,7 +42,7 @@ The relationship is given one of these three labels:
 
 > [!IMPORTANT]
 > NLI is not the same as logical entailment.
-> It determines whether a human would consider the hypothesis to follow from the premise.
+> Its goal is to determine if a reasonable human would consider the hypothesis to follow from the premise.
 > This checks for consistency instead of the absolute truth of the hypothesis.
 
 Typical applications of NLI include:
