@@ -1,7 +1,6 @@
 # Getting Started
 
 This document includes installation and configuration instructions for Omni-NLI.
-For a quickstart, please see the project's main [README.md](https://github.com/CogitatorTech/omni-nli/blob/main/README.md) file.
 
 ## Installation
 
@@ -25,7 +24,7 @@ Generic CPU Image:
 docker run --rm -it -p 8000:8000 ghcr.io/cogitatortech/omni-nli-cpu:latest
 ```
 
-GPU Image (CUDA; for NVIDIA GPUs):
+GPU Image (for NVIDIA GPUs):
 
 ```sh
 docker run --rm -it --gpus all -p 8000:8000 ghcr.io/cogitatortech/omni-nli-cuda:latest

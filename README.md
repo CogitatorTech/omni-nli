@@ -25,31 +25,37 @@ A multi-interface (REST and MCP) server for natural language inference
 
 Omni-NLI is a self-hostable server that provides [natural language inference (NLI)](https://en.wikipedia.org/wiki/Textual_entailment) capabilities via
 RESTful and the Model Context Protocol (MCP) interfaces.
-It can be used both as a very scalable standalone stateless microservice and also as an MCP server for AI agents to implement a verification layer
+It can be used both as a very scalable standalone stateless microservice (via the REST API) and also as an MCP server for AI agents to implement a verification layer
 for AI-based applications like chatbots or virtual assistants.
 
 ![Architecture Diagram](docs/assets/diagrams/architecture.svg)
 
 ### What is NLI?
 
-Given two pieces of text called premise and hypothesis, NLI is the task of determining the logical relationship between them if it was done by a human.
-The relationship is typically shown by one of three labels:
+Given two pieces of text called premise and hypothesis, NLI (AKA textual entailment) is the task of determining the directional relationship between
+them as perceived by a human reader.
+The relationship is given one of these three labels:
 
 - `"entailment"`: the hypothesis is supported by the premise
 - `"contradiction"`: the hypothesis is contradicted by the premise
 - `"neutral"`: the hypothesis is neither supported nor contradicted by the premise
 
-NLI is useful for a lot of applications, like fact-checking the output of large language models (LLMs) and checking the correctness of the answers a
-question-answering system generates.
-It can also be used to make a RAG system more reliable, for example, by checking if the retrieved context by the system actually supports the LLM's
-final answer that is shown to the user.
+> [!IMPORTANT]
+> NLI is not the same as logical entailment.
+> It determines whether a human would consider the hypothesis to follow from the premise. This checks for consistency rather than the absolute truth of the hypothesis.
+> It is useful for fact-checking and consistency verification, acknowledging that NLI models capture probabilistic associations rather than strict formal logic.
+
+Typical applications of NLI include:
+
+* **Consistency checking**: NLI can be used to check if a given piece of text is consistent with the rest of the text. For example, if a new response
+  from a chatbot or AI assistant contradicts something that was said earlier in the conversation.
+* **Verifying summarization**: It can be used to check if a summarization contradicts the original text in some way.
+* **Document search**: It can be used to check if the ranked list of results (documents) entail the query.
+* **Fact-checking and verification**: It can be used to check if a piece of text is supported by some facts. Note that this is not the same as using logic.
 
 > [!IMPORTANT]
 > The quality of the results depends a lot on the model (the LLM) that is used.
 > A good strategy is to first fine-tune the model using a dataset of premise-hypothesis-label triples that are relevant to your application domain.
-> Also, NLI is not the same as logical entailment.
-> It mainly involves checking if the premise supports the hypothesis and does not guarantee that the hypothesis is true.
-> It can be used to help with fact-checking and verification, but it does not guarantee that like when logic is used.
 
 ### Main Features of Omni-NLI
 
@@ -129,7 +135,6 @@ Omni-NLI is licensed under the MIT License (see [LICENSE](LICENSE)).
 ### Acknowledgements
 
 - The logo is from [SVG Repo](https://www.svgrepo.com/svg/480613/puzzle-9) with some modifications.
-
 
 <!-- Need to add this line for MCP registry publication -->
 <!-- mcp-name: io.github.CogitatorTech/omni-nli -->
