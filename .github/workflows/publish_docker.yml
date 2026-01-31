@@ -67,14 +67,12 @@ jobs:
       - name: Set Fallback Tag (`latest`)
         id: fallback
         run: |
-          META_TAGS="${{ steps.meta.outputs.tags }}"
-          if [ -z "${META_TAGS}" ]; then
+          if [ -z "${{ steps.meta.outputs.tags }}" ]; then
             echo "tags=ghcr.io/${{ steps.repo_name.outputs.REPO }}-${{ matrix.image_type }}:latest" >> $GITHUB_OUTPUT
           else
-            # Use all semver tags (they are newline-separated, convert to comma-separated)
-            echo "tags<<EOF" >> $GITHUB_OUTPUT
-            echo "${META_TAGS}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            # Use the first tag from metadata output
+            first_tag=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+            echo "tags=${first_tag}" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and Push Docker Image
