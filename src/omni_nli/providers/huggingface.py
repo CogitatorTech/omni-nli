@@ -20,9 +20,12 @@ _logger = logging.getLogger(__name__)
 
 # Check if HuggingFace dependencies are available
 _HF_AVAILABLE = False
-try:
-    from transformers import pipeline  # noqa: F401
 
+# Make sure the symbol exists for tests that patch it, even when `transformers` isn't installed.
+pipeline = None  # type: ignore[assignment]
+
+try:
+    from transformers import pipeline
     _HF_AVAILABLE = True
 except ImportError:
     _logger.debug(
