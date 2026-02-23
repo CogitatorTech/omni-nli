@@ -64,7 +64,7 @@ dependencies = [
 [project.optional-dependencies]
 huggingface = [
     "torch (>=2.0.0,<3.0.0)",
-    "transformers (>=4.57.6,<5.0.0)",
+    "transformers (>=4.57.6,<6.0.0)",
     "accelerate (>=1.12.0,<2.0.0)",
     "huggingface-hub (>=0.27.0,<1.0.0)",
 ]
@@ -80,9 +80,9 @@ dev = [
     "asgi-lifespan[dev] (>=2.1.0,<3.0.0)",
     "mkdocs (>=1.6.1,<2.0.0)",
     "mkdocs-material (>=9.6.12,<10.0.0)",
-    "mkdocstrings-python (>=1.16.10,<2.0.0)",
+    "mkdocstrings-python (>=1.16.10,<3.0.0)",
     "pyyaml (>=6.0.1,<7.0.0)",
-    "rundoc (>=0.2.3,<0.3.0)",
+    "rundoc (>=0.2.3,<1.0.0)",
     "hypothesis (>=6.150.2,<7.0.0)",
 ]
 
