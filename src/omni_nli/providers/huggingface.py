@@ -25,7 +25,7 @@ _HF_AVAILABLE = False
 pipeline = None  # type: ignore[assignment]
 
 try:
-    from transformers import pipeline  # noqa: F401
+    from transformers import pipeline
     _HF_AVAILABLE = True
 except ImportError:
     _logger.debug(
